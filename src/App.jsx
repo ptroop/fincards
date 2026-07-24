@@ -3,8 +3,6 @@ import FlashCard from './components/FlashCard';
 import CramCard from './components/CramCard';
 import ShortcutView from './components/ShortcutView';
 import SecuritizationView from './components/SecuritizationView';
-import KnowledgeGraphView from './components/KnowledgeGraphView';
-import MobileKnowledgeGraph from './components/MobileKnowledgeGraph';
 import LearningMapView from './components/LearningMapView';
 import PodcastLauncher from './components/podcast/PodcastLauncher.jsx';
 import InterviewReadyView from './components/InterviewReadyView.jsx';
@@ -14,6 +12,7 @@ import cardsData from './data/cards.json';
 import { accountingCoreCards } from './data/accountingCoreCards';
 import { accountingAptitudeCards } from './data/accountingAptitudeCards';
 import { accountingAdvancedCards } from './data/accountingAdvancedCards';
+import { accountingInterviewConceptCards, accountingInterviewAptitudeCards } from './data/accountingInterviewExpansionCards';
 import { interviewReadyCards } from './data/interviewReadyCards';
 import conceptsData from './data/concepts.json';
 import { getAllProgress, saveCardProgress } from './db/progressDB';
@@ -23,6 +22,13 @@ const DeepDiveReader = lazy(() => import('./components/DeepDiveReader.jsx'));
 
 const conceptsById = new Map(conceptsData.map((concept) => [concept.id, concept]));
 const normalizeTopicText = (value = '') => value.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+const loadSavedCustomCards = () => {
+  try {
+    return JSON.parse(localStorage.getItem('deepti_custom_cards') || '[]');
+  } catch {
+    return [];
+  }
+};
 
 function resolveTopicCards(deck, topic) {
   if (!topic) return { cards: [], usedFallback: false };
@@ -48,10 +54,7 @@ export default function App() {
   const [progressData, setProgressData] = useState({});
   const [masterDeck, setMasterDeck] = useState(cardsData);
   const [loading, setLoading] = useState(false);
-  const [customCards, setCustomCards] = useState(() => {
-    try { return JSON.parse(localStorage.getItem('deepti_custom_cards') || '[]'); }
-    catch { return []; }
-  });
+  const [customCards, setCustomCards] = useState(loadSavedCustomCards);
   const [showAddForm, setShowAddForm] = useState(false);
   const [formQ, setFormQ] = useState('');
   const [formA, setFormA] = useState('');
@@ -72,7 +75,6 @@ export default function App() {
   const [graphDeck, setGraphDeck] = useState(null); // null = not in graph study mode
   const [graphDeckTitle, setGraphDeckTitle] = useState('');
   const [graphDeckFallback, setGraphDeckFallback] = useState(false);
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   
   const scrollPositionRef = useRef(0);
   const dashboardRef = useRef(null);
@@ -90,12 +92,6 @@ export default function App() {
   // PWA Install State
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [fetchError, setFetchError] = useState(null);
-
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 768);
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
 
   useEffect(() => {
     const handleBeforeInstallPrompt = (e) => {
@@ -136,7 +132,15 @@ export default function App() {
   // Load progress and cards on mount
   useEffect(() => {
     const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbyerLC0EU-OiK_nncqf9IHWGJk0yaU47XlTO9_nuZ_5qRFqiyxrrvpqPx4ay8Clhilc/exec?t=" + Date.now();
-    const localDeck = [...cardsData, ...accountingCoreCards, ...accountingAptitudeCards, ...accountingAdvancedCards, ...interviewReadyCards];
+    const localDeck = [
+      ...cardsData,
+      ...accountingCoreCards,
+      ...accountingAptitudeCards,
+      ...accountingAdvancedCards,
+      ...accountingInterviewConceptCards,
+      ...accountingInterviewAptitudeCards,
+      ...interviewReadyCards,
+    ];
 
     const fetchCards = fetch(WEBHOOK_URL)
       .then(res => {
@@ -195,10 +199,7 @@ export default function App() {
         return { ...card, category, subcategory, answer, explanation, source };
       });
 
-      const savedCustom = (() => {
-        try { return JSON.parse(localStorage.getItem('deepti_custom_cards') || '[]'); }
-        catch { return []; }
-      })();
+      const savedCustom = loadSavedCustomCards();
       setMasterDeck([...scrubbedDeck, ...savedCustom]);
       setLoading(false);
       const progressMap = {};
@@ -209,7 +210,7 @@ export default function App() {
     }).catch(err => {
       console.error("Initialization error:", err);
       setFetchError(err.message || 'Initialization failed');
-      setMasterDeck([...localDeck, ...customCards]);
+      setMasterDeck([...localDeck, ...loadSavedCustomCards()]);
       setProgressData({});
       setLoading(false);
     });
@@ -303,7 +304,7 @@ export default function App() {
     }
     
     return deck;
-  }, [masterDeck, activeCategory, activeSubcategory, globalMode, progressData, selectedTopic, topicDeck]);
+  }, [masterDeck, activeCategory, activeSubcategory, globalMode, progressData, selectedTopic, topicDeck, graphDeck]);
 
   const filteredDeck = useMemo(() => {
     if (globalMode !== 'list') return [];
@@ -311,6 +312,9 @@ export default function App() {
     return activeDeck.filter(card => (
       card.question.toLowerCase().includes(query) ||
       (card.answer && card.answer.toLowerCase().includes(query)) ||
+      (card.explanation && card.explanation.toLowerCase().includes(query)) ||
+      (card.source && card.source.toLowerCase().includes(query)) ||
+      (card.tags && card.tags.join(' ').toLowerCase().includes(query)) ||
       (card.category && card.category.toLowerCase().includes(query)) ||
       (card.subcategory && card.subcategory.toLowerCase().includes(query))
     ));

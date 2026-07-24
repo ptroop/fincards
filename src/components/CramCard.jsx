@@ -85,6 +85,13 @@ export default function CramCard({ card, stat, onReview, isFlipped, onFlip, onNo
           <div className="font-medium text-base md:text-lg leading-snug mb-4 text-white">
             {card.answer}
           </div>
+
+          {card.formula && (
+            <div className="rounded-2xl border border-white/20 bg-white/10 px-4 py-3 font-mono text-[13px] md:text-[14px] leading-relaxed text-white whitespace-pre-wrap">
+              <div className="mb-1 font-sans text-[10px] font-semibold uppercase tracking-[0.14em] text-white/60">Formula</div>
+              {card.formula}
+            </div>
+          )}
           
           <div className="mt-2 text-white/90" onClick={e => e.stopPropagation()}>
             <LearnMore explanation={card.explanation} />

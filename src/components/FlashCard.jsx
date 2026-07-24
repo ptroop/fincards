@@ -84,6 +84,13 @@ export default function FlashCard({ card, onReview, stats, onNoteUpdated }) {
             <p className="text-lg md:text-2xl font-medium leading-relaxed text-white mb-6">
               {card.answer}
             </p>
+
+            {card.formula && (
+              <div className="mb-6 rounded-2xl border border-white/20 bg-white/10 px-5 py-4 font-mono text-[14px] md:text-[16px] leading-relaxed text-white whitespace-pre-wrap">
+                <div className="mb-2 font-sans text-[10px] font-semibold uppercase tracking-[0.14em] text-white/60">Formula</div>
+                {card.formula}
+              </div>
+            )}
             
             <div className="text-white/90">
               <LearnMore explanation={card.explanation} />
