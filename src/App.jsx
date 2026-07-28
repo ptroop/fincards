@@ -19,6 +19,7 @@ import { getTMinusOneDayDeck } from './data/tMinusOneDayCards';
 import { oxaneAptitudeCards, oxaneAptitudeSubcategories } from './data/oxaneAptitudeCards';
 import { excelFinanceModelingCards } from './data/excelFinanceModelingCards';
 import { aptitudeShortcutOverrides } from './data/aptitudeShortcutOverrides';
+import { verifiedMarketCurrentAffairsOverrides } from './data/verifiedMarketCurrentAffairsOverrides';
 import conceptsData from './data/concepts.json';
 import { getAllProgress, saveCardProgress } from './db/progressDB';
 import { calculateNextReview } from './utils/srsAlgorithm';
@@ -32,9 +33,11 @@ const isPreservedAptitudeShortcut = (card) => card?.category === 'Aptitude'
 const baseCardsData = cardsData.filter((card) => (
   (card.category !== 'Aptitude' || isPreservedAptitudeShortcut(card))
   && card.category !== 'Excel & Financial Modeling'
-)).map((card) => aptitudeShortcutOverrides[card.id]
-  ? { ...card, ...aptitudeShortcutOverrides[card.id] }
-  : card);
+)).map((card) => ({
+  ...card,
+  ...(aptitudeShortcutOverrides[card.id] || {}),
+  ...(verifiedMarketCurrentAffairsOverrides[card.id] || {}),
+}));
 const tMinusOneDayDeck = getTMinusOneDayDeck(interviewReadyCards);
 const loadSavedCustomCards = () => {
   try {
