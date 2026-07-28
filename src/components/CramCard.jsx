@@ -94,7 +94,11 @@ export default function CramCard({ card, stat, onReview, isFlipped, onFlip, onNo
           )}
           
           <div className="mt-2 text-white/90" onClick={e => e.stopPropagation()}>
-            <LearnMore explanation={card.explanation} />
+            <LearnMore
+              explanation={card.explanation}
+              alwaysOpen={card.category === 'Aptitude'}
+              label={card.category === 'Aptitude' ? 'Reasoning' : 'Learn more'}
+            />
             
             {/* USER NOTE SECTION */}
             {(noteText || isEditingNote) && (

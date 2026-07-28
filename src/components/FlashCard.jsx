@@ -93,7 +93,11 @@ export default function FlashCard({ card, onReview, stats, onNoteUpdated }) {
             )}
             
             <div className="text-white/90">
-              <LearnMore explanation={card.explanation} />
+              <LearnMore
+                explanation={card.explanation}
+                alwaysOpen={card.category === 'Aptitude'}
+                label={card.category === 'Aptitude' ? 'Reasoning' : 'Learn more'}
+              />
             </div>
 
             {/* USER NOTE SECTION */}
