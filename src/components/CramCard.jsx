@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import LearnMore from './LearnMore';
+import AptitudeDataVisual from './AptitudeDataVisual';
 import { saveUserNote, toggleStarStatus } from '../db/progressDB';
 
 export default function CramCard({ card, stat, onReview, isFlipped, onFlip, onNoteUpdated }) {
@@ -23,19 +24,19 @@ export default function CramCard({ card, stat, onReview, isFlipped, onFlip, onNo
 
   return (
     <div 
-      className="relative w-full cursor-pointer group perspective-1000 min-h-[220px] card-container"
+      className={`relative w-full cursor-pointer group perspective-1000 card-container ${card.visual ? 'min-h-[500px]' : 'min-h-[220px]'}`}
       onClick={() => {
         if (!isEditingNote) onFlip();
       }}
     >
       <div 
-        className="w-full h-full min-h-[220px] transition-transform duration-500 ease-out relative transform-style-3d"
+        className={`w-full h-full transition-transform duration-500 ease-out relative transform-style-3d ${card.visual ? 'min-h-[500px]' : 'min-h-[220px]'}`}
         style={{ transform: isFlipped ? 'rotateX(180deg)' : 'rotateX(0deg)' }}
       >
         
         {/* FRONT FACE */}
         <div 
-          className={`w-full min-h-[220px] p-6 rounded-[24px] bg-[#ffffff] dark:bg-[#1c1c1e] apple-shadow flex flex-col gap-3 ${isFlipped ? 'absolute inset-0' : 'relative'}`}
+          className={`w-full p-6 rounded-[24px] bg-[#ffffff] dark:bg-[#1c1c1e] apple-shadow flex flex-col gap-3 ${card.visual ? 'min-h-[500px]' : 'min-h-[220px]'} ${isFlipped ? 'absolute inset-0' : 'relative'}`}
           style={{ backfaceVisibility: 'hidden' }}
         >
           <div className="flex justify-between items-center w-full pb-2">
@@ -56,6 +57,7 @@ export default function CramCard({ card, stat, onReview, isFlipped, onFlip, onNo
           <div className="font-semibold text-lg md:text-xl leading-snug pb-8 text-[#1d1d1f] dark:text-[#f5f5f7]">
             {card.question}
           </div>
+          {card.visual && <AptitudeDataVisual visual={card.visual} compact />}
           <div className="absolute bottom-5 left-5 text-[12px] font-medium text-[#0066cc] dark:text-[#2997ff] mt-2 flex items-center gap-2 opacity-50 group-hover:opacity-100 transition-opacity">
             Tap to reveal
           </div>
@@ -63,7 +65,7 @@ export default function CramCard({ card, stat, onReview, isFlipped, onFlip, onNo
 
         {/* BACK FACE (Apple Blue) */}
         <div 
-          className={`w-full min-h-[220px] p-6 rounded-[24px] bg-[#0066cc] dark:bg-[#0055aa] text-white apple-shadow flex flex-col gap-3 ${!isFlipped ? 'absolute inset-0' : 'relative'}`}
+          className={`w-full p-6 rounded-[24px] bg-[#0066cc] dark:bg-[#0055aa] text-white apple-shadow flex flex-col gap-3 ${card.visual ? 'min-h-[500px]' : 'min-h-[220px]'} ${!isFlipped ? 'absolute inset-0' : 'relative'}`}
           style={{ 
             backfaceVisibility: 'hidden', 
             transform: 'rotateX(180deg)' 

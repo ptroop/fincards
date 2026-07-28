@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import LearnMore from './LearnMore';
+import AptitudeDataVisual from './AptitudeDataVisual';
 import { saveUserNote, toggleStarStatus } from '../db/progressDB';
 
 export default function FlashCard({ card, onReview, stats, onNoteUpdated }) {
@@ -24,7 +25,7 @@ export default function FlashCard({ card, onReview, stats, onNoteUpdated }) {
 
   return (
     <div 
-      className={`relative w-full max-w-3xl mx-auto h-full max-h-[65vh] md:max-h-[500px] min-h-[350px] cursor-pointer group perspective-1000 card-container ${isFlipped ? 'flipped' : ''}`}
+      className={`relative w-full max-w-3xl mx-auto h-full cursor-pointer group perspective-1000 card-container ${card.visual ? 'max-h-[78vh] md:max-h-[680px] min-h-[540px]' : 'max-h-[65vh] md:max-h-[500px] min-h-[350px]'} ${isFlipped ? 'flipped' : ''}`}
       onClick={() => {
         if (!isEditingNote) setIsFlipped(!isFlipped);
       }}
@@ -33,7 +34,7 @@ export default function FlashCard({ card, onReview, stats, onNoteUpdated }) {
         
         {/* FRONT OF CARD (White / Dark Gray) */}
         <div 
-          className="absolute inset-0 w-full h-full bg-[#ffffff] dark:bg-[#1c1c1e] rounded-[28px] md:rounded-[36px] apple-shadow flex flex-col items-center justify-center p-6 md:p-16 text-center backface-hidden"
+          className={`absolute inset-0 w-full h-full bg-[#ffffff] dark:bg-[#1c1c1e] rounded-[28px] md:rounded-[36px] apple-shadow flex flex-col items-center justify-center p-6 text-center backface-hidden ${card.visual ? 'md:p-8' : 'md:p-16'}`}
         >
           {/* Top Left Category */}
           <div className="absolute top-6 left-6 md:top-8 md:left-8 text-[11px] md:text-[12px] font-semibold tracking-wide text-[#86868b] uppercase">
@@ -56,9 +57,12 @@ export default function FlashCard({ card, onReview, stats, onNoteUpdated }) {
             )}
           </button>
           
-          <h2 className="text-2xl md:text-4xl font-semibold leading-tight md:leading-snug mt-2 text-[#1d1d1f] dark:text-[#f5f5f7] overflow-y-auto no-scrollbar max-h-[80%] pb-2 w-full px-4">
-            {card.question}
-          </h2>
+          <div className={`w-full overflow-y-auto no-scrollbar ${card.visual ? 'mt-10 max-h-[88%] pb-8' : 'max-h-[80%] pb-2'}`}>
+            <h2 className={`${card.visual ? 'mb-4 text-xl md:text-2xl' : 'mt-2 text-2xl md:text-4xl'} px-4 font-semibold leading-tight md:leading-snug text-[#1d1d1f] dark:text-[#f5f5f7]`}>
+              {card.question}
+            </h2>
+            {card.visual && <AptitudeDataVisual visual={card.visual} compact />}
+          </div>
           
           <div className="absolute bottom-6 md:bottom-8 text-[13px] text-[#0066cc] dark:text-[#2997ff] font-medium opacity-0 group-hover:opacity-100 transition-opacity">
             Tap to reveal

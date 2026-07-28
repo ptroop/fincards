@@ -304,8 +304,7 @@ export default function App() {
     if (activeCategory === 'Aptitude' && activeSubcategory && activeSubcategory !== 'All') {
       if (activeSubcategory === 'Shortcuts') {
         deck = deck.filter(card => 
-          (card.explanation && card.explanation.toLowerCase().includes('shortcut')) || 
-          (card.answer && card.answer.toLowerCase().includes('shortcut')) ||
+          card.subcategory === 'Shortcuts' ||
           card.card_type === 'shortcut'
         );
       } else {
@@ -828,8 +827,7 @@ export default function App() {
                   let count = 0;
                   if (topic === 'Shortcuts') {
                     count = masterDeck.filter(c => c.category === 'Aptitude' && (
-                      (c.explanation && c.explanation.toLowerCase().includes('shortcut')) ||
-                      (c.answer && c.answer.toLowerCase().includes('shortcut')) ||
+                      c.subcategory === 'Shortcuts' ||
                       c.card_type === 'shortcut'
                     )).length;
                   } else {

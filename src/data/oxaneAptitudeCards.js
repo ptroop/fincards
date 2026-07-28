@@ -1,6 +1,40 @@
-const source = 'Oxane Partners assessment-aligned public reports';
+import { getAptitudeShortcutStructure } from './aptitudeShortcutStructure.js';
 
-const card = (id, subcategory, difficulty, question, answer, explanation, formula = '', cardType = 'concept', trick = '') => ({
+export const oxaneAptitudeEvidence = [
+  {
+    id: 'glassdoor-portfolio-analyst-2025',
+    label: 'Glassdoor public Oxane Portfolio Analyst assessment report',
+    url: 'https://www.glassdoor.co.in/Interview/Oxane-Partners-Interview-Questions-E1103164.htm',
+    supports: ['mathematics', 'reasoning', 'finance', 'Excel'],
+  },
+  {
+    id: 'board-infinity-assessment-guide',
+    label: 'Board Infinity public Oxane assessment and interview reports',
+    url: 'https://discuss.boardinfinity.com/t/oxane-partners-senior-analyst-interview-questions-experience-guide/23465',
+    supports: ['quantitative aptitude', 'logical reasoning', 'data interpretation', 'verbal ability', 'accounting', 'Excel', 'current affairs', 'finance'],
+  },
+  {
+    id: 'glassdoor-finance-excel-question',
+    label: 'Glassdoor public Oxane technical-question report',
+    url: 'https://www.glassdoor.co.in/Interview/Excel-Functions-SQL-basics-and-Intermediate-level-questions-Finance-Related-questions-from-Corporate-Finance-Mergers-and-A-QTN_6639248.htm',
+    supports: ['Excel functions', 'corporate finance', 'M&A', 'derivatives'],
+  },
+];
+
+const defaultEvidence = oxaneAptitudeEvidence[1];
+
+const card = (
+  id,
+  subcategory,
+  difficulty,
+  question,
+  answer,
+  explanation,
+  formula = '',
+  cardType = 'concept',
+  trick = '',
+  evidence = {},
+) => ({
   id: `oxane_apt_${id}`,
   category: 'Aptitude',
   subcategory,
@@ -9,27 +43,43 @@ const card = (id, subcategory, difficulty, question, answer, explanation, formul
   question,
   answer,
   explanation,
-  source,
-  tags: ['Oxane Partners', 'Assessment aligned', subcategory],
+  source: evidence.label || defaultEvidence.label,
+  source_url: evidence.url || defaultEvidence.url,
+  provenance: evidence.provenance || 'reported-topic reconstruction',
+  evidence_confidence: evidence.confidence || 'medium',
+  evidence_note: evidence.note || 'Original practice question reconstructed from a topic repeatedly reported in public Oxane assessment accounts; it is not represented as verbatim proprietary test wording.',
+  tags: ['Oxane Partners', 'Assessment aligned', evidence.provenance || 'reported-topic reconstruction', subcategory],
   ...(formula ? { formula } : {}),
   ...(trick ? { trick } : {}),
 });
 
 const topic = (prefix, subcategory, items) => items.map((item, index) => {
-  const [difficulty, question, answer, explanation, formula = ''] = item;
-  return card(`${prefix}_${String(index + 1).padStart(3, '0')}`, subcategory, difficulty, question, answer, explanation, formula);
+  const [difficulty, question, answer, explanation, formula = '', evidence = {}] = item;
+  return card(`${prefix}_${String(index + 1).padStart(3, '0')}`, subcategory, difficulty, question, answer, explanation, formula, 'concept', '', evidence);
 });
 
-const shortcut = (id, title, answer, explanation) => card(
+const shortcut = (id, shortcutTopic, title, answer, explanation, formula = '') => ({
+  ...card(
   `shortcut_${String(id).padStart(3, '0')}`,
   'Shortcuts',
-  'Easy',
+  'Medium',
   title,
   answer,
   explanation,
-  '',
+  formula,
   'shortcut',
-);
+  '',
+  {
+    label: 'Academic shortcut synthesized from publicly reported Oxane assessment topics',
+    url: defaultEvidence.url,
+    provenance: 'academic shortcut reference',
+    confidence: 'high',
+    note: 'A reusable method card covering an assessed topic; not a claim about exact prior wording.',
+  },
+  ),
+  shortcut_topic: shortcutTopic,
+  ...getAptitudeShortcutStructure(shortcutTopic),
+});
 
 const quantitativeFoundations = topic('quant', 'Quantitative Foundations', [
   ['Medium', 'Revenue is 25% above budget and then falls 12% from that actual level. Where does it finish relative to budget?', '10% above budget.', 'Use successive multipliers: 1.25 x 0.88 = 1.10.', 'Final / Budget = 1.25 x 0.88 = 1.10'],
@@ -85,22 +135,22 @@ const probabilityStatistics = topic('probability', 'Probability and Statistics',
   ['Medium', 'A test is positive for 5% of healthy borrowers and 80% of defaulting borrowers. Why is conditional probability needed?', 'Because the base default rate changes the meaning of a positive test.', 'The probability of default given a positive result is not the same as the probability of a positive result given default.', 'P(Default | Positive) differs from P(Positive | Default)'],
   ['Hard', 'A borrower has a 3% prior default probability. A warning signal appears for 80% of defaulting borrowers and 5% of non-defaulting borrowers. Given a warning, what is the probability of default?', 'Approximately 33.1%.', 'Bayes’ theorem gives 0.03x0.80 divided by [0.03x0.80 + 0.97x0.05] = 0.331.', 'P(Default | Warning) = 0.024 / (0.024 + 0.0485)'],
   ['Medium', 'An investment pays 100 with probability 0.6 and loses 40 with probability 0.4. Find expected value.', 'The expected value is 44.', 'The gain contributes 60 to expected value and the loss contributes negative 16. Their probability-weighted sum is 44, which is a long-run average rather than a guaranteed outcome.', 'Expected value = 0.6 x 100 + 0.4 x (-40)'],
-  ['Medium', 'What does variance measure?', 'The average squared distance from the mean.', 'It measures dispersion but is expressed in squared units.', 'Variance = Average of squared deviations'],
+  ['Hard', 'A three-year return series is 2%, 4%, and 6%. Calculate the population variance and standard deviation.', 'Population variance is 8/3, or 2.667 percentage-points squared; population standard deviation is approximately 1.633 percentage points.', 'The mean is 4%. Squared deviations are 4, 0, and 4; divide their sum by the population count of three, then take the square root. If these observations were treated as a sample, the denominator would be n-1 instead.', 'σ²=[(2-4)²+(4-4)²+(6-4)²]/3=8/3; σ=√(8/3)'],
   ['Medium', 'A portfolio invests 60% at 8% and 40% at 12%. Find expected return.', 'The portfolio’s expected return is 9.6%.', 'The two return contributions are 4.8% and 4.8%. Add the weighted contributions; do not take a simple 10% average because the allocations differ.', 'Expected return = 0.60 x 8% + 0.40 x 12%'],
   ['Medium', 'A return is 1.5 standard deviations above the mean. What does that indicate?', 'Its z-score is 1.5: the return is 1.5 standard deviations above the mean.', 'Whether that is unusual depends on the distribution and the threshold being used; the z-score alone does not establish an outlier.', 'z = (Observation - Mean) / Standard deviation = 1.5'],
   ['Medium', 'Group A has 20 observations with an average of 50. Group B has 30 observations with an average of 60. Find the combined average.', '56.', 'Combine the group totals, not their two averages: (20 x 50 + 30 x 60)/50 = 56.', 'Combined mean = (n1m1 + n2m2)/(n1 + n2)'],
-  ['Medium', 'Which is more robust to an extreme outlier: mean or median?', 'The median is more robust.', 'An extreme value directly changes the arithmetic total and therefore the mean. It usually has much less effect on the middle-ranked observation, making the median preferable for strongly skewed data.', 'Median = Middle ranked value; Mean = Sum / Count'],
-  ['Medium', 'How do you calculate a weighted average for grouped data?', 'Multiply each value by its weight, sum, and divide by total weight.', 'This prevents small and large groups from receiving equal influence.', 'Weighted mean = Sum(value x weight) / Sum(weights)'],
-  ['Medium', 'What does coefficient of variation compare?', 'Relative dispersion across data sets with different means or units.', 'It is standard deviation divided by the mean.', 'CV = Standard deviation / Mean'],
+  ['Hard', 'For balances 10, 11, 12, 13, and 100, calculate the mean and median. Which better represents a typical balance?', 'Mean is 29.2 and median is 12; the median better represents the typical observation in this outlier-contaminated sample.', 'The extreme value 100 adds directly to the arithmetic total and pulls the mean far above four of the five observations. The middle ordered value remains 12, so it is more robust, although the outlier should still be investigated rather than automatically discarded.', 'Mean=146/5=29.2; median=12'],
+  ['Hard', 'A sample of 40 loans has mean balance 25. One loan with balance 10 was omitted. What is the corrected mean for all 41 loans?', 'The corrected mean is approximately 24.634.', 'The reported total is 40x25=1,000. Add the omitted balance 10 and divide by the corrected count 41: 1,010/41≈24.634. Updating only the numerator or averaging 25 and 10 would be incorrect.', 'Corrected mean=(40x25+10)/41'],
+  ['Hard', 'Portfolio A has mean return 10% and standard deviation 2%; Portfolio B has mean 15% and standard deviation 2.4%. Which has lower relative dispersion?', 'Portfolio B: its coefficient of variation is 16%, compared with 20% for Portfolio A.', 'CV scales dispersion by the mean: A=2/10=0.20 and B=2.4/15=0.16. This comparison is meaningful only when the means are non-zero and measured on a ratio scale; it is not a complete risk-adjusted performance measure.', 'CV_A=2/10=20%; CV_B=2.4/15=16%'],
   ['Medium', 'What is the z-score of 70 when mean is 50 and standard deviation is 10?', 'The z-score is 2.', 'The observation exceeds the mean by 20. Dividing that distance by the 10-unit standard deviation places it exactly two standard deviations above the mean.', 'z = (70 - 50) / 10'],
-  ['Medium', 'What does it mean when an observation is at the 90th percentile?', 'Approximately 90% of observations are at or below it, and approximately 10% are above it.', 'Percentiles describe relative position after the observations are ordered.', '90th percentile = Value with about 90% of observations at or below it'],
-  ['Hard', 'What does the slope of a regression line represent?', 'The expected change in the dependent variable for a one-unit change in the independent variable.', 'It is a conditional association, not automatically causation.', 'Slope = Covariance(X,Y) / Variance(X)'],
-  ['Medium', 'What is the null hypothesis in a test of whether a campaign changed default rates?', 'That the campaign did not change the default rate.', 'The alternative states that a change exists.', 'H0: No change; H1: Change exists'],
-  ['Medium', 'How should a 95% confidence level be interpreted?', 'The method captures the true parameter in 95% of repeated samples in the long run.', 'It is not the probability that one fixed parameter is random.', 'Confidence level = 1 - Significance level'],
-  ['Medium', 'What is the expected value of a fair six-sided die roll?', '3.5.', 'Average the six equally likely outcomes from 1 through 6.', 'Expected value = (1 + 2 + 3 + 4 + 5 + 6) / 6'],
+  ['Hard', 'In an ordered sample of 200 borrowers, a score is at the 90th percentile. Approximately how many observations are at or below it and above it?', 'Approximately 180 are at or below it and 20 are above it.', 'A percentile is a relative rank, not a statement that the borrower scored 90% or has a 90% probability of success. Exact counts can vary with the percentile convention and tied observations.', 'At or below≈0.90x200=180; above≈20'],
+  ['Hard', 'A regression of default rate on unemployment produces intercept 1.2% and slope 0.45. Estimate default rate at 6% unemployment and interpret the slope cautiously.', 'Estimated default rate is 3.9%; the model associates a one-percentage-point unemployment increase with a 0.45-percentage-point higher default rate.', 'Calculate 1.2%+0.45x6=3.9%. The slope is a conditional model estimate, not proof that unemployment alone causes the change; omitted variables, functional form, and extrapolation matter.', 'ŷ = 1.2% + 0.45x6 = 3.9%'],
+  ['Hard', 'A lender tests whether a new policy changed the default rate. State H0 and explain Type I and Type II errors in this context.', 'H0 is that the policy did not change the default rate. Type I wrongly concludes a change; Type II fails to detect a real change.', 'The alternative can be two-sided or directional depending on the pre-specified question. Significance controls false-positive probability under H0, while power depends on sample size, effect size, variability, and the chosen threshold.', 'H0: p_new-p_old=0; H1: p_new-p_old≠0'],
+  ['Hard', 'A 95% confidence interval for a default rate is 2.1%-3.5%. What can and cannot be concluded?', 'The procedure is compatible with default rates from 2.1% to 3.5% at the stated confidence level; it does not mean there is a 95% probability that the fixed true rate lies in this realized interval.', 'Across repeated comparable samples, the interval method would capture the true parameter about 95% of the time if its assumptions hold. The interval does not remove sampling bias, dependence, or definition errors.', 'Confidence level=1-α; here α=5%'],
+  ['Hard', 'Two assets have covariance 0.018. Their standard deviations are 15% and 20%. Calculate correlation and state whether diversification is complete.', 'Correlation is 0.60, and diversification is not complete.', 'Correlation=0.018/(0.15x0.20)=0.60. Because correlation is below +1, combining the assets can reduce variance relative to perfect positive co-movement, but positive correlation means substantial common movement remains.', 'ρ=Cov/(σ₁σ₂)=0.018/0.03=0.60'],
 ]);
 
-const logicalReasoning = topic('logic', 'Logical Reasoning and Puzzles', [
+const _supersededLogicalReasoning = topic('logic_legacy', 'Logical Reasoning and Puzzles', [
   ['Medium', 'Complete the sequence: 2, 6, 12, 20, 30, ?', '42.', 'The terms are n(n + 1): 1x2, 2x3, 3x4, 4x5, 5x6, so the next is 6x7.', 'Next term = 6 x 7 = 42'],
   ['Medium', 'Complete the interleaved sequence: 3, 8, 5, 12, 7, 16, 9, ?', '20.', 'Odd positions are 3, 5, 7, 9; even positions are 8, 12, 16, 20.', 'Separate odd and even positions'],
   ['Medium', 'In a code, alternate letters move forward by 1 and 2 positions. Using this rule, how is MARKET coded?', 'MARKET is coded as NCSMFV.', 'Apply the shifts in order: M+1=N, A+2=C, R+1=S, K+2=M, E+1=F, and T+2=V. The alternating rule must restart at the first letter of the word.', 'Apply shifts +1, +2, +1, +2, +1, +2'],
@@ -131,6 +181,151 @@ const logicalReasoning = topic('logic', 'Logical Reasoning and Puzzles', [
   ['Medium', 'Which word is the odd one out: Audit, Verify, Reconcile, Estimate?', 'Estimate.', 'Audit, verify, and reconcile test or validate information; estimate creates an approximate value.', 'Classify words by function, not spelling'],
 ]);
 
+const logicalReasoning = topic('logic', 'Logical Reasoning and Puzzles', [
+  ['Hard', 'Complete the recurrence: 3, 8, 18, 38, 78, ?', '158.', 'Each term is twice the previous term plus 2: 3x2+2=8, 8x2+2=18, and so on. Therefore 78x2+2=158. Checking every transition prevents choosing a coincidental difference pattern.', 'a(n) = 2a(n-1) + 2'],
+  ['Hard', 'The sequence 4, 7, 14, 17, 34, 37, ? alternates two operations. Find the next term.', '74.', 'The operations alternate +3 and x2: 4+3=7, 7x2=14, 14+3=17, 17x2=34, and 34+3=37. The next operation is x2, producing 74.', 'Alternating rule: +3, then x2'],
+  ['Hard', 'Find the missing pair: AZ, CX, FU, JQ, ?', 'OL.', 'The first letters advance by +2, +3, +4, then +5: A, C, F, J, O. The second letters retreat by -2, -3, -4, then -5: Z, X, U, Q, L. Both columns must satisfy their own progression.', 'Track the two letter-position sequences independently'],
+  ['Hard', 'Seven analysts A-G occupy seats 1-7 from left to right. G is at seat 1; D is immediately right of G; B is three seats right of D; E is immediately left of B; A is immediately right of B; and C is at an end. Who occupies seat 3?', 'F occupies seat 3.', 'The fixed clues give G-D-_-E-B-A-C in seats 1 through 7. Since C must take the remaining end, seat 7, the only unused person F must take seat 3. A position grid makes the deduction auditable.', 'Final order: G-D-F-E-B-A-C'],
+  ['Hard', 'Eight people sit around a circular table. A and B must sit together, while C and D must not sit together. How many distinct arrangements are possible?', '960 arrangements.', 'Treat A-B as one block: seven units around a circle give 6! arrangements, and the block has two internal orders, for 1,440. Subtract arrangements where C-D is also a block: six circular units give 5!, with two orders for each block, or 480. Thus 1,440-480=960.', 'Valid = 6!x2 - 5!x2x2 = 960'],
+  ['Hard', 'Six candidates P-U are ranked with no ties. S ranks above P; P above R; T below R; Q above S; and U below T. Who is fourth?', 'R is fourth.', 'The constraints join into one complete chain: Q>S>P>R>T>U. Because every candidate is linked, there is no alternative valid ordering; R therefore occupies rank four.', 'Forced order: Q > S > P > R > T > U'],
+  ['Hard', 'Premises: all monitored loans are reviewed; no reviewed loan is undocumented; some restructured loans are monitored. Which conclusion must follow?', 'Some restructured loans are not undocumented.', 'The restructured loans that are monitored must also be reviewed. Since no reviewed loan is undocumented, those particular restructured loans are not undocumented. The conclusion follows through the subset chain without reversing any premise.', 'Restructured∩Monitored ⊆ Reviewed ⊆ Not undocumented'],
+  ['Hard', 'Question: Is x greater than 7? Statement I: x+y=14. Statement II: xy=48. Are the statements sufficient?', 'Even together, the statements are not sufficient.', 'Together the equations imply that x and y are 6 and 8, but they do not identify which variable takes which value. Therefore x could be 6 or 8, so the yes/no question cannot be answered uniquely.', 't² - 14t + 48 = 0 gives t = 6 or 8'],
+  ['Hard', 'Six borrowers A-F occupy floors 1-6, one per floor. B is immediately above E; A is two floors above B; D is immediately below A; F is below E; and C is on floor 6. Who is on floor 1?', 'F is on floor 1.', 'C fixes floor 6. The linked placement E-B-D-A can only occupy floors 2-5, because A is two floors above B and D is immediately below A. That leaves floor 1 for F, which also satisfies F below E.', 'Floors 1-6: F, E, B, D, A, C'],
+  ['Hard', 'Neha says, “The man in the photograph is the only son of my father’s mother, and his daughter is my sister.” How is the man related to Neha?', 'He is Neha’s father.', 'Neha’s father’s mother is her paternal grandmother. That grandmother’s only son is Neha’s father, and the statement that his daughter is Neha’s sister is consistent with the same conclusion. Resolve possessive phrases from the inside outward.', 'Father’s mother → paternal grandmother → her only son → father'],
+  ['Hard', 'An analyst walks 8 km north, 6 km east, 3 km south, 2 km west, and 5 km south. Where is the analyst relative to the start?', '4 km east of the starting point.', 'North-south displacement is 8-3-5=0. East-west displacement is 6-2=4 km east. Add signed coordinates instead of adding total distance travelled.', 'Net displacement = (6-2, 8-3-5) = (4,0)'],
+  ['Hard', 'A coding rule reverses a word and then shifts letters in odd code positions forward by one and even code positions backward by one. How is LOAN coded?', 'LOAN is coded as OZPK.', 'Reverse LOAN to NAOL. Apply +1,-1,+1,-1 by code position: N→O, A→Z with alphabet wrap, O→P, and L→K. The order of the two transformations matters.', 'Reverse first; then apply alternating +1 and -1 shifts'],
+  ['Hard', 'At what time between 7:00 and 8:00 are the clock hands exactly opposite for the first time?', 'At 7:05 5/11, approximately 7:05:27.', 'At 7:M, the hour hand is at 210+0.5M degrees and the minute hand at 6M. Set their separation to 180: 210-5.5M=180, so M=30/5.5=60/11 minutes.', '|30H - 5.5M| = 180'],
+  ['Hard', 'If 1 March 2024 was a Friday, what day was 1 March 2025?', 'Saturday.', 'Although 2024 is a leap year, the interval begins after 29 February and therefore contains 365 days. A 365-day interval shifts the weekday by one day, from Friday to Saturday. Count the actual interval instead of applying a leap-year shortcut blindly.', '365 mod 7 = 1 weekday shift'],
+  ['Hard', 'Two ropes each take exactly 60 seconds to burn but burn at uneven rates. How can you measure 45 seconds?', 'Light rope 1 at both ends and rope 2 at one end. When rope 1 finishes, light the other end of rope 2; rope 2 then finishes 15 seconds later.', 'Rope 1 finishes in 30 seconds when lit from both ends. Rope 2 has then used 30 seconds of burn capacity, although not necessarily half its length. Lighting its second end halves its remaining 30-second burn time to 15 seconds, totalling 45.', 'Use burn-time invariance, not rope length', {
+    label: defaultEvidence.label,
+    url: defaultEvidence.url,
+    provenance: 'publicly reported question',
+    confidence: 'high',
+    note: 'The uneven-rope 45-second puzzle is explicitly reported in a public Oxane interview account.',
+  }],
+  ['Hard', 'A committee of three must be chosen from A-F. A and B cannot both serve; C serves only if D serves; and at least one of E or F must serve. Which committee is invalid: ACE, ADF, BDE, or CDF?', 'ACE is invalid.', 'ACE includes C without D, violating the implication C→D. ADF satisfies all rules; BDE includes E and no conflicting pair; CDF includes D as required by C and includes F.', 'Translate “C only if D” as C → D'],
+  ['Hard', 'Claim: “The new underwriting rule reduced defaults because defaults fell after the rule was introduced.” Which additional fact most weakens the claim?', 'The same decline occurred in comparable portfolios that did not adopt the rule.', 'A contemporaneous decline in an untreated comparison group suggests a common factor—such as the economic cycle or borrower mix—could explain the movement. Timing alone does not establish causation.', 'Best weakener supplies a plausible alternative cause'],
+  ['Hard', 'Claim: “The reconciliation process is reliable because every exception is reviewed.” Which assumption is necessary?', 'The process identifies a materially complete and accurate population of exceptions before review.', 'Reviewing every item on an incomplete exception list does not validate records the controls failed to flag. The argument therefore depends on the detection stage, not merely the review stage.', 'Control reliability = effective detection + effective resolution'],
+  ['Hard', 'A lender’s default count rose from 20 to 24 while originations doubled from 1,000 to 2,000. Which conclusion is logically supported?', 'The observed default rate fell from 2.0% to 1.2%; the count alone does not show deterioration.', 'The denominator changed materially. Calculate 20/1,000 and 24/2,000 before interpreting the trend. A causal claim still requires comparable vintages and seasoning.', 'Compare rates on aligned populations, not raw counts'],
+  ['Hard', 'Four events describe a covenant breach: (1) liquidity declined; (2) the borrower drew its revolver; (3) a supplier demanded cash payment; (4) the covenant was breached. If 3 caused 1, 1 caused 2, and 2 caused 4, what is the correct order?', '3 → 1 → 2 → 4.', 'The supplier’s demand precedes the liquidity decline; weaker liquidity precedes the revolver draw; and the additional debt then precedes the covenant breach. Respecting causal direction avoids ordering events by how serious they sound.', 'Topologically sort the stated dependencies'],
+  ['Hard', 'An input-output machine rearranges numbers by repeatedly moving the largest remaining number to the left. Starting with 42, 17, 63, 28, 51, what is the list after two steps?', '63, 51, 42, 17, 28.', 'Step 1 moves 63 to the first position while preserving the relative order of the others: 63,42,17,28,51. Step 2 moves the largest of the remaining numbers, 51, into position two: 63,51,42,17,28.', 'Apply exactly one placement operation per step'],
+  ['Hard', 'In a class of 120 candidates, 70 know Excel, 55 know finance, and 20 know neither. How many know both?', '25 candidates.', 'The union contains 120-20=100 candidates. Inclusion-exclusion gives 70+55-both=100, so the overlap is 25. Adding the two groups without subtracting overlap double-counts candidates who know both.', '|E∩F| = |E| + |F| - |E∪F| = 25'],
+  ['Hard', 'A says, “B is lying.” B says, “Exactly one of us is telling the truth.” Which assignment is consistent?', 'A is lying and B is telling the truth.', 'If A were truthful, B would be lying; then B’s statement that exactly one is truthful would actually be true, a contradiction. Therefore A lies, B tells the truth, and exactly one statement is true.', 'Test each truth assignment for self-consistency'],
+  ['Hard', 'Five reports P-T are scheduled Monday-Friday, one per day. P is before R; Q is immediately after S; T is not Monday or Friday; and R is Friday. If S is Monday, when is P?', 'P is Thursday.', 'S Monday forces Q Tuesday. R is Friday. T cannot be Monday or Friday, so with Tuesday occupied it must be Wednesday. The only remaining day for P is Thursday, which is before R as required.', 'Schedule: S, Q, T, P, R'],
+  ['Hard', 'Find the missing number in the matrix: row 1 = 3, 5, 16; row 2 = 4, 7, 29; row 3 = 6, 8, ?', '49.', 'In each row, the third number equals first x second + 1: 3x5+1=16 and 4x7+1=29. Applying the same two-input relationship gives 6x8+1=49.', 'Third entry = first x second + 1'],
+  ['Hard', 'Choose the odd relationship: auditor:assurance, valuer:estimate, lender:credit, custodian:underwriting.', 'Custodian:underwriting is the odd relationship.', 'Auditors provide assurance, valuers produce estimates, and lenders extend credit. Custodians safeguard assets; underwriting is performed by an underwriter or arranger. The classification depends on professional function, not merely finance vocabulary.', 'Test whether the role conventionally performs the stated function'],
+  ['Hard', 'Arrange the sentences into a coherent paragraph: A) The residual was then traced to three duplicated loan IDs. B) The analyst first reconciled the source total to the model total. C) After removing them, both totals agreed. D) That comparison revealed a difference of 12.', 'B-D-A-C.', 'The initial reconciliation must precede discovery of the difference. “That comparison” refers to the reconciliation, “the residual” refers to the difference, and “them” refers to the duplicate IDs. Pronoun and causal links determine the sequence.', 'Use reference chains: comparison → difference → duplicates → resolution'],
+  ['Hard', 'A model predicts every past default correctly but uses variables that were recorded only after default. What is the strongest inference?', 'The model has target leakage and its apparent accuracy is not evidence of out-of-sample predictive power.', 'Post-default information makes the historical classification artificially easy and would not exist at the real prediction date. Rebuild features using only information available as of each observation date.', 'Valid prediction requires point-in-time feature availability'],
+]);
+
+const dataInterpretationVisuals = {
+  oxane_apt_data_001: {
+    type: 'line',
+    title: 'Revenue across three reporting points',
+    unit: 'Revenue',
+    labels: ['Start', 'Year 1', 'Year 2'],
+    series: [{ name: 'Revenue', values: [800, 920, 1058], color: '#0066cc' }],
+  },
+  oxane_apt_data_002: {
+    type: 'bar',
+    title: 'Operating and capital structure comparison',
+    unit: 'Indexed amount',
+    labels: ['Earlier period', 'Current period'],
+    series: [
+      { name: 'Revenue', values: [100, 120], color: '#2997ff' },
+      { name: 'EBITDA', values: [20, 21], color: '#34c759' },
+      { name: 'Debt', values: [40, 63], color: '#ff9500' },
+    ],
+  },
+  oxane_apt_data_003: {
+    type: 'table',
+    title: 'Origination and observed-default data',
+    columns: ['Vintage', 'Originated loans', 'Observed defaults', 'Observed default rate'],
+    rows: [
+      ['Year 1', '1,000', '20', '2.0%'],
+      ['Year 2', '2,000', '30', '1.5%'],
+    ],
+  },
+  oxane_apt_data_004: {
+    type: 'table',
+    title: 'Bond sensitivity inputs',
+    columns: ['Input', 'Value'],
+    rows: [
+      ['Modified duration', '4.5'],
+      ['Yield movement', '+80 bps'],
+      ['Convexity treatment', 'Ignore for first-order estimate'],
+    ],
+  },
+  oxane_apt_data_005: {
+    type: 'stacked',
+    title: 'Portfolio mix and segment default rates',
+    segments: [
+      { label: 'Corporate credit', value: 40, annotation: '2% default rate', color: '#0066cc' },
+      { label: 'Consumer', value: 35, annotation: '4% default rate', color: '#ff9500' },
+      { label: 'Real estate', value: 25, annotation: '3% default rate', color: '#34c759' },
+    ],
+  },
+  oxane_apt_data_006: {
+    type: 'table',
+    title: 'Exposure and default-probability schedule',
+    columns: ['Segment', 'Exposure', 'Default probability'],
+    rows: [
+      ['A', '100', '1%'],
+      ['B', '300', '4%'],
+      ['C', '600', '2%'],
+    ],
+  },
+  oxane_apt_data_007: {
+    type: 'table',
+    title: 'Loan portfolio by segment',
+    columns: ['Segment', 'Exposure', 'Non-performing amount'],
+    rows: [
+      ['Corporate', '600', '24'],
+      ['Consumer', '450', '27'],
+      ['Real estate', '?', '?'],
+      ['Portfolio total', '1,500', '5% of total exposure'],
+    ],
+  },
+  oxane_apt_data_008: {
+    type: 'line',
+    title: 'Portfolio value from start to year 3',
+    unit: 'Index value',
+    labels: ['Start', 'Year 3'],
+    series: [{ name: 'Portfolio', values: [100, 133.1], color: '#5856d6' }],
+  },
+  oxane_apt_data_009: {
+    type: 'table',
+    title: 'Loan-count and average-balance movement',
+    columns: ['Period', 'Loan count', 'Average balance'],
+    rows: [
+      ['Earlier period', '100', '10'],
+      ['Current period', '80', '12'],
+    ],
+  },
+  oxane_apt_data_010: {
+    type: 'bridge',
+    title: 'Population reconciliation',
+    start: { label: 'Report A', value: 1000 },
+    adjustments: [
+      { label: 'Duplicate records', value: -25 },
+      { label: 'Adjusted A', value: 975, total: true },
+      { label: 'Report B', value: 980, total: true },
+      { label: 'Valid pending records', value: 5 },
+      { label: 'Adjusted B', value: 985, total: true },
+    ],
+  },
+  oxane_apt_data_015: {
+    type: 'line',
+    title: 'Default rates before and after the policy',
+    unit: 'Default rate (%)',
+    labels: ['Before', 'After'],
+    series: [
+      { name: 'Policy segment', values: [2, 4], color: '#ff3b30' },
+      { name: 'Control segment', values: [2, 2.5], color: '#0066cc' },
+    ],
+  },
+};
+
 const dataVerbal = topic('data', 'Data Interpretation and Verbal Ability', [
   ['Medium', 'Revenue rises from 800 to 920 in year one and to 1,058 in year two. What is the two-year CAGR?', '15%.', 'The total multiplier is 1,058/800 = 1.3225, whose square root is 1.15.', 'CAGR = (1,058 / 800)^(1/2) - 1 = 15%'],
   ['Hard', 'Revenue rises from 100 to 120, EBITDA from 20 to 21, and debt from 40 to 63. Which leverage metric deteriorates, and by how much?', 'Debt/EBITDA deteriorates from 2.0x to 3.0x, an increase of 1.0x.', 'Revenue grew 20%, but EBITDA grew only 5% while debt rose 57.5%. The borrower therefore has materially more debt per unit of operating earnings.', 'Debt/EBITDA: 40/20 = 2.0x; 63/21 = 3.0x'],
@@ -152,9 +347,13 @@ const dataVerbal = topic('data', 'Data Interpretation and Verbal Ability', [
   ['Medium', 'A source file shows EBITDA of 84, while the model reports 81 after an unexplained hardcode. Which review comment is strongest?', '"The model EBITDA is 3 below the source because the formula contains an unexplained hardcode; replace it with the validated source link."', 'The comment identifies the observable discrepancy, quantifies it, names the cause, and gives a corrective action. Calling the model "wrong" alone is not reviewable evidence.', 'Finding = Evidence + quantified difference + root cause + action'],
   ['Medium', 'Rewrite this sentence without redundant causation: "Due to the fact that collections were delayed, therefore liquidity declined."', '"Because collections were delayed, liquidity declined."', 'Use one causal connector, not both "due to the fact that" and "therefore." The revision is shorter while preserving the causal meaning.', 'Prefer one precise connector: Because X, Y'],
   ['Medium', 'Summarize this update in one sentence: "The central bank raised its policy rate by 25 basis points. Bank funding costs rose, but the effect on loan demand remains uncertain."', 'A 25-basis-point policy-rate increase raised bank funding costs, while its effect on loan demand remains uncertain.', 'The summary retains the event, the observed transmission effect, and the unresolved consequence without adding a prediction.', 'Summary = Event + observed impact + material uncertainty'],
-]);
+]).map((item) => (
+  dataInterpretationVisuals[item.id]
+    ? { ...item, visual: dataInterpretationVisuals[item.id] }
+    : item
+));
 
-const excel = topic('excel', 'Excel and Spreadsheet Assessment', [
+const _supersededExcel = topic('excel_legacy', 'Excel and Spreadsheet Assessment', [
   ['Easy', 'How would you use IF to flag a DSCR below 1.20x?', 'Use an IF test returning “Breach” when DSCR < 1.20.', 'The formula converts a threshold into a visible exception.', '=IF(DSCR<1.2,"Breach","Pass")'],
   ['Easy', 'How would you total exposure for one asset class using SUMIFS?', 'Use the exposure column as the sum range and the asset-class column with "Corporate" as the criterion.', 'SUMIFS evaluates every row against the criterion and adds only matching exposure values. Lock or structure the ranges so copied formulas do not drift.', '=SUMIFS(exposure,asset_class,"Corporate")'],
   ['Medium', 'How can SUMPRODUCT calculate a weighted portfolio return?', 'Pass the aligned weight and return ranges to SUMPRODUCT so each row’s contribution is multiplied and then summed.', 'The weights and returns must cover identical rows, and the weights should reconcile to 100%. A simple average is wrong when allocations differ.', '=SUMPRODUCT(weights,returns)'],
@@ -175,6 +374,41 @@ const excel = topic('excel', 'Excel and Spreadsheet Assessment', [
   ['Medium', 'How would you reconcile two portfolio reports?', 'Align keys and dates, compare values, isolate differences, and document adjustments.', 'A reconciliation needs scope control before formula work.', 'Difference = Report A - Report B'],
   ['Hard', 'How would you trace a wrong output in a financial model?', 'Check inputs, precedents, formulas, units, and intermediate totals.', 'Trace from output backward through the calculation chain.', 'Output -> formula -> precedent -> source'],
   ['Hard', 'How would you build a sensitivity table for DSCR?', 'Separate inputs, vary the selected assumptions, and observe the output under each scenario.', 'Scenario analysis makes model risk visible.', 'Output = f(Operating cash flow, Interest, Principal)'],
+]);
+
+const excel = topic('excel', 'Excel and Spreadsheet Assessment', [
+  ['Hard', 'A loan tape has Balance in column D, Asset Class in B, and DPD in F. Write one formula to total Corporate exposure with DPD above 30, and state two controls before relying on it.', 'Use =SUMIFS(D:D,B:B,"Corporate",F:F,">30"). Confirm that Balance is numeric and that Asset Class/DPD values are standardized on the same row population.', 'SUMIFS is appropriate because both criteria must hold on each row. In a controlled workbook, prefer Table references over whole columns, reconcile the result to a filtered total, and inspect blanks or text-formatted DPD values.', '=SUMIFS(Loans[Balance],Loans[Asset Class],"Corporate",Loans[DPD],">30")'],
+  ['Hard', 'Loan IDs can repeat across monthly snapshots. How would you build a lookup key that avoids falsely flagging every repeated ID as a duplicate?', 'Use a composite key such as LoanID&"|"&TEXT(AsOfDate,"yyyymmdd"), then test uniqueness on that key.', 'The business grain is one loan per reporting date, not one row per LoanID for all history. COUNTIFS on LoanID and AsOfDate, or a governed composite key, distinguishes legitimate time-series repeats from duplicate records at the same cut-off.', '=COUNTIFS(LoanID,id,AsOfDate,date)>1'],
+  ['Hard', 'Write an exact XLOOKUP that returns Balance for a Loan ID and displays “Missing ID” if the key is absent. What control is still required?', 'Use =XLOOKUP(A2,Loans[Loan ID],Loans[Balance],"Missing ID",0). You must still test whether Loan ID is unique.', 'Exact match prevents accidental banded matching and the not-found argument exposes missing keys. XLOOKUP returns one match, so duplicates can remain hidden unless a separate COUNTIF/COUNTIFS control verifies cardinality.', '=XLOOKUP(A2,Loans[Loan ID],Loans[Balance],"Missing ID",0)'],
+  ['Hard', 'A legacy workbook must return a rating from a column left of the Loan ID. Construct an INDEX-MATCH formula and explain why it is safer than changing the table for VLOOKUP.', 'Use =INDEX(RatingRange,MATCH(A2,LoanIDRange,0)). It can return from either side and does not rely on a hard-coded column index.', 'MATCH locates the exact key position and INDEX returns the rating from the aligned range. Inserting source columns does not silently change a column-number argument, but duplicate and missing-key controls are still necessary.', '=INDEX(RatingRange,MATCH(A2,LoanIDRange,0))'],
+  ['Hard', 'A VLOOKUP uses =VLOOKUP(A2,$F$2:$J$500,4) on an unsorted loan table. Identify the defect and give the corrected formula.', 'The omitted fourth argument invokes approximate match. Use =VLOOKUP(A2,$F$2:$J$500,4,FALSE), assuming the key is in column F and the desired value is column 4 of the table.', 'Approximate match can return a plausible but wrong row when the first column is unsorted. Exact-match mode is essential for identifiers; then validate that the table index and key uniqueness are correct.', '=VLOOKUP(A2,$F$2:$J$500,4,FALSE)', {
+    label: defaultEvidence.label,
+    url: defaultEvidence.url,
+    provenance: 'publicly reported question',
+    confidence: 'high',
+    note: 'Practical VLOOKUP questions are explicitly reported in public Oxane assessment/interview accounts; this numerical setup is reconstructed.',
+  }],
+  ['Medium', 'A sensitivity table stores scenarios horizontally, with scenario names in row 2 and DSCR values in row 5. Write an HLOOKUP for the selected scenario and name the more robust modern alternative.', 'Use =HLOOKUP(B1,$C$2:$H$5,4,FALSE). A robust modern alternative is XLOOKUP(B1,$C$2:$H$2,$C$5:$H$5,"Missing",0).', 'The fourth row of the selected table range corresponds to worksheet row 5. HLOOKUP is valid for a genuinely horizontal table, but XLOOKUP makes the lookup and return ranges explicit and is less fragile when rows are inserted.', '=HLOOKUP(selected_scenario,scenario_table,4,FALSE)'],
+  ['Hard', 'A model uses INDIRECT to select a scenario sheet and OFFSET to define a rolling range. Explain the audit and performance risks, then propose alternatives.', 'Both functions are volatile and obscure direct precedents. Prefer XLOOKUP/CHOOSE for governed scenarios and INDEX or structured Table references for dynamic ranges.', 'INDIRECT builds references from text and can break external links or renames without transparent tracing. OFFSET recalculates whenever the workbook recalculates. Direct references, INDEX, Tables, or dynamic arrays are usually more auditable and efficient.', 'Prefer direct reference functions over volatile text/offset references', {
+    label: defaultEvidence.label,
+    url: defaultEvidence.url,
+    provenance: 'publicly reported question',
+    confidence: 'high',
+    note: 'INDIRECT and OFFSET are explicitly reported Oxane interview topics; the model-review framing is reconstructed.',
+  }],
+  ['Hard', 'A formula in C6 is =$B6*C$3 and is copied across and down. Which coordinates move, and why is this pattern useful in a scenario matrix?', 'The input column B stays fixed while its row changes; the scenario row 3 stays fixed while its column changes.', 'In $B6, the dollar locks column B but allows row 6 to become 7,8, and so on. In C$3, the row is fixed while the scenario column moves. The mixed references create a two-dimensional multiplication grid without manual edits.', '$B6 = fixed column/relative row; C$3 = relative column/fixed row'],
+  ['Hard', 'A PivotTable shows exposure by rating, but its grand total is below the source total. Give a diagnostic sequence rather than simply refreshing it.', 'Check the source range/Table expansion, active filters and slicers, blank/unmapped ratings, value-field aggregation, hidden source rows, and the as-of population; then reconcile the grand total to the source.', 'Refreshing cannot include records outside a static source range or fix text-versus-number aggregation. A controlled diagnostic starts with population and amount totals, isolates excluded records, and documents every bridge item.', 'Source total - Pivot total = explained exclusions + unresolved residual'],
+  ['Hard', 'A report contains 1,000 rows but only 980 unique composite keys. How do you determine whether the 20-row difference represents errors?', 'Group or COUNTIFS by the business key, inspect repeated rows, and compare all non-key fields and as-of dates before classifying duplicates.', 'A count difference proves repeated keys, not erroneous records. Valid multiple facilities, tranches, or snapshots may share a simple identifier. Define the intended grain first, then label exact duplicates, legitimate one-to-many records, and unresolved conflicts separately.', 'Duplicate diagnosis = defined grain + key count + field-level comparison'],
+  ['Hard', 'A lookup is wrapped in IFERROR(...,0), and portfolio exposure suddenly drops. Why is this dangerous, and how should the formula be controlled?', 'The zero can conceal missing keys as genuine zero balances. Return an explicit “Missing” flag or separate the lookup result from an exception-control column.', 'Error suppression should distinguish expected not-found conditions from calculation defects. Count missing mappings, reconcile their source balance, and prevent release while material exceptions remain unresolved.', 'Control missing population and missing exposure separately'],
+  ['Hard', 'A portfolio has balances in B2:B100 and PDs in C2:C100. Write the exposure-weighted PD formula and explain why AVERAGE(C2:C100) is wrong.', 'Use =SUMPRODUCT(B2:B100,C2:C100)/SUM(B2:B100). A simple average gives every loan equal weight regardless of exposure.', 'SUMPRODUCT calculates expected defaulted exposure by row; dividing by total balance converts it to a portfolio rate. Check PD units, blank values, negative balances, and whether off-balance-sheet exposure needs a conversion factor.', '=SUMPRODUCT(Balance,PD)/SUM(Balance)'],
+  ['Medium', 'Using modern Excel, how would you return a spill list of unique sectors for loans with DPD above 30?', 'Use =SORT(UNIQUE(FILTER(Loans[Sector],Loans[DPD]>30))).', 'FILTER selects delinquent rows, UNIQUE removes repeated sectors, and SORT makes the output stable for review. Handle the no-result case explicitly and ensure DPD is numeric rather than text.', '=SORT(UNIQUE(FILTER(Loans[Sector],Loans[DPD]>30,"No matches")))'],
+  ['Hard', 'A facility starts 15 January 2025 and matures 30 September 2027. Which Excel functions help calculate month-end reporting dates and year fractions, and what convention must be stated?', 'Use EOMONTH for reporting cut-offs and YEARFRAC or DAYS with an explicit day-count basis for accrual periods.', 'EOMONTH(StartDate,n) generates controlled period ends. YEARFRAC requires a basis and may not reproduce every legal Actual/360, Actual/365, or 30/360 convention exactly, so the model must match the contract and validate edge dates.', '=EOMONTH(date,n); =YEARFRAC(start,end,basis)'],
+  ['Medium', 'Imported borrower names contain non-printing characters and multiple spaces. Which cleaning chain would you use before matching?', 'Use CLEAN to remove non-printing characters, TRIM to normalize spaces, and optionally UPPER/LOWER for case standardization.', 'A practical formula is =UPPER(TRIM(CLEAN(A2))). Preserve the raw field and create a cleaned helper rather than overwriting source evidence. Name cleaning alone cannot solve genuine spelling variants or entity-resolution issues.', '=UPPER(TRIM(CLEAN(A2)))'],
+  ['Medium', 'A source provides comma-separated values in one cell and scenarios down rows when the model needs columns. Which tools solve each problem?', 'Use TEXTSPLIT or Text to Columns for delimited data, and TRANSPOSE or Paste Special Transpose to change orientation.', 'Choose formula-based tools when the result should update with the source and static tools for a controlled one-time import. Validate embedded commas, quoted text, blanks, and data types after splitting.', '=TEXTSPLIT(A2,","); =TRANSPOSE(range)'],
+  ['Hard', 'Design a two-variable sensitivity table for enterprise value against WACC and terminal growth. What setup and validity controls are required?', 'Link one anchor formula to enterprise value, place WACC values on one axis and growth values on the other, then use a two-variable Data Table with the corresponding input cells.', 'Keep WACC greater than terminal growth in the perpetuity-growth model, use economically defensible ranges, and inspect monotonicity: EV should generally fall as WACC rises and rise as terminal growth rises. Data Tables are calculation tools, not scenario governance.', 'Terminal value = FCFₙ₊₁/(WACC-g), requiring WACC>g'],
+  ['Hard', 'A copied forecast row contains formulas in every period except one hard-coded number. Give a fast audit method and the evidence needed before replacing it.', 'Use Show Formulas, Go To Special → Constants, or compare formula patterns; trace the hardcode to a documented source or approved override before replacing it with the expected formula.', 'A hardcode can be an error or a deliberate assumption. Compare neighboring formulas, precedents, units, and change logs. Record the source and reason rather than mechanically overwriting every constant.', 'Audit pattern = formula consistency + precedent trace + source evidence'],
+  ['Hard', 'Source exposure is 1,250, model exposure is 1,218, and known exclusions total 27. What residual remains, and how should it be reported?', 'The unresolved residual is 5: 1,250-1,218-27=5.', 'A proper reconciliation separates the gross difference of 32 into 27 explained and 5 unresolved. It should identify the affected keys and amount, owner, status, and release impact rather than forcing the totals to agree.', 'Unresolved = Source - Model - explained exclusions = 5'],
+  ['Hard', 'A formula returns #VALUE! after new monthly data is pasted. Give a systematic debugging sequence.', 'Inspect the first failing formula, evaluate it step by step, verify data types and ranges, compare with the prior working row, trace precedents, and isolate the first changed input.', 'Common causes include text-formatted numbers, shifted ranges, inconsistent dates, hidden characters, and array-size mismatches. Fix the root cause in the input or formula; wrapping the result in IFERROR would only hide the control failure.', 'Debug from first failure: output → subexpression → precedent → source change'],
 ]);
 
 const finance = topic('finance', 'Finance and Accounting Fundamentals', [
@@ -231,7 +465,7 @@ const creditMarkets = topic('credit', 'Credit, Markets and Securitization', [
   ['Hard', 'What is a borrowing base?', 'The eligible collateral value against which a facility can borrow.', 'Eligibility haircuts, advance rates, and concentration limits can reduce availability.', 'Borrowing base = Eligible collateral x Advance rates'],
 ]);
 
-const marketAwareness = topic('markets', 'Market Awareness and Financial GK', [
+const _supersededMarketAwareness = topic('markets_legacy', 'Market Awareness and Financial GK', [
   ['Medium', 'Two companies have index weights of 60% and 40%. Their shares return 10% and -5% respectively. What is the index return?', 'The index return is 4%.', 'A market index follows its stated weighting methodology, not a simple average of constituent returns. The larger positive constituent contributes 6%, while the smaller negative constituent contributes -2%.', 'Index return = 60%x10% + 40%x(-5%) = 4%'],
   ['Medium', 'A portfolio returns 7.2% while its Nifty 50 benchmark returns 8.0% over the same period. How should relative performance be stated?', 'The portfolio underperformed its benchmark by 0.8 percentage points.', 'Use the same dates, currency, and total-return convention before comparing. A raw return of 7.2% is positive, but it is weaker than the selected benchmark over that period.', 'Relative performance = 7.2% - 8.0% = -0.8 percentage points'],
   ['Medium', 'Two sources report index closes of 24,800 and 24,920. What must be reconciled before either figure is used in an assessment answer?', 'Reconcile the index, trading date, timestamp, close convention, currency, and whether either figure is delayed or adjusted.', 'Market levels are as-of facts. Selecting the number that looks plausible without aligning definitions can turn two valid observations into a false discrepancy.', 'Reliable market fact = Named index + exact as-of time + consistent close definition + primary source'],
@@ -254,27 +488,51 @@ const marketAwareness = topic('markets', 'Market Awareness and Financial GK', [
   ['Hard', 'A listed lender falls 9% after reporting higher profit but weaker collections and a rise in stage-three loans. How should the move be explained without overstating causation?', 'State that the shares fell 9% after the release and that weaker collections and higher impaired loans are plausible concerns despite profit growth; do not claim they caused the move without market evidence.', 'A credible explanation separates the observed price move and disclosed fundamentals from an inferred investor reaction. It should also check guidance, consensus expectations, volume, and concurrent market news.', 'Answer structure = Observed move + disclosed facts + plausible mechanism + competing explanations + uncertainty'],
 ]);
 
+const marketAwareness = topic('markets', 'Market Awareness and Financial GK', [
+  ['Hard', 'The RBI raises its policy rate by 50 basis points. A bank has mostly floating-rate loans but one-year fixed-rate deposits. What is the likely near-term NIM effect, and what could reverse it later?', 'NIM may initially widen because floating loan yields reprice faster than fixed deposit costs; it can later compress when deposits renew at higher rates or funding competition intensifies.', 'A strong answer identifies repricing timing rather than saying only that “rates rise.” Asset yields, deposit beta, maturity gaps, loan demand, credit costs, and hedges determine the realized effect.', 'NIM impact ≈ asset repricing - liability repricing - credit/funding second-order effects'],
+  ['Hard', 'Headline inflation prints above expectations while real growth is unchanged. Explain the first-order effect on nominal government-bond yields and existing fixed-rate bond prices.', 'Nominal yields would normally face upward pressure and existing fixed-rate bond prices downward pressure.', 'Investors may demand more inflation compensation and may anticipate tighter policy. The magnitude depends on whether the surprise is persistent, already priced, or offset by a growth shock; direction is not an unconditional forecast.', 'Fisher intuition: nominal yield ≈ real yield + expected inflation; price moves inversely to yield'],
+  ['Hard', 'The two-year government yield moves above the ten-year yield. What does this inversion signal, and what does it not prove?', 'It signals that markets price relatively tight near-term conditions and/or lower future rates; it does not prove that a recession will occur.', 'The curve embeds policy expectations, inflation risk, term premium, liquidity, and demand for duration. An interview-standard answer treats inversion as an indicator with mechanisms and limitations, not as a deterministic rule.', 'Curve slope = long-term yield - short-term yield'],
+  ['Hard', 'The central bank purchases government securities in the open market. Trace the intended transmission to banking-system liquidity, short-term rates, and bond prices.', 'The purchase injects reserves, tends to ease short-term funding conditions, and directly supports the purchased securities’ prices, lowering their yields.', 'Transmission can be weakened if banks hoard liquidity, credit demand is weak, or other operations absorb reserves. Distinguish an outright purchase from a repo, which is temporary and collateralized.', 'Security purchase → reserves up → funding pressure down; bond price up → yield down'],
+  ['Hard', 'The rupee depreciates 8% against the dollar. Compare the first-order effect on an unhedged IT exporter with dollar revenue and an airline with dollar fuel and lease costs.', 'The exporter receives more rupees per dollar of revenue, while the airline’s rupee cost of dollar obligations rises.', 'Net earnings depend on hedge ratios, foreign-currency costs, pricing, demand, and accounting translation. Sector labels alone are insufficient; map revenue and cost currencies before drawing a conclusion.', 'Net FX exposure = foreign-currency revenue - foreign-currency costs - effective hedge'],
+  ['Hard', 'Crude oil rises from $75 to $90 per barrel. Calculate the percentage increase and explain the likely channels for India’s economy and three sectors.', 'The price rises 20%. The shock can worsen the import bill and inflation; it pressures airlines, paints, and transport users while potentially helping upstream producers.', 'India is a net crude importer, so macro effects can include a wider current-account deficit, currency pressure, and less room for rate cuts. Company impact depends on pass-through, inventory, taxes, hedges, and product spreads.', 'Price change = (90/75)-1 = 20%'],
+  ['Hard', 'US policy-rate expectations rise sharply. Trace two plausible channels to Indian equities and the rupee without claiming the outcome is certain.', 'Higher US yields can reduce the relative attraction of Indian assets and support the dollar, creating foreign-flow and rupee-depreciation pressure.', 'Actual moves also depend on Indian growth, valuation, inflation, RBI action, hedging costs, and global risk appetite. The academically correct answer gives transmission channels and competing forces.', 'Relative yields + risk appetite → capital flows → FX and valuation effects'],
+  ['Hard', 'A geopolitical conflict forces container ships onto a route that adds 12 days to a 36-day voyage. By what percentage does transit time rise, and which working-capital line is affected first?', 'Transit time rises 33.3%, and inventory in transit is the first direct working-capital exposure.', 'Longer transit requires more stock for the same sales cadence and delays cash conversion. Freight and insurance costs may rise too, affecting margins and payables depending on contract terms.', 'Transit increase = 12/36 = 33.3%; longer days inventory outstanding raises the cash-conversion cycle'],
+  ['Hard', 'A 10% import tariff applies to inputs that are 30% of a manufacturer’s cost base. If none is passed through or mitigated, estimate the direct cost-base increase and explain the EBITDA effect.', 'The direct cost-base increase is 3%; EBITDA falls by that incremental cost amount before volume, pricing, or mitigation effects.', 'Multiply the tariff only by the exposed input share. Translating the 3% cost-base shock into an EBITDA-margin change requires revenue and the original cost structure, so do not call it a three-point margin decline automatically.', 'Direct cost shock = 30% x 10% = 3% of the original cost base'],
+  ['Hard', 'A sovereign rating is downgraded while the policy rate is unchanged. Why might corporate borrowing costs still rise?', 'The sovereign risk premium can lift the benchmark curve and the required spread on domestic issuers, raising all-in corporate yields.', 'A downgrade may affect foreign-investor mandates, currency risk, bank funding, collateral haircuts, and the perceived ceiling for corporate credit. Policy rates are only one component of borrowing cost.', 'Corporate yield = risk-free/sovereign curve + credit spread + liquidity/structure premium'],
+  ['Hard', 'A five-year corporate bond’s yield rises from 7.0% to 8.2%, while the matched government yield rises from 6.5% to 6.8%. How much did the credit spread change?', 'The spread widened from 50 basis points to 140 basis points, a widening of 90 basis points.', 'Separate the risk-free move from issuer-specific repricing. The corporate yield rose 120 basis points, of which 30 came from the government curve and 90 from wider credit/liquidity spread.', 'Initial spread = 7.0%-6.5%=0.5%; final = 8.2%-6.8%=1.4%'],
+  ['Hard', 'An index contains two stocks weighted 70% and 30%. They return +12% and -8%. Calculate the index return and state the assumption.', 'The index return is 6.0%, assuming weights are the relevant beginning-period weights and ignoring rebalancing effects.', 'Compute 0.70x12% + 0.30x(-8%) = 8.4%-2.4%=6.0%. A simple 2% average would incorrectly give equal influence to unequal constituents.', 'Index return = Σ(beginning weight x constituent return)'],
+  ['Hard', 'A company has 80 million shares at ₹150, debt of ₹4,000 million, cash of ₹1,200 million, and minority interest of ₹300 million. Calculate equity value and enterprise value.', 'Equity value is ₹12,000 million and enterprise value is ₹15,100 million.', 'Equity value is 80x150=12,000. Enterprise value bridges to all operating capital claims: 12,000+4,000+300-1,200=15,100. Treatment of leases, investments, and non-operating assets depends on the valuation convention.', 'EV = equity value + debt + minority interest - cash'],
+  ['Hard', 'An asset manager begins the year with AUM of ₹10,000 crore, ends with ₹12,000 crore, and charges 0.60% on average AUM. Estimate annual management-fee revenue using a simple average.', 'Estimated fee revenue is ₹66 crore.', 'Simple average AUM is (10,000+12,000)/2=11,000 crore. Multiplying by 0.60% gives ₹66 crore. A production model should use daily or monthly AUM and reflect fee tiers, waivers, and product mix.', 'Fee revenue ≈ [(opening AUM + closing AUM)/2] x fee rate'],
+  ['Hard', 'An Indian importer must pay $2 million in three months and fears rupee depreciation. Which forward position hedges the exposure, and what risk remains?', 'The importer should buy dollars forward and sell rupees forward for the payment date.', 'The forward fixes the INR cost of the known dollar payable. Basis, counterparty, timing, forecast-volume, and opportunity risks remain; if the payable is cancelled, the hedge can become an open position.', 'Match hedge direction, not market opinion: foreign-currency payable → buy that currency forward'],
+  ['Hard', 'An airline expects to buy 100,000 barrels of fuel and fears rising prices. Should it take a long or short commodity-futures position, and why can the hedge still be imperfect?', 'It should take a long futures position so futures gains can offset a higher physical purchase price.', 'Imperfection arises if the futures contract references a different grade, delivery location, or maturity, creating basis risk. Quantity mismatch, margin calls, and timing differences also matter.', 'Input buyer hedges a price rise with a long futures position'],
+  ['Hard', 'A current-affairs question asks how a newly announced policy affects Indian banks. What answer structure produces an interview-standard response?', 'State the verified event and date, identify the transmission channels, distinguish winners and losers, quantify exposure where possible, and name uncertainties or counter-effects.', 'This structure prevents unsupported headlines from becoming conclusions. For banks, test funding cost, loan yields, credit demand, asset quality, treasury books, liquidity, and regulatory capital rather than giving a generic positive/negative verdict.', 'Event → mechanism → exposure → financial-statement impact → risks → monitored evidence'],
+  ['Hard', 'The government funds a larger fiscal deficit through additional market borrowing. Explain the possible crowding-out and bond-market effects.', 'Greater bond supply can push yields higher and compete with private borrowers for savings, raising financing costs; the result depends on demand and central-bank/liquidity conditions.', 'The spending may also support growth and private demand, so crowding out is not mechanical. The answer should separate supply pressure, inflation expectations, growth effects, and monetary response.', 'Bond supply/demand + inflation/growth expectations determine yield impact'],
+  ['Hard', 'Nominal GDP grows 10% while the GDP deflator rises 6%. Approximate real GDP growth.', 'Approximately 3.8%, or about 4% using the subtraction shortcut.', 'Use the exact relation: (1.10/1.06)-1=3.77%. Subtracting inflation from nominal growth gives 4%, a close approximation at moderate rates but not an identity.', 'Real growth = (1 + nominal growth)/(1 + deflator growth) - 1'],
+  ['Hard', 'A stock falls 11% on the day it reports revenue above consensus, EBITDA below consensus, and weaker guidance. How should an analyst explain the move?', 'Report the price move and the disclosed surprises, then say margin and guidance disappointment are plausible drivers while checking valuation, positioning, volume, and concurrent news before asserting causation.', 'Markets react to information relative to expectations, not whether one line item grew. A defensible answer separates facts from inference, considers competing explanations, and records the exact as-of period.', 'Observed move + expectation gaps + plausible mechanism + alternatives + uncertainty'],
+]);
+
 const newShortcuts = [
-  shortcut(1, 'Percentage Multipliers', 'Use 1 + r/100 for an increase and 1 - r/100 for a decrease.', 'Example: +20% then -20% = 1.20 x 0.80 = 0.96, so the result is 4% lower. Use it whenever changes are sequential; each percentage applies to the updated base.'),
-  shortcut(2, 'Ratio Scaling', 'If A:B = m:n and A+B is known, one part equals total/(m+n).', 'Example: 3:5 of 640 gives one part 80, so the shares are 240 and 400. Confirm that both parts use the same units.'),
-  shortcut(3, 'Weighted Average', 'Weighted average = sum(value x weight) / sum(weights).', 'Example: 60 units at 80 and 40 at 110 gives (4,800 + 4,400)/100 = 92. Do not average the two prices unless the quantities are equal.'),
-  shortcut(4, 'Average Replacement', 'New average = Old average + (New value - Replaced value)/Count.', 'Example: replacing 70 with 90 in five observations raises the average by 20/5 = 4. Use only when the observation count stays fixed.'),
-  shortcut(5, 'Complementary Probability', 'P(at least one) = 1 - P(none).', 'For three fair coin tosses, P(at least one head) = 1 - (1/2)^3 = 7/8. It is usually faster than listing every successful outcome.'),
-  shortcut(6, 'Expected Value', 'Expected value = sum(outcome x probability).', 'Example: a 60% chance of 100 and 40% chance of -50 gives 0.6 x 100 + 0.4 x (-50) = 40. Expected value is an average outcome, not a guarantee or a risk measure.'),
-  shortcut(7, 'Speed Conversion', 'Multiply km/h by 5/18 to convert to m/s; multiply m/s by 18/5 to convert back.', '72 km/h becomes 72 x 5/18 = 20 m/s. Match the conversion to the distance and time units before calculating.'),
-  shortcut(8, 'Work-Rate LCM', 'Choose a total-work LCM, convert each worker into units per day, and add the rates.', 'For 12-day and 18-day workers, total work 36 units gives rates 3 and 2, so joint time is 36/5 = 7.2 days. Use this for constant, independent work rates.'),
-  shortcut(9, 'Standard-Deviation Reading', 'z = (observation - mean) / standard deviation.', 'If mean is 50, standard deviation is 5, and the observation is 60, z = 2. A z-score gives distance from the mean; it does not prove an observation is an outlier without context.'),
-  shortcut(10, 'Excel Audit Chain', 'Trace output -> formula -> precedent -> source input.', 'This catches wrong references, units, hardcodes, and broken links faster than scanning the entire workbook. Add a check row and reconcile the output to an independent total.'),
-  shortcut(11, 'Unit Digit Cycles', 'For powers, identify the repeating cycle of the last digit and reduce the exponent modulo the cycle length.', 'Powers of 7 end in 7, 9, 3, 1 repeatedly. Therefore 7^23 has the same unit digit as 7^3: 3. Use the cycle length, not the full exponent.'),
-  shortcut(12, 'Equal-Distance Average Speed', 'For two equal distances at speeds a and b, average speed = 2ab/(a+b).', 'At 60 km/h out and 40 km/h back, average speed = 2 x 60 x 40 / 100 = 48 km/h. Do not use the arithmetic mean unless the times are equal.'),
-  shortcut(13, 'Conditional Probability', 'P(A|B) = P(A and B) / P(B).', 'If 30 of 100 loans are both secured and delinquent, and 40 are delinquent, P(secured|delinquent) = 30/40 = 75%. State the conditioning event clearly.'),
-  shortcut(14, 'Bayes Update', 'P(A|B) = P(B|A)P(A) / P(B).', 'If a test is positive, combine the test sensitivity with the base rate and false-positive rate before interpreting the result. A high accuracy claim alone is not enough.'),
-  shortcut(15, 'Combinations and Permutations', 'nCr selects without order; nPr arranges with order. nCr = n!/[r!(n-r)!], nPr = n!/(n-r)!.', 'Choose two reviewers from ten: 10C2 = 45. Assign two distinct roles from ten people: 10P2 = 90. Decide whether order changes the outcome first.'),
-  shortcut(16, 'Bond Price-Yield Direction', 'For a plain fixed-rate bond, price and yield move in opposite directions.', 'If market yield rises, the present value of the fixed coupons and principal falls. The relationship is not linear; longer duration generally means greater price sensitivity.'),
-  shortcut(17, 'Discount-Factor Chain', 'Present value = future cash flow x discount factor; discount factors compound across periods.', 'At 10%, the two-year discount factor is 1/(1.10)^2 = 0.8264, so 100 received in two years is worth about 82.64 today. Keep rate and period units aligned.'),
-  shortcut(18, 'Excel Navigation Shortcuts', 'Ctrl+Arrow jumps across a data region; Ctrl+Shift+Arrow selects it; Ctrl+PageUp/PageDown changes sheets.', 'Use Ctrl+Arrow to reach the edge of a loan tape and Ctrl+Shift+Arrow to select the data block before formatting or checking it. Blank cells can change where the shortcut stops.'),
-  shortcut(19, 'Excel Review Shortcuts', 'Ctrl+1 opens Format Cells; F2 edits a formula; Ctrl+` shows formulas; Alt+= inserts AutoSum.', 'Use Ctrl+` to scan for hardcodes and broken patterns, F2 to inspect references, and Ctrl+1 to confirm units and formats. These are review tools, not substitutes for reconciliation.'),
-  shortcut(20, 'Handshake as a Combination', 'The handshake count n(n-1)/2 is the same as choosing 2 people from n: nC2.', 'For 10 people, 10C2 = 45. The shortcut assumes each pair interacts once, so it also applies to unique pair comparisons, not repeated meetings.'),
+  shortcut(1, 'data-interpretation-growth', 'How do you switch correctly between growth, percentage-point change, and CAGR?', 'Use growth = new/old-1; percentage-point change = new rate-old rate; CAGR = (end/start)^(1/n)-1.', 'Worked example:\nRevenue from 100 to 133.1 in three years has 33.1% total growth but 10% CAGR. A margin from 12% to 15% rises 3 percentage points, or 25% relative to the old margin.\n\nUse when:\nA table mixes amounts and rates.\n\nTrap:\nNever call a three-point margin increase “3% growth,” and use the number of compounding intervals, not the number of displayed observations.', 'Growth = New/Old - 1; CAGR = (End/Start)^(1/n) - 1'),
+  shortcut(2, 'data-sufficiency', 'What is the disciplined shortcut for data-sufficiency questions?', 'Test statement I alone, statement II alone, then both together; stop as soon as the question has one unique answer.', 'Worked example:\nTo ask whether x>7, x+y=14 is insufficient; xy=48 is insufficient; together x can still be 6 or 8, so even both are insufficient.\n\nUse when:\nThe task asks sufficiency, not necessarily the value.\n\nTrap:\nDo not combine statements before testing them separately, and do not confuse “can calculate something” with “can answer the exact question.”'),
+  shortcut(3, 'number-letter-patterns', 'How should you attack a number or letter series without guessing?', 'Test first and second differences, ratios, alternating positions, recurrences, squares/cubes, and paired alphabet-position streams—in that order.', 'Worked example:\nAZ, CX, FU, JQ, ? has two streams: first letters move +2,+3,+4,+5 to O; second letters move -2,-3,-4,-5 to L, so OL.\n\nUse when:\nA pattern contains at least four transitions.\n\nTrap:\nA rule must explain every transition and preferably both dimensions; fitting only the last two terms is not evidence.'),
+  shortcut(4, 'syllogisms-set-logic', 'What is the reliable shortcut for syllogisms and overlapping sets?', 'Translate each premise into subset, exclusion, or overlap notation; infer only the direction stated and use inclusion-exclusion for counts.', 'Worked example:\nAll monitored loans are reviewed, and no reviewed loan is undocumented. Therefore monitored loans are not undocumented. Separately, |A∩B|=|A|+|B|-|A∪B|.\n\nUse when:\nPrompts contain all, some, none, only, or neither.\n\nTrap:\n“All A are B” does not mean “all B are A,” and two groups inside the same larger set need not overlap.'),
+  shortcut(5, 'arrangements-ordering', 'How do you solve seating, floors, and scheduling puzzles efficiently?', 'Create one slot grid, place fixed and immediate clues first, join inequality chains, and branch only on the most constrained unresolved clue.', 'Worked example:\nIf R is Friday, S is Monday, Q immediately follows S, and T is not an end day, fill S-Q first and R last before testing T.\n\nUse when:\nSeveral people or events occupy unique positions.\n\nTrap:\n“Two places to the right” and “two people between” are different; in circles, fix one person to remove rotational duplicates.'),
+  shortcut(6, 'excel-lookup-choice', 'How do you choose among XLOOKUP, INDEX-MATCH, VLOOKUP, and HLOOKUP?', 'Use XLOOKUP for exact modern lookups; INDEX-MATCH for flexible legacy models; VLOOKUP only when the key is leftmost; HLOOKUP only for genuinely horizontal tables.', 'Worked example:\n=XLOOKUP(A2,LoanID,Balance,"Missing",0) returns an exact balance and makes the missing case explicit.\n\nUse when:\nJoining a source tape to a model or reconciliation.\n\nTrap:\nNever omit exact-match mode in legacy VLOOKUP unless the lookup column is intentionally sorted for an approximate band. Validate duplicate keys before trusting any lookup.'),
+  shortcut(7, 'excel-conditional-aggregation', 'Which formulas cover most multi-condition aggregation tasks?', 'Use SUMIFS for conditional sums, COUNTIFS for conditional counts, AVERAGEIFS for conditional means, and SUMPRODUCT when conditions or weights need array logic.', 'Worked example:\n=SUMIFS(Balance,Region,"India",DPD,">30") sums India balances over 30 DPD. =SUMPRODUCT(Balance,PD)/SUM(Balance) gives exposure-weighted PD.\n\nUse when:\nSummarising a loan tape without manual filters.\n\nTrap:\nAll criteria ranges must align in size; weighted averages require division by total weight.'),
+  shortcut(8, 'excel-references-errors', 'How do references and error handling prevent broken spreadsheet models?', 'Use A1 for relative references, $A$1 for fixed row and column, A$1 or $A1 for mixed references; use IFERROR only after identifying expected failure modes.', 'Worked example:\n=$B6*C$3 locks the rate column and scenario row appropriately when copied across a matrix.\n\nUse when:\nBuilding copyable schedules and scenario tables.\n\nTrap:\nIFERROR can hide genuine defects. Prefer explicit checks such as IF(COUNTIF(Key,ID)=0,"Missing",...) where missing data is a control event.'),
+  shortcut(9, 'excel-pivots-cleaning', 'What is the fastest defensible workflow for a raw Excel loan tape?', 'Convert to a Table, standardize types, validate keys, remove or flag duplicates, use filters/pivots for profiling, and reconcile totals before analysis.', 'Worked example:\nCompare row count, unique LoanID count, and total balance before and after cleaning; document every difference as a control bridge.\n\nUse when:\nReceiving assessment data with blanks, text-numbers, or duplicates.\n\nTrap:\nRemoving duplicates without defining the business key can delete valid records; a PivotTable summary is not a substitute for source-to-output reconciliation.'),
+  shortcut(10, 'excel-audit-reconciliation', 'What is the minimum academic audit chain for an Excel output?', 'Trace output → formula → precedents → source; add independent control totals, key-level exception checks, and reason-coded reconciliation bridges.', 'Worked example:\nIf source exposure is 1,000 and model exposure is 985, bridge the 15 to exclusions, duplicates, missing mappings, or an unresolved residual.\n\nUse when:\nReviewing a model under time pressure.\n\nTrap:\nMatching totals can conceal offsetting errors. Reconcile population, amounts, signs, dates, and units—not only the grand total.'),
+  shortcut(11, 'time-value-discounting', 'What is the compact time-value-of-money framework?', 'FV=PV(1+r)^n and PV=FV/(1+r)^n; align the rate with the cash-flow period and compounding convention.', 'Worked example:\n₹100 received in two years discounted at 10% is ₹100/1.10²=₹82.64.\n\nUse when:\nDiscounting bonds, DCF cash flows, or loan payments.\n\nTrap:\nA nominal annual rate compounded monthly is not a monthly rate until divided by 12; mid-year cash flows require a consistent timing convention.', 'PV = CF_t/(1+r)^t'),
+  shortcut(12, 'npv-irr', 'How should NPV and IRR be used together?', 'NPV is the present value of inflows minus outflows at the required return; IRR is the discount rate that sets NPV to zero. Prefer NPV when rankings conflict.', 'Worked example:\nFor cash flows -100, +60, +60 at a 10% hurdle, NPV=-100+60/1.1+60/1.1²≈₹4.13.\n\nUse when:\nEvaluating investments or comparing project returns with a hurdle rate.\n\nTrap:\nNon-conventional cash flows can create multiple IRRs, and IRR can mis-rank mutually exclusive projects with different scale or timing.', 'NPV = Σ CF_t/(1+r)^t; IRR solves NPV=0'),
+  shortcut(13, 'wacc-capm-cost-debt', 'What is the valuation shortcut linking cost of equity, cost of debt, and WACC?', 'Ke=Rf+β(ERP); after-tax Kd=pre-tax Kd(1-T); WACC=E/(D+E)Ke+D/(D+E)Kd(1-T), using market-value weights.', 'Worked example:\nWith Rf 7%, beta 1.2, ERP 6%, Ke=14.2%. A 10% debt cost at 25% tax gives 7.5% after tax.\n\nUse when:\nDiscounting FCFF with a capital-structure-consistent rate.\n\nTrap:\nDo not use book weights by default, do not tax-affect Ke, and do not apply one WACC to cash flows with materially different risk or currency.', 'Ke = Rf + βERP; WACC = wEKe + wDKd(1-T)'),
+  shortcut(14, 'bond-price-duration', 'How do yield, price, duration, and convexity fit together?', 'Fixed-rate bond price moves inversely to yield; modified duration estimates the first-order percentage price change, and convexity corrects the curvature.', 'Worked example:\nDuration 4.5 and a +80 bp yield move imply ΔP/P≈-4.5x0.008=-3.6% before convexity.\n\nUse when:\nEstimating mark-to-market sensitivity quickly.\n\nTrap:\nDuration is a local approximation, not a forecast; callable bonds, floating coupons, credit-spread moves, and large rate changes need additional analysis.', 'ΔP/P ≈ -Modified duration x Δy + 0.5 x Convexity x (Δy)²'),
+  shortcut(15, 'credit-ratios', 'Which ratio map covers the main credit questions?', 'Leverage: Debt/EBITDA and Debt/Equity; coverage: EBITDA/Interest and DSCR; liquidity: Current and Quick ratios; asset quality: NPL ratio and coverage.', 'Worked example:\nDebt 300, EBITDA 75, interest 25 gives 4.0x leverage and 3.0x interest coverage. Read them together because high leverage may still be serviceable with stable cash conversion.\n\nUse when:\nScreening a borrower or comparing periods.\n\nTrap:\nNormalize EBITDA, define net versus gross debt, align numerator/denominator periods, and never use an “ideal” ratio without sector and covenant context.'),
+  shortcut(16, 'working-capital-free-cash-flow', 'What is the fastest bridge from earnings to free cash flow?', 'FCFF=EBIT(1-T)+D&A-Capex-ΔNWC; a working-capital increase is a use of cash, while non-cash D&A is added back.', 'Worked example:\nEBIT 100, tax 25, D&A 20, capex 30, and ΔNWC +15 gives FCFF=50.\n\nUse when:\nExplaining why similar EBITDA can produce different cash flow.\n\nTrap:\nCFO already includes working-capital movements and usually interest under accounting presentation; do not subtract the same item twice when bridging.', 'FCFF = EBIT(1-T) + D&A - Capex - ΔNWC'),
+  shortcut(17, 'securitization-waterfall', 'What is the compact securitization waterfall and control framework?', 'Start with collateral collections, deduct servicing/trust costs, pay senior interest and principal, then junior claims and residual; test triggers, reserve use, and loss allocation.', 'Worked example:\nCollections 110 less fees 5 leave 105. If senior interest is 20 and scheduled senior principal 60, 25 remains for junior or reserve subject to triggers.\n\nUse when:\nReading ABS/RMBS/CMBS cash flows.\n\nTrap:\nPriority can change after delinquency, OC/IC, or event-of-default triggers. Do not assume a static waterfall or that credit enhancement eliminates risk.'),
+  shortcut(18, 'rates-inflation-fx', 'What is the mechanism map for rates, inflation, and FX questions?', 'Inflation surprise can raise expected policy rates and nominal yields; higher relative yields can affect capital flows and FX; currency moves then transmit through foreign-currency revenue, costs, and debt.', 'Worked example:\nAn INR depreciation helps an unhedged dollar exporter’s translation but hurts an importer’s dollar payable.\n\nUse when:\nAnswering market-awareness scenarios.\n\nTrap:\nState “tends to” and identify offsetting forces—expectations, hedges, demand, pass-through, and central-bank action—rather than claiming one automatic outcome.'),
+  shortcut(19, 'verbal-critical-reasoning', 'What is the shortcut for professional verbal and critical-reasoning answers?', 'Separate fact from inference, identify the conclusion and necessary assumption, test alternative causes, and write the final sentence as evidence + implication + limitation.', 'Worked example:\n“Defaults fell after the policy” supports correlation; a control group with the same decline weakens causation.\n\nUse when:\nSummarising news, writing review comments, or answering strengthen/weaken questions.\n\nTrap:\nAvoid redundant wording, unsupported causation, and conclusions stronger than the evidence.'),
+  shortcut(20, 'assessment-time-management', 'How should a mixed Oxane-style assessment be managed under time pressure?', 'Use two passes: bank direct calculations and exact Excel/finance items first; then solve multi-step reasoning with written constraints, reserving final minutes for units, signs, and denominator checks.', 'Worked example:\nFor a 60-minute, 40-question test, target roughly 45 minutes for first-pass attempts, 10 for flagged questions, and 5 for controls, adjusted to section rules.\n\nUse when:\nSections mix maths, reasoning, Excel, finance, and current affairs.\n\nTrap:\nDo not spend several minutes protecting one sunk-cost question; also do not rush past negative signs, basis-point conversions, or “except/not” wording.'),
+  shortcut(21, 'binomial-probability', 'What formulas solve repeated independent success/failure trials?', 'For X~Binomial(n,p), use P(X=k)=nCk·p^k·(1-p)^(n-k), with mean np and variance np(1-p).', 'Worked example:\nIf five independent loans each have a 10% default probability, P(exactly two defaults)=5C2x0.10²x0.90³=7.29%. The expected number of defaults is 5x0.10=0.5.\n\nUse when:\nThere is a fixed number of independent trials, two outcomes per trial, and constant success probability.\n\nTrap:\nDo not use the binomial model when default probabilities differ materially, outcomes are correlated, the number of trials is not fixed, or sampling without replacement makes probabilities change.', 'P(X=k)=nCk·p^k(1-p)^(n-k); E[X]=np; Var(X)=np(1-p)'),
 ];
 
 export const oxaneAptitudeCards = [
