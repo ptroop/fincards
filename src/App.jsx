@@ -14,6 +14,7 @@ import { accountingAptitudeCards } from './data/accountingAptitudeCards';
 import { accountingAdvancedCards } from './data/accountingAdvancedCards';
 import { accountingInterviewConceptCards, accountingInterviewAptitudeCards } from './data/accountingInterviewExpansionCards';
 import { interviewReadyCards } from './data/interviewReadyCards';
+import { oxaneAptitudeCards, oxaneAptitudeSubcategories } from './data/oxaneAptitudeCards';
 import conceptsData from './data/concepts.json';
 import { getAllProgress, saveCardProgress } from './db/progressDB';
 import { calculateNextReview } from './utils/srsAlgorithm';
@@ -22,6 +23,9 @@ const DeepDiveReader = lazy(() => import('./components/DeepDiveReader.jsx'));
 
 const conceptsById = new Map(conceptsData.map((concept) => [concept.id, concept]));
 const normalizeTopicText = (value = '') => value.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+const isPreservedAptitudeShortcut = (card) => card?.category === 'Aptitude'
+  && (card.subcategory === 'Shortcuts' || card.card_type === 'shortcut');
+const baseCardsData = cardsData.filter((card) => card.category !== 'Aptitude' || isPreservedAptitudeShortcut(card));
 const loadSavedCustomCards = () => {
   try {
     return JSON.parse(localStorage.getItem('deepti_custom_cards') || '[]');
@@ -52,7 +56,7 @@ function resolveTopicCards(deck, topic) {
 
 export default function App() {
   const [progressData, setProgressData] = useState({});
-  const [masterDeck, setMasterDeck] = useState(cardsData);
+  const [masterDeck, setMasterDeck] = useState([...baseCardsData, ...oxaneAptitudeCards]);
   const [loading, setLoading] = useState(false);
   const [customCards, setCustomCards] = useState(loadSavedCustomCards);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -133,7 +137,8 @@ export default function App() {
   useEffect(() => {
     const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbyerLC0EU-OiK_nncqf9IHWGJk0yaU47XlTO9_nuZ_5qRFqiyxrrvpqPx4ay8Clhilc/exec?t=" + Date.now();
     const localDeck = [
-      ...cardsData,
+      ...baseCardsData,
+      ...oxaneAptitudeCards,
       ...accountingCoreCards,
       ...accountingAptitudeCards,
       ...accountingAdvancedCards,
@@ -164,7 +169,8 @@ export default function App() {
     Promise.all([fetchCards, fetchProgress]).then(([liveCards, progressArr]) => {
       const combinedDeck = [...localDeck];
       if (Array.isArray(liveCards)) {
-        combinedDeck.push(...liveCards.filter(c => c.id && c.question));
+        combinedDeck.push(...liveCards.filter(c => c.id && c.question)
+          .filter(c => c.category !== 'Aptitude' || isPreservedAptitudeShortcut(c)));
       }
 
       // Dynamic mapping & scrubbing
@@ -798,7 +804,7 @@ export default function App() {
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5">
-                {['Quantitative', 'Logical Reasoning', 'Shortcuts'].map(topic => {
+                {oxaneAptitudeSubcategories.map(topic => {
                   let count = 0;
                   if (topic === 'Shortcuts') {
                     count = masterDeck.filter(c => c.category === 'Aptitude' && (
