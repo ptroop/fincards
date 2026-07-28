@@ -238,7 +238,7 @@ function InterviewAccordionItem({ card, isOpen, onToggle }) {
   );
 }
 
-export default function InterviewReadyView({ cards }) {
+export default function InterviewReadyView({ cards, onOpenTMinusOneDay }) {
   const [activeSubcategory, setActiveSubcategory] = useState(null);
   const [openCardId, setOpenCardId] = useState(null);
   const [visibleCount, setVisibleCount] = useState(20);
@@ -394,6 +394,31 @@ export default function InterviewReadyView({ cards }) {
               >
                 Formulae
               </button>
+              {onOpenTMinusOneDay && (
+                <button
+                  type="button"
+                  onClick={onOpenTMinusOneDay}
+                  style={{
+                    position: 'relative',
+                    overflow: 'hidden',
+                    padding: '12px 24px',
+                    borderRadius: '100px',
+                    border: '1px solid rgba(255,255,255,0.32)',
+                    background: 'linear-gradient(135deg, #30206f 0%, #6d4aff 48%, #b58cff 100%)',
+                    color: '#fff',
+                    boxShadow: '0 8px 22px rgba(109,74,255,0.25), inset 0 1px 0 rgba(255,255,255,0.48)',
+                    fontSize: '15px',
+                    fontWeight: 650,
+                    cursor: 'pointer',
+                    whiteSpace: 'nowrap',
+                    transition: 'transform 0.3s cubic-bezier(0.32,0.72,0,1), box-shadow 0.3s ease',
+                    fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif'
+                  }}
+                >
+                  <span style={{ position: 'absolute', left: '-8%', top: -14, width: '62%', height: 28, background: 'rgba(255,255,255,0.28)', transform: 'rotate(-10deg)', filter: 'blur(7px)', pointerEvents: 'none' }} />
+                  <span style={{ position: 'relative' }}>T - 1 Day</span>
+                </button>
+              )}
             </div>
           </div>
 

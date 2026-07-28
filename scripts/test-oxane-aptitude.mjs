@@ -19,8 +19,8 @@ assert.equal(new Set(newQuestions).size, newQuestions.length, 'Oxane Aptitude qu
 assert.equal(legacyShortcuts.length, 20, `Expected to preserve 20 legacy Shortcut cards, got ${legacyShortcuts.length}`);
 assert.equal(
   oxaneAptitudeCards.filter((card) => card.subcategory === 'Shortcuts' && card.card_type === 'shortcut').length,
-  10,
-  'Expected ten new shortcut cards',
+  20,
+  'Expected twenty new shortcut cards',
 );
 
 for (const card of oxaneAptitudeCards) {
@@ -36,7 +36,8 @@ for (const subcategory of oxaneAptitudeSubcategories) {
     ? legacyShortcuts.length + oxaneAptitudeCards.filter((card) => card.subcategory === subcategory).length
     : oxaneAptitudeCards.filter((card) => card.subcategory === subcategory).length;
   assert.ok(count >= 20, `${subcategory} must contain at least 20 cards, got ${count}`);
-  assert.ok(count <= 30, `${subcategory} must contain at most 30 cards, got ${count}`);
+  const upperBound = subcategory === 'Shortcuts' ? 40 : 30;
+  assert.ok(count <= upperBound, `${subcategory} must contain at most ${upperBound} cards, got ${count}`);
 }
 
 const appSource = await readFile(new URL('../src/App.jsx', import.meta.url), 'utf8');

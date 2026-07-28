@@ -6,6 +6,7 @@ import SecuritizationView from './components/SecuritizationView';
 import LearningMapView from './components/LearningMapView';
 import PodcastLauncher from './components/podcast/PodcastLauncher.jsx';
 import InterviewReadyView from './components/InterviewReadyView.jsx';
+import TMinusOneDayView from './components/TMinusOneDayView.jsx';
 import ExcelMasteryView from './components/ExcelMasteryView.jsx';
 import FormulaeView from './components/FormulaeView.jsx';
 import cardsData from './data/cards.json';
@@ -14,7 +15,10 @@ import { accountingAptitudeCards } from './data/accountingAptitudeCards';
 import { accountingAdvancedCards } from './data/accountingAdvancedCards';
 import { accountingInterviewConceptCards, accountingInterviewAptitudeCards } from './data/accountingInterviewExpansionCards';
 import { interviewReadyCards } from './data/interviewReadyCards';
+import { getTMinusOneDayDeck } from './data/tMinusOneDayCards';
 import { oxaneAptitudeCards, oxaneAptitudeSubcategories } from './data/oxaneAptitudeCards';
+import { excelFinanceModelingCards } from './data/excelFinanceModelingCards';
+import { aptitudeShortcutOverrides } from './data/aptitudeShortcutOverrides';
 import conceptsData from './data/concepts.json';
 import { getAllProgress, saveCardProgress } from './db/progressDB';
 import { calculateNextReview } from './utils/srsAlgorithm';
@@ -25,7 +29,13 @@ const conceptsById = new Map(conceptsData.map((concept) => [concept.id, concept]
 const normalizeTopicText = (value = '') => value.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
 const isPreservedAptitudeShortcut = (card) => card?.category === 'Aptitude'
   && (card.subcategory === 'Shortcuts' || card.card_type === 'shortcut');
-const baseCardsData = cardsData.filter((card) => card.category !== 'Aptitude' || isPreservedAptitudeShortcut(card));
+const baseCardsData = cardsData.filter((card) => (
+  (card.category !== 'Aptitude' || isPreservedAptitudeShortcut(card))
+  && card.category !== 'Excel & Financial Modeling'
+)).map((card) => aptitudeShortcutOverrides[card.id]
+  ? { ...card, ...aptitudeShortcutOverrides[card.id] }
+  : card);
+const tMinusOneDayDeck = getTMinusOneDayDeck(interviewReadyCards);
 const loadSavedCustomCards = () => {
   try {
     return JSON.parse(localStorage.getItem('deepti_custom_cards') || '[]');
@@ -56,7 +66,7 @@ function resolveTopicCards(deck, topic) {
 
 export default function App() {
   const [progressData, setProgressData] = useState({});
-  const [masterDeck, setMasterDeck] = useState([...baseCardsData, ...oxaneAptitudeCards]);
+  const [masterDeck, setMasterDeck] = useState([...baseCardsData, ...oxaneAptitudeCards, ...excelFinanceModelingCards]);
   const [loading, setLoading] = useState(false);
   const [customCards, setCustomCards] = useState(loadSavedCustomCards);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -139,6 +149,7 @@ export default function App() {
     const localDeck = [
       ...baseCardsData,
       ...oxaneAptitudeCards,
+      ...excelFinanceModelingCards,
       ...accountingCoreCards,
       ...accountingAptitudeCards,
       ...accountingAdvancedCards,
@@ -170,7 +181,10 @@ export default function App() {
       const combinedDeck = [...localDeck];
       if (Array.isArray(liveCards)) {
         combinedDeck.push(...liveCards.filter(c => c.id && c.question)
-          .filter(c => c.category !== 'Aptitude' || isPreservedAptitudeShortcut(c)));
+          .filter(c => (
+            (c.category !== 'Aptitude' || isPreservedAptitudeShortcut(c))
+            && c.category !== 'Excel & Financial Modeling'
+          )));
       }
 
       // Dynamic mapping & scrubbing
@@ -782,9 +796,12 @@ export default function App() {
             <InterviewReadyView
               cards={interviewReadyCards}
               onBack={goBack}
+              onOpenTMinusOneDay={() => setActiveCategory('T - 1 Day')}
               globalMode={globalMode}
               onToggleMode={() => setGlobalMode(prev => prev === 'focus' ? 'list' : 'focus')}
             />
+          ) : activeCategory === 'T - 1 Day' ? (
+            <TMinusOneDayView cards={tMinusOneDayDeck} onBack={() => setActiveCategory('Interview Ready')} />
           ) : activeCategory === 'Excel Mastery' ? (
             <ExcelMasteryView onBack={goBack} />
           ) : activeCategory === 'Formulae' ? (

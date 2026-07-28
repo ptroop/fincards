@@ -247,16 +247,26 @@ const marketAwareness = topic('markets', 'Market Awareness and Financial GK', [
 ]);
 
 const newShortcuts = [
-  shortcut(1, 'Percentage Multipliers', 'Use 1 + r/100 for an increase and 1 - r/100 for a decrease.', 'Example: +20% then -20% = 1.20 x 0.80 = 0.96, so the result is 4% lower.'),
-  shortcut(2, 'Ratio Scaling', 'If A:B = m:n and A+B is known, one part equals total/(m+n).', 'Example: 3:5 of 640 gives one part 80, so the shares are 240 and 400.'),
-  shortcut(3, 'Weighted Average', 'Multiply each value by its weight, add the products, and divide by total weight.', 'This is faster and safer than averaging group averages.'),
-  shortcut(4, 'Average Replacement', 'New average = Old average + (New value - Replaced value)/Count.', 'It avoids re-adding the entire data set when one observation changes.'),
-  shortcut(5, 'Complementary Probability', 'P(at least one) = 1 - P(none).', 'For three fair coin tosses, P(at least one head) = 1 - (1/2)^3 = 7/8.'),
-  shortcut(6, 'Expected Value', 'Expected value is the sum of outcome x probability for every outcome.', 'Use it to compare uncertain returns before considering risk dispersion.'),
-  shortcut(7, 'Speed Conversion', 'Multiply km/h by 5/18 to convert to m/s.', '72 km/h becomes 72 x 5/18 = 20 m/s.'),
-  shortcut(8, 'Work-Rate LCM', 'Choose a convenient total-work LCM, then add worker outputs.', 'For 12-day and 18-day workers, total work 36 units gives rates 3 and 2, so joint time is 36/5 = 7.2 days.'),
-  shortcut(9, 'Standard-Deviation Reading', 'A z-score tells how many standard deviations an observation is from the mean.', 'z = 2 means the observation is two standard deviations above the mean.'),
-  shortcut(10, 'Excel Audit Chain', 'Trace output -> formula -> precedent -> source input.', 'This catches wrong references, units, hard-codes, and broken links faster than scanning the entire workbook.'),
+  shortcut(1, 'Percentage Multipliers', 'Use 1 + r/100 for an increase and 1 - r/100 for a decrease.', 'Example: +20% then -20% = 1.20 x 0.80 = 0.96, so the result is 4% lower. Use it whenever changes are sequential; each percentage applies to the updated base.'),
+  shortcut(2, 'Ratio Scaling', 'If A:B = m:n and A+B is known, one part equals total/(m+n).', 'Example: 3:5 of 640 gives one part 80, so the shares are 240 and 400. Confirm that both parts use the same units.'),
+  shortcut(3, 'Weighted Average', 'Weighted average = sum(value x weight) / sum(weights).', 'Example: 60 units at 80 and 40 at 110 gives (4,800 + 4,400)/100 = 92. Do not average the two prices unless the quantities are equal.'),
+  shortcut(4, 'Average Replacement', 'New average = Old average + (New value - Replaced value)/Count.', 'Example: replacing 70 with 90 in five observations raises the average by 20/5 = 4. Use only when the observation count stays fixed.'),
+  shortcut(5, 'Complementary Probability', 'P(at least one) = 1 - P(none).', 'For three fair coin tosses, P(at least one head) = 1 - (1/2)^3 = 7/8. It is usually faster than listing every successful outcome.'),
+  shortcut(6, 'Expected Value', 'Expected value = sum(outcome x probability).', 'Example: a 60% chance of 100 and 40% chance of -50 gives 0.6 x 100 + 0.4 x (-50) = 40. Expected value is an average outcome, not a guarantee or a risk measure.'),
+  shortcut(7, 'Speed Conversion', 'Multiply km/h by 5/18 to convert to m/s; multiply m/s by 18/5 to convert back.', '72 km/h becomes 72 x 5/18 = 20 m/s. Match the conversion to the distance and time units before calculating.'),
+  shortcut(8, 'Work-Rate LCM', 'Choose a total-work LCM, convert each worker into units per day, and add the rates.', 'For 12-day and 18-day workers, total work 36 units gives rates 3 and 2, so joint time is 36/5 = 7.2 days. Use this for constant, independent work rates.'),
+  shortcut(9, 'Standard-Deviation Reading', 'z = (observation - mean) / standard deviation.', 'If mean is 50, standard deviation is 5, and the observation is 60, z = 2. A z-score gives distance from the mean; it does not prove an observation is an outlier without context.'),
+  shortcut(10, 'Excel Audit Chain', 'Trace output -> formula -> precedent -> source input.', 'This catches wrong references, units, hardcodes, and broken links faster than scanning the entire workbook. Add a check row and reconcile the output to an independent total.'),
+  shortcut(11, 'Unit Digit Cycles', 'For powers, identify the repeating cycle of the last digit and reduce the exponent modulo the cycle length.', 'Powers of 7 end in 7, 9, 3, 1 repeatedly. Therefore 7^23 has the same unit digit as 7^3: 3. Use the cycle length, not the full exponent.'),
+  shortcut(12, 'Equal-Distance Average Speed', 'For two equal distances at speeds a and b, average speed = 2ab/(a+b).', 'At 60 km/h out and 40 km/h back, average speed = 2 x 60 x 40 / 100 = 48 km/h. Do not use the arithmetic mean unless the times are equal.'),
+  shortcut(13, 'Conditional Probability', 'P(A|B) = P(A and B) / P(B).', 'If 30 of 100 loans are both secured and delinquent, and 40 are delinquent, P(secured|delinquent) = 30/40 = 75%. State the conditioning event clearly.'),
+  shortcut(14, 'Bayes Update', 'P(A|B) = P(B|A)P(A) / P(B).', 'If a test is positive, combine the test sensitivity with the base rate and false-positive rate before interpreting the result. A high accuracy claim alone is not enough.'),
+  shortcut(15, 'Combinations and Permutations', 'nCr selects without order; nPr arranges with order. nCr = n!/[r!(n-r)!], nPr = n!/(n-r)!.', 'Choose two reviewers from ten: 10C2 = 45. Assign two distinct roles from ten people: 10P2 = 90. Decide whether order changes the outcome first.'),
+  shortcut(16, 'Bond Price-Yield Direction', 'For a plain fixed-rate bond, price and yield move in opposite directions.', 'If market yield rises, the present value of the fixed coupons and principal falls. The relationship is not linear; longer duration generally means greater price sensitivity.'),
+  shortcut(17, 'Discount-Factor Chain', 'Present value = future cash flow x discount factor; discount factors compound across periods.', 'At 10%, the two-year discount factor is 1/(1.10)^2 = 0.8264, so 100 received in two years is worth about 82.64 today. Keep rate and period units aligned.'),
+  shortcut(18, 'Excel Navigation Shortcuts', 'Ctrl+Arrow jumps across a data region; Ctrl+Shift+Arrow selects it; Ctrl+PageUp/PageDown changes sheets.', 'Use Ctrl+Arrow to reach the edge of a loan tape and Ctrl+Shift+Arrow to select the data block before formatting or checking it. Blank cells can change where the shortcut stops.'),
+  shortcut(19, 'Excel Review Shortcuts', 'Ctrl+1 opens Format Cells; F2 edits a formula; Ctrl+` shows formulas; Alt+= inserts AutoSum.', 'Use Ctrl+` to scan for hardcodes and broken patterns, F2 to inspect references, and Ctrl+1 to confirm units and formats. These are review tools, not substitutes for reconciliation.'),
+  shortcut(20, 'Handshake as a Combination', 'The handshake count n(n-1)/2 is the same as choosing 2 people from n: nC2.', 'For 10 people, 10C2 = 45. The shortcut assumes each pair interacts once, so it also applies to unique pair comparisons, not repeated meetings.'),
 ];
 
 export const oxaneAptitudeCards = [
