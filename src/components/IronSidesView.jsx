@@ -26,10 +26,10 @@ function Formula({ item }) {
       <div style={{ color: green, fontSize: 12, fontWeight: 700, marginBottom: 7, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
         {item.label}
       </div>
-      <div style={{ color: ink, fontFamily: 'ui-monospace, SFMono-Regular, Consolas, monospace', fontSize: 15, lineHeight: 1.5, overflowX: 'auto' }}>
+      <div style={{ color: ink, fontFamily: 'ui-monospace, SFMono-Regular, Consolas, monospace', fontSize: 16, lineHeight: 1.6, overflowX: 'auto' }}>
         {item.expression}
       </div>
-      {item.variables && <div style={{ color: muted, fontSize: 13, lineHeight: 1.55, marginTop: 8 }}>{item.variables}</div>}
+      {item.variables && <div style={{ color: muted, fontSize: 15, lineHeight: 1.6, marginTop: 8 }}>{item.variables}</div>}
     </div>
   );
 }
@@ -46,7 +46,7 @@ function ConceptCard({ item, index }) {
             {item.title}
           </h3>
           {openingDefinition && (
-            <p style={{ color: ink, fontSize: 18, lineHeight: 1.65, fontWeight: 560, margin: '18px 0 16px', fontFamily: textFont }}>
+            <p style={{ color: ink, fontSize: 20, lineHeight: 1.7, fontWeight: 560, margin: '18px 0 16px', fontFamily: textFont }}>
               {openingDefinition}
             </p>
           )}
@@ -54,9 +54,9 @@ function ConceptCard({ item, index }) {
       </div>
       <div style={{ marginLeft: 58, paddingTop: openingDefinition ? 0 : 18 }}>
       {item.simpleMeaning && (
-        <p style={{ color: ink, fontSize: 18, lineHeight: 1.72, margin: '0 0 18px', fontFamily: textFont }}>{item.simpleMeaning}</p>
+        <p style={{ color: ink, fontSize: 20, lineHeight: 1.78, margin: '0 0 18px', fontFamily: textFont }}>{item.simpleMeaning}</p>
       )}
-      <div style={{ color: '#334038', fontSize: 18, lineHeight: 1.82, fontFamily: textFont }}>
+      <div style={{ color: '#334038', fontSize: 20, lineHeight: 1.86, fontFamily: textFont }}>
         <LongText text={item.tutorial || item.explanation} />
       </div>
       <IronSidesConceptVisual visual={item.visual} />
@@ -64,8 +64,8 @@ function ConceptCard({ item, index }) {
         <div style={{ marginTop: 28, display: 'grid', gap: 22 }}>
           {item.subconcepts.map((subconcept) => (
             <section key={`${item.id}_${subconcept.title}`}>
-              <h4 style={{ color: ink, fontSize: 18, lineHeight: 1.3, fontWeight: 700, margin: '0 0 6px' }}>{subconcept.title}</h4>
-              <p style={{ color: '#46534b', fontSize: 17, lineHeight: 1.78, margin: 0, fontFamily: textFont }}>{subconcept.explanation}</p>
+              <h4 style={{ color: ink, fontSize: 20, lineHeight: 1.35, fontWeight: 700, margin: '0 0 6px' }}>{subconcept.title}</h4>
+              <p style={{ color: '#46534b', fontSize: 19, lineHeight: 1.82, margin: 0, fontFamily: textFont }}>{subconcept.explanation}</p>
             </section>
           ))}
         </div>
@@ -77,28 +77,28 @@ function ConceptCard({ item, index }) {
       )}
       {(item.indianExample || item.workedExample || item.example) && (
         <div style={{ marginTop: 26, padding: '16px 18px', borderLeft: '3px solid #79a88d', background: '#f5f8f5' }}>
-          <div style={{ color: '#334038', fontSize: 15, lineHeight: 1.72, fontFamily: textFont }}><LongText text={item.indianExample || item.workedExample || item.example} /></div>
+          <div style={{ color: '#334038', fontSize: 17, lineHeight: 1.8, fontFamily: textFont }}><LongText text={item.indianExample || item.workedExample || item.example} /></div>
         </div>
       )}
       {item.realEvent && (
-        <p style={{ margin: '18px 0 0', color: '#46534b', fontSize: 15, lineHeight: 1.72, fontFamily: textFont }}>{item.realEvent}</p>
+        <p style={{ margin: '18px 0 0', color: '#46534b', fontSize: 17, lineHeight: 1.8, fontFamily: textFont }}>{item.realEvent}</p>
       )}
       {item.workedExample && item.workedExample !== item.indianExample && (
         <div style={{ marginTop: 18 }}>
-          <h4 style={{ color: ink, fontSize: 16, fontWeight: 750, margin: '0 0 8px' }}>Worked example</h4>
-          <div style={{ color: '#334038', fontSize: 15, lineHeight: 1.7, fontFamily: textFont }}><LongText text={item.workedExample} /></div>
+          <h4 style={{ color: ink, fontSize: 18, fontWeight: 750, margin: '0 0 8px' }}>Worked example</h4>
+          <div style={{ color: '#334038', fontSize: 17, lineHeight: 1.8, fontFamily: textFont }}><LongText text={item.workedExample} /></div>
         </div>
       )}
       {item.journalEntries?.length > 0 && (
         <div style={{ marginTop: 18, borderRadius: 16, background: '#17211b', color: '#eaf1ec', padding: '17px 18px' }}>
           <div style={{ color: '#9cc2a8', fontSize: 11, fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 9 }}>Entry</div>
-          <div style={{ display: 'grid', gap: 8, fontFamily: 'ui-monospace, SFMono-Regular, Consolas, monospace', fontSize: 13, lineHeight: 1.6 }}>
+          <div style={{ display: 'grid', gap: 8, fontFamily: 'ui-monospace, SFMono-Regular, Consolas, monospace', fontSize: 15, lineHeight: 1.7 }}>
             {item.journalEntries.map((entry) => <div key={entry}>{entry}</div>)}
           </div>
         </div>
       )}
       {item.trap && (
-        <div style={{ marginTop: 18, paddingTop: 14, borderTop: `1px solid ${border}`, color: '#564231', fontSize: 15, lineHeight: 1.65 }}>
+        <div style={{ marginTop: 18, paddingTop: 14, borderTop: `1px solid ${border}`, color: '#564231', fontSize: 16, lineHeight: 1.72 }}>
             {item.trap}
         </div>
       )}
@@ -137,14 +137,14 @@ function QuestionCard({ card, number }) {
           <>
             <span style={{ color: '#a2aaa4' }}>·</span>
             <span style={{ color: muted, fontSize: 13 }}>
-              {card.evidenceType === 'reported interview question' ? `Reported${card.company ? ` · ${card.company}` : ''}` : 'Assessment standard'}
+              {card.evidenceType === 'reported interview question' ? `Reported${card.company ? ` · ${card.company}` : ''}` : 'Practice'}
             </span>
           </>
         )}
         <span style={{ color: '#a2aaa4' }}>·</span>
       </div>
 
-      <h3 style={{ color: ink, fontSize: 'clamp(21px, 3vw, 28px)', lineHeight: 1.3, fontWeight: 540, margin: '0 0 22px', letterSpacing: '-0.018em' }}>
+      <h3 style={{ color: ink, fontSize: 'clamp(23px, 3vw, 30px)', lineHeight: 1.34, fontWeight: 540, margin: '0 0 22px', letterSpacing: '-0.018em' }}>
         {card.question}
       </h3>
 
@@ -167,8 +167,8 @@ function QuestionCard({ card, number }) {
                   padding: '14px 16px',
                   textAlign: 'left',
                   fontFamily: textFont,
-                  fontSize: 15,
-                  lineHeight: 1.45,
+                  fontSize: 17,
+                  lineHeight: 1.55,
                   cursor: 'pointer',
                 }}
               >
@@ -194,8 +194,8 @@ function QuestionCard({ card, number }) {
               {isCorrect ? 'Correct' : `Correct answer: ${String.fromCharCode(65 + card.correctOption)}`}
             </div>
           )}
-          <div style={{ color: ink, fontSize: 18, lineHeight: 1.7, fontWeight: 580 }}>{card.answer}</div>
-          <div style={{ color: '#405048', fontSize: 17, lineHeight: 1.78, marginTop: 12, fontFamily: textFont }}>
+          <div style={{ color: ink, fontSize: 20, lineHeight: 1.75, fontWeight: 580 }}>{card.answer}</div>
+          <div style={{ color: '#405048', fontSize: 19, lineHeight: 1.84, marginTop: 12, fontFamily: textFont }}>
             <LongText text={card.explanation} />
           </div>
           {card.sourceUrl && (
@@ -217,9 +217,9 @@ function QuestionCard({ card, number }) {
 function ArchiveCard({ card }) {
   const [open, setOpen] = useState(false);
   return (
-    <article style={{ padding: '28px 0', borderBottom: `1px solid ${border}` }}>
+    <article style={{ padding: '30px 0', borderBottom: `1px solid ${border}` }}>
       <div style={{ color: green, fontSize: 12, fontWeight: 700, marginBottom: 10 }}>{card.subcategory}</div>
-      <h3 style={{ color: ink, fontSize: 'clamp(20px, 3vw, 26px)', lineHeight: 1.3, fontWeight: 520, margin: '0 0 16px' }}>{card.question}</h3>
+      <h3 style={{ color: ink, fontSize: 'clamp(22px, 3vw, 28px)', lineHeight: 1.34, fontWeight: 520, margin: '0 0 16px' }}>{card.question}</h3>
       <button
         type="button"
         onClick={() => setOpen((value) => !value)}
@@ -228,7 +228,7 @@ function ArchiveCard({ card }) {
         {open ? 'Hide archive answer' : 'View archive answer'}
       </button>
       {open && (
-        <div style={{ marginTop: 20, color: '#334038', fontSize: 16, lineHeight: 1.72, fontFamily: textFont }}>
+        <div style={{ marginTop: 20, color: '#334038', fontSize: 18, lineHeight: 1.8, fontFamily: textFont }}>
           <LongText text={card.answer} />
           {card.formula && <div style={{ marginTop: 16, padding: 14, background: pale, borderRadius: 12, fontFamily: 'ui-monospace, SFMono-Regular, Consolas, monospace', overflowX: 'auto' }}>{card.formula}</div>}
         </div>
@@ -266,14 +266,19 @@ export default function IronSidesView({ modules, questions, archiveCards, onBack
   const [section, setSection] = useState('learn');
   const [activeModuleId, setActiveModuleId] = useState(modules[0]?.id ?? null);
   const [questionType, setQuestionType] = useState('all');
+  const [questionEvidence, setQuestionEvidence] = useState('all');
   const activeModule = modules.find((module) => module.id === activeModuleId) ?? modules[0];
   const activeModuleIndex = modules.findIndex((module) => module.id === activeModule?.id);
   const previousTopic = activeModuleIndex > 0 ? modules[activeModuleIndex - 1] : null;
   const nextTopic = activeModuleIndex >= 0 && activeModuleIndex < modules.length - 1 ? modules[activeModuleIndex + 1] : null;
 
   const moduleQuestions = useMemo(
-    () => questions.filter((card) => card.moduleId === activeModule?.id && (questionType === 'all' || card.type === questionType)),
-    [activeModule, questionType, questions],
+    () => questions.filter((card) => (
+      card.moduleId === activeModule?.id
+      && (questionType === 'all' || card.type === questionType)
+      && (questionEvidence === 'all' || card.evidenceType === questionEvidence)
+    )),
+    [activeModule, questionEvidence, questionType, questions],
   );
 
   const totals = useMemo(() => ({
@@ -372,6 +377,25 @@ export default function IronSidesView({ modules, questions, archiveCards, onBack
               <div style={{ padding: '20px 0 12px' }}>
                 <div style={{ color: green, fontSize: 13, fontWeight: 750, marginBottom: 8 }}>Question bank</div>
                 <h2 style={{ color: ink, fontSize: 'clamp(34px, 6vw, 52px)', lineHeight: 1.05, fontWeight: 540, letterSpacing: '-0.04em', margin: '0 0 16px' }}>{activeModule.title}</h2>
+                <p style={{ color: muted, fontSize: 15, lineHeight: 1.65, maxWidth: 760, margin: 0 }}>
+                  Reported questions reflect publicly documented interview patterns. Practice questions are original assessment-standard exercises covering the same concepts and the questions you should be able to solve fluently.
+                </p>
+                <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 20 }}>
+                  {[
+                    ['all', `All (${questions.filter((card) => card.moduleId === activeModule.id).length})`],
+                    ['reported interview question', `Reported (${questions.filter((card) => card.moduleId === activeModule.id && card.evidenceType === 'reported interview question').length})`],
+                    ['assessment-standard', `Practice (${questions.filter((card) => card.moduleId === activeModule.id && card.evidenceType === 'assessment-standard').length})`],
+                  ].map(([value, label]) => (
+                    <button
+                      type="button"
+                      key={value}
+                      onClick={() => setQuestionEvidence(value)}
+                      style={{ border: 0, borderRadius: 999, padding: '9px 14px', background: questionEvidence === value ? ink : '#e9eeea', color: questionEvidence === value ? '#fff' : ink, fontSize: 13, fontWeight: 700, cursor: 'pointer' }}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
                 <div style={{ display: 'flex', gap: 8, marginTop: 20 }}>
                   {[
                     ['all', 'All'],
@@ -390,6 +414,9 @@ export default function IronSidesView({ modules, questions, archiveCards, onBack
                 </div>
               </div>
               {moduleQuestions.map((card, index) => <QuestionCard key={card.id} card={card} number={index + 1} />)}
+              {moduleQuestions.length === 0 && (
+                <p style={{ color: muted, fontSize: 16, lineHeight: 1.6, padding: '28px 0' }}>No questions match both filters.</p>
+              )}
               <TopicNavigation previousTopic={previousTopic} nextTopic={nextTopic} onSelect={selectModule} />
             </section>
           )}

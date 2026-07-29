@@ -432,5 +432,8 @@ assert.ok(ironSidesViewSource.includes('How to post a journal entry into a ledge
 assert.ok(ironSidesViewSource.includes('<TopicNavigation previousTopic={previousTopic} nextTopic={nextTopic} onSelect={selectModule} />'), 'Learn and Practice must render topic navigation.');
 assert.ok((ironSidesViewSource.match(/<TopicNavigation /g) || []).length === 2, 'Both Learn and Practice require bottom Previous/Next topic navigation.');
 assert.ok(ironSidesViewSource.includes("scrollIntoView({ behavior: 'smooth', block: 'start' })"), 'Topic navigation must automatically scroll to the topic heading.');
+assert.ok(ironSidesViewSource.includes("['assessment-standard', `Practice ("), 'Practice questions must be separately filterable from reported questions.');
+assert.ok(ironSidesViewSource.includes("card.evidenceType === questionEvidence"), 'The question bank must apply the reported/practice provenance filter.');
+assert.ok(ironSidesViewSource.includes(": 'Practice'"), 'Practice questions must be labelled clearly in each question card.');
 
 console.log('IronSides MBA assessment coverage contract passed.');
