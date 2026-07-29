@@ -1,6 +1,8 @@
 import { zeroToHeroModules, zeroToHeroQuestions } from './ironsidesZeroToHero.js';
 import { ironsidesAuditQuestions } from './ironsidesAuditQuestions.js';
 import { ironsidesStandardQuestions } from './ironsidesStandardQuestions.js';
+import { ironsidesJournalQuestions } from './ironsidesJournalQuestions.js';
+import { ironsidesInterviewBenchmarkQuestions } from './ironsidesInterviewBenchmarkQuestions.js';
 
 const concept = (id, title, explanation, formulae = [], example = '', trap = '') => ({
   id,
@@ -872,9 +874,27 @@ const sourceConceptById = new Map(
     ...supplementalConcepts,
   ].map((item) => [
     item.id,
-    conceptVisuals[item.id] ? { ...item, visual: conceptVisuals[item.id] } : item,
+    conceptVisuals[item.id]
+      ? { ...item, visual: conceptVisuals[item.id] }
+      : item,
   ]),
 );
+
+const nightBeforeTutorials = {
+  zth_accounting_purpose: 'Start with the business event, not with the words debit and credit. Ask: what did the business receive, what did it give up or become obliged to give up, and on what date did that economic change occur? Then identify the accounts, measure the amount, and decide whether the effect belongs in this period. This is why a loan receipt is cash plus a liability, not income; a cash purchase of a machine is one asset exchanged for another; and a credit sale is revenue plus a receivable even though cash has not arrived.\n\nFor an Indian service firm that completes Rs 2,00,000 of work in March and collects in April, March records Trade Receivable Dr 2,00,000 and Service Revenue Cr 2,00,000. If March salary of Rs 80,000 is paid in April, March records Salary Expense Dr 80,000 and Salary Payable Cr 80,000. The later cash payments settle existing balances; they do not create April expense or revenue again. If you cannot describe the economic story in one sentence, you are not ready to write the entry.',
+  zth_equation_accounts: 'The accounting equation is the check on the story: Assets = Liabilities + Equity. Assets are resources controlled by the business; liabilities are claims of outsiders; equity is the residual claim of owners. Profit increases equity, expenses reduce it, owner capital is not revenue, and drawings or dividends are not expenses. Debit and credit are directions within this system: assets, expenses and drawings normally increase on the debit side; liabilities, equity and income normally increase on the credit side.\n\nWork through each transaction before memorising a rule. A promoter introduces Rs 10 lakh: Bank Dr, Capital Cr. The business borrows Rs 5 lakh: Bank Dr, Loan Cr. It buys equipment for Rs 3 lakh cash: Equipment Dr, Bank Cr; total assets do not change. It makes a credit sale of Rs 2 lakh: Receivable Dr, Revenue Cr; assets and equity rise, but cash is still zero. Every entry must leave the equation balanced, but a balanced entry can still use the wrong account, wrong period or fictitious evidence.',
+  zth_cycle_evidence: 'The books are a chain, and each link has a different job. The invoice, receipt, contract, bank statement or payroll record is evidence of the event. The journal records the event in date order with a narration. The ledger gathers every debit and credit for one account. The trial balance lists the closing ledger balances and checks arithmetic equality. Adjustments update timing before statements are prepared; closing resets temporary income and expense accounts.\n\nTake a Rs 1,18,000 GST-inclusive credit sale. The invoice supports taxable value, GST and customer identity. The journal records Trade Receivable Dr 1,18,000; Sales Cr 1,00,000; Output GST Cr 18,000. Posting sends the debit to that customer ledger and the credits to Sales and Output GST. The trial balance receives the closing balances, not the raw journal total. When the customer pays, Bank Dr and Trade Receivable Cr. Recording revenue again on collection would double count the sale. A trial balance can agree even when a transaction is omitted, capital expenditure is posted as expense, or the wrong customer is used.',
+  zth_ledgers_control_accounts: 'A ledger is not another journal. The journal answers, “What happened and when?” The ledger answers, “What is the complete movement and closing balance of this account?” To post, take each journal line separately: a debit line goes to the debit side of the named ledger account and a credit line goes to the credit side. Copy the date, amount and reference. Do not post the whole journal entry into one account.\n\nExample: a credit sale of Rs 50,000 to Asha is posted as Rs 50,000 on the debit side of Asha’s account and Rs 50,000 on the credit side of Sales. When Asha pays, post Bank on the debit side and Asha on the credit side. Total both sides of Asha’s account; the difference is the closing balance. The receivables control account in the general ledger must equal the sum of all customer ledgers. If it does not, trace omitted postings, wrong amounts, returns, discounts, bad debts, contra entries and duplicate entries. Only the general-ledger closing balances move into the trial balance.',
+  zth_journal_method: 'Write a journal entry in this order. First state the transaction in ordinary language. Second list every account affected, including tax, principal, interest or inventory cost when relevant. Third classify each account as asset, liability, equity, income, expense or contra-account. Fourth decide whether each account increased or decreased. Fifth apply the normal-balance direction and make total debits equal total credits. Sixth write a short narration and trace the effect to profit, cash, assets, liabilities and equity.\n\nFor an unpaid electricity bill of Rs 12,000, the business consumed a service and now owes the supplier: Electricity Expense Dr 12,000; Electricity Payable Cr 12,000. When paid later: Electricity Payable Dr 12,000; Bank Cr 12,000. For a loan instalment of Rs 1,10,000 containing Rs 90,000 principal and Rs 20,000 interest: Loan Payable Dr 90,000; Interest Expense Dr 20,000; Bank Cr 1,10,000. The compound entry is one economic event with three effects. Never use “debit means loss” or “credit means gain”; those slogans fail as soon as a bank balance, receivable or liability is involved.',
+  zth_indian_commercial_entries: 'Indian entries often fail because the underlying transaction and the statutory balance are mixed together. Record the business cost or revenue at its economic amount, then record GST, TDS or payroll deductions in separate recoverable or payable accounts. For a professional fee of Rs 1,00,000 subject to TDS of Rs 10,000, the payer records Professional Fees Dr 1,00,000; Bank Cr 90,000; TDS Payable Cr 10,000. The full expense is recognised because the service cost is Rs 1,00,000; the withheld Rs 10,000 is a liability to the government. On deposit, TDS Payable Dr and Bank Cr.\n\nFor a taxable sale, revenue is recorded at the taxable value and output GST is credited separately. Eligible input GST is a recoverable asset, not an expense. Ineligible tax may form part of asset or expense cost under the applicable rule. A customer advance is Bank Dr and Contract Liability Cr until performance occurs. The exact rate, threshold and eligibility are law-dependent; in an assessment, use the rate given in the question and keep the tax control account separate from the commercial account.',
+  zth_operating_entries: 'Operating entries describe the ordinary cycle: buy or make goods, sell them, collect from customers, pay suppliers, and correct returns or credit losses. A credit purchase of inventory creates Inventory Dr and Trade Payable Cr. A credit sale under a perpetual system requires two entries: Trade Receivable Dr and Sales Cr for the selling price, then Cost of Goods Sold Dr and Inventory Cr for the cost. The first entry measures performance; the second removes the resource consumed. Collection later is Bank Dr and Trade Receivable Cr, not another sale.\n\nFor a Rs 10,000 sale of goods costing Rs 6,000, profit is Rs 4,000 because revenue is Rs 10,000 and COGS is Rs 6,000. A sales return reverses the selling-price entry and restores inventory at cost when the goods are saleable. A purchase return reduces Inventory or Purchases and the supplier balance. A trade discount reduces the transaction price before recording; a settlement discount is recorded when payment terms are met. An allowance for doubtful receivables reduces net receivables through an expense and allowance; it does not erase the customer ledger or pretend that collection failure has already occurred with certainty.',
+  zth_financing_asset_entries: 'Separate the asset, the financing and the period expense. A qualifying machine cost is capitalised because it provides benefits beyond the current period; depreciation then allocates its depreciable amount across its useful life. Buying a machine for Rs 12 lakh cash is Equipment Dr and Bank Cr. If straight-line depreciation is Rs 2 lakh for the year, Depreciation Expense Dr and Accumulated Depreciation Cr. Depreciation reduces profit and the carrying amount, but it is not a cash payment in the current period.\n\nA loan receipt is Bank Dr and Loan Payable Cr. Interest is recorded as time passes; principal repayment reduces the liability and does not reduce profit. When an asset is sold, remove both original cost and accumulated depreciation, record sale proceeds, and compare proceeds with carrying amount. If a machine costing Rs 10 lakh has accumulated depreciation of Rs 6 lakh and is sold for Rs 5 lakh, carrying amount is Rs 4 lakh and the gain is Rs 1 lakh. Dividends and drawings reduce equity; they are distributions, not operating expenses.',
+};
+
+for (const [id, tutorial] of Object.entries(nightBeforeTutorials)) {
+  const item = sourceConceptById.get(id);
+  if (item) item.tutorial = tutorial;
+}
 
 const topic = ({
   id,
@@ -882,6 +902,7 @@ const topic = ({
   title,
   shortTitle,
   description,
+  opening = '',
   capability,
   conceptIds,
   assessmentWeight = '',
@@ -891,6 +912,7 @@ const topic = ({
   title,
   shortTitle,
   description,
+  opening,
   capability,
   assessmentWeight,
   concepts: conceptIds.map((conceptId) => {
@@ -932,6 +954,7 @@ export const ironsidesModules = [
     title: 'Accounting',
     shortTitle: 'Accounting',
     description: 'Transaction recognition; accounting equation; account classification; accounting concepts, policies, estimates and materiality; capital and revenue classification; accrual accounting; inventory; PPE and depreciation; intangibles; revenue; provisions, reserves and contingencies; foreign exchange and tax timing; cost classification; contribution; break-even; relevant costing; budgets; variances; and inventory control.',
+    opening: 'Accounting is the disciplined record of an entity’s economic activity. It converts evidence—contracts, invoices, receipts, bank records and payroll data—into dated amounts that explain what the entity controls, what it owes, and what it earned or consumed during the period. The order matters: identify the event and reporting entity; classify the accounts; decide when and at what amount the event belongs in the books; record the entry; post it to the ledger; and read its effect in the statements. This chapter follows that sequence, then applies it to inventory, fixed assets, revenue, provisions and management decisions.',
     capability: 'Analyse the substance of a transaction, apply recognition and measurement rules, distinguish financial from management-accounting treatments, and calculate the accounting amounts used in commercial and operating decisions.',
     conceptIds: [
       'zth_accounting_purpose',
@@ -970,6 +993,7 @@ export const ironsidesModules = [
     title: 'Book Entry',
     shortTitle: 'Book Entry',
     description: 'Source documents; books of original entry; subsidiary books; journal and ledger roles; posting and balancing; personal ledgers; receivables and payables control accounts; cash book; petty cash; bills receivable and payable; trial balance; closing; and bank reconciliation.',
+    opening: 'Book entry is the mechanical path from evidence to a reliable balance. The journal preserves chronology; the ledger groups activity by account; the trial balance lists the resulting balances; and reconciliation tests those balances against an independent record. If you understand what each stage does, you can move from an invoice to a ledger, balance the account, locate an error and explain which number reaches the statements.',
     capability: 'Move a transaction from source evidence through the appropriate book of original entry and ledger, balance accounts, reconcile control totals and bank balances, and prepare a trial balance without confusing bookkeeping records with financial statements.',
     conceptIds: [
       'zth_cycle_evidence',
@@ -1009,6 +1033,7 @@ export const ironsidesModules = [
     title: 'Journal Entries',
     shortTitle: 'Journal Entries',
     description: 'Debit-credit method; simple and compound entries; cash and credit transactions; sales, purchases, returns and discounts; receivables and payables; accruals and deferrals; inventory; GST and TDS; payroll; provisions; fixed assets and depreciation; disposals; loans; equity; drawings; and dividends.',
+    opening: 'A journal entry is not a debit-credit puzzle. It is a compact description of an economic event. Begin with what happened; identify every account affected; decide whether each account increased or decreased; assign the normal side; and check the result against profit, cash and the balance sheet. The examples here cover sales, purchases, accruals, taxes, payroll, assets, loans and distributions.',
     capability: 'Construct balanced journal entries from economic substance and explain the effect of each entry on profit, cash, assets, liabilities and equity across operating, statutory, asset and financing transactions.',
     assessmentWeight: 'Highest accounting weight',
     conceptIds: [
@@ -1083,6 +1108,8 @@ const sourceAssessmentQuestions = [
   ...zeroToHeroQuestions,
   ...ironsidesAuditQuestions,
   ...ironsidesStandardQuestions,
+  ...ironsidesJournalQuestions,
+  ...ironsidesInterviewBenchmarkQuestions,
 ];
 
 const genuinelyAdvancedQuestionIds = new Set([

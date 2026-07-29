@@ -50,7 +50,7 @@ assert.deepEqual(
 
 const questionIds = ironsidesAssessmentQuestions.map((card) => card.id);
 assert.equal(new Set(questionIds).size, questionIds.length, 'IronSides question IDs must be unique.');
-assert.equal(ironsidesAssessmentQuestions.length, 219, 'IronSides assessment question count changed unexpectedly.');
+assert.equal(ironsidesAssessmentQuestions.length, 259, 'IronSides assessment question count changed unexpectedly.');
 
 for (const module of ironsidesModules) {
   assert.ok(module.description.length >= 80, `${module.id} needs a complete topic scope.`);

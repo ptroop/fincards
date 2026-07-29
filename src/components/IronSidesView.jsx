@@ -53,8 +53,11 @@ function ConceptCard({ item, index }) {
         </div>
       </div>
       <div style={{ marginLeft: 58, paddingTop: openingDefinition ? 0 : 18 }}>
-      <div style={{ color: '#334038', fontSize: 16, lineHeight: 1.78, fontFamily: textFont }}>
-        <LongText text={item.explanation} />
+      {item.simpleMeaning && (
+        <p style={{ color: ink, fontSize: 18, lineHeight: 1.72, margin: '0 0 18px', fontFamily: textFont }}>{item.simpleMeaning}</p>
+      )}
+      <div style={{ color: '#334038', fontSize: 18, lineHeight: 1.82, fontFamily: textFont }}>
+        <LongText text={item.tutorial || item.explanation} />
       </div>
       <IronSidesConceptVisual visual={item.visual} />
       {item.subconcepts?.length > 0 && (
@@ -62,7 +65,7 @@ function ConceptCard({ item, index }) {
           {item.subconcepts.map((subconcept) => (
             <section key={`${item.id}_${subconcept.title}`}>
               <h4 style={{ color: ink, fontSize: 18, lineHeight: 1.3, fontWeight: 700, margin: '0 0 6px' }}>{subconcept.title}</h4>
-              <p style={{ color: '#46534b', fontSize: 15, lineHeight: 1.72, margin: 0, fontFamily: textFont }}>{subconcept.explanation}</p>
+              <p style={{ color: '#46534b', fontSize: 17, lineHeight: 1.78, margin: 0, fontFamily: textFont }}>{subconcept.explanation}</p>
             </section>
           ))}
         </div>
@@ -131,13 +134,6 @@ function QuestionCard({ card, number }) {
         <span style={{ color: '#a2aaa4' }}>·</span>
         <span style={{ color: muted, fontSize: 13 }}>{card.type === 'mcq' ? 'MCQ' : 'Solving question'}</span>
         <span style={{ color: '#a2aaa4' }}>·</span>
-        <span style={{ color: muted, fontSize: 13 }}>{card.difficulty}</span>
-        {card.questionClass && (
-          <>
-            <span style={{ color: '#a2aaa4' }}>·</span>
-            <span style={{ color: muted, fontSize: 13 }}>{card.questionClass.replaceAll('_', ' ')}</span>
-          </>
-        )}
       </div>
 
       <h3 style={{ color: ink, fontSize: 'clamp(21px, 3vw, 28px)', lineHeight: 1.3, fontWeight: 540, margin: '0 0 22px', letterSpacing: '-0.018em' }}>
@@ -190,8 +186,8 @@ function QuestionCard({ card, number }) {
               {isCorrect ? 'Correct' : `Correct answer: ${String.fromCharCode(65 + card.correctOption)}`}
             </div>
           )}
-          <div style={{ color: ink, fontSize: 17, lineHeight: 1.65, fontWeight: 580 }}>{card.answer}</div>
-          <div style={{ color: '#405048', fontSize: 15, lineHeight: 1.7, marginTop: 12, fontFamily: textFont }}>
+          <div style={{ color: ink, fontSize: 18, lineHeight: 1.7, fontWeight: 580 }}>{card.answer}</div>
+          <div style={{ color: '#405048', fontSize: 17, lineHeight: 1.78, marginTop: 12, fontFamily: textFont }}>
             <LongText text={card.explanation} />
           </div>
           {card.formula && (
@@ -346,6 +342,9 @@ export default function IronSidesView({ modules, questions, archiveCards, onBack
             <section>
               <div style={{ padding: '20px 0 8px' }}>
                 <h2 style={{ color: ink, fontSize: 'clamp(34px, 6vw, 52px)', lineHeight: 1.05, fontWeight: 540, letterSpacing: '-0.04em', margin: '0 0 16px' }}>{activeModule.title}</h2>
+                {activeModule.opening && (
+                  <p style={{ color: '#334038', fontSize: 19, lineHeight: 1.78, maxWidth: 850, margin: '18px 0 0', fontFamily: textFont }}>{activeModule.opening}</p>
+                )}
                 {activeModule.assessmentWeight && (
                   <div style={{ color: green, fontSize: 12, fontWeight: 800, letterSpacing: '0.07em', textTransform: 'uppercase', margin: '-6px 0 16px' }}>{activeModule.assessmentWeight}</div>
                 )}
