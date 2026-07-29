@@ -36,6 +36,7 @@ function Formula({ item }) {
 
 function ConceptCard({ item, index }) {
   const openingDefinition = item.definition && item.definition !== item.explanation ? item.definition : null;
+  const openingMeaning = item.simpleMeaning && item.simpleMeaning !== item.definition ? item.simpleMeaning : null;
 
   return (
     <article id={item.id} style={{ borderBottom: `1px solid ${border}`, padding: '38px 0 46px', scrollMarginTop: 110 }}>
@@ -53,8 +54,8 @@ function ConceptCard({ item, index }) {
         </div>
       </div>
       <div style={{ marginLeft: 58, paddingTop: openingDefinition ? 0 : 18 }}>
-      {item.simpleMeaning && (
-        <p style={{ color: ink, fontSize: 20, lineHeight: 1.78, margin: '0 0 18px', fontFamily: textFont }}>{item.simpleMeaning}</p>
+      {openingMeaning && (
+        <p style={{ color: ink, fontSize: 20, lineHeight: 1.78, margin: '0 0 18px', fontFamily: textFont }}>{openingMeaning}</p>
       )}
       <div style={{ color: '#334038', fontSize: 20, lineHeight: 1.86, fontFamily: textFont }}>
         <LongText text={item.tutorial || item.explanation} />
@@ -62,11 +63,14 @@ function ConceptCard({ item, index }) {
       <IronSidesConceptVisual visual={item.visual} />
       {item.subconcepts?.length > 0 && (
         <div style={{ marginTop: 28, display: 'grid', gap: 22 }}>
-          {item.subconcepts.map((subconcept) => (
-            <section key={`${item.id}_${subconcept.title}`}>
-              <h4 style={{ color: ink, fontSize: 20, lineHeight: 1.35, fontWeight: 700, margin: '0 0 6px' }}>{subconcept.title}</h4>
-              <p style={{ color: '#46534b', fontSize: 19, lineHeight: 1.82, margin: 0, fontFamily: textFont }}>{subconcept.explanation}</p>
-            </section>
+          {item.subconcepts.map((subconcept, subconceptIndex) => (
+            <details key={`${item.id}_${subconcept.title}`} style={{ borderTop: `1px solid ${border}`, paddingTop: 16 }}>
+              <summary style={{ color: ink, fontSize: 20, lineHeight: 1.35, fontWeight: 700, cursor: 'pointer', listStylePosition: 'outside' }}>
+                <span style={{ color: green, fontSize: 13, marginRight: 10 }}>{String(subconceptIndex + 1).padStart(2, '0')}</span>
+                {subconcept.title}
+              </summary>
+              <p style={{ color: '#46534b', fontSize: 19, lineHeight: 1.82, margin: '14px 0 0 24px', fontFamily: textFont }}>{subconcept.explanation}</p>
+            </details>
           ))}
         </div>
       )}

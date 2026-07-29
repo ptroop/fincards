@@ -50,7 +50,7 @@ assert.deepEqual(
 
 const questionIds = ironsidesAssessmentQuestions.map((card) => card.id);
 assert.equal(new Set(questionIds).size, questionIds.length, 'IronSides question IDs must be unique.');
-assert.equal(ironsidesAssessmentQuestions.length, 273, 'IronSides assessment question count changed unexpectedly.');
+assert.equal(ironsidesAssessmentQuestions.length, 308, 'IronSides assessment question count changed unexpectedly.');
 assert.ok(ironsidesAssessmentQuestions.every((card) => ['reported interview question', 'assessment-standard'].includes(card.evidenceType)), 'Every question must disclose whether it is reported or assessment-standard.');
 assert.ok(ironsidesAssessmentQuestions.filter((card) => card.evidenceType === 'reported interview question').every((card) => card.sourceUrl), 'Reported questions must retain public source provenance.');
 
@@ -122,6 +122,25 @@ assert.ok(
   ironsidesAssessmentQuestions.filter((card) => card.questionClass === 'ledger_practice').length >= 8,
   'Book Entry must include explicit ledger-posting and reconciliation practice.',
 );
+assert.equal(
+  ironsidesAssessmentQuestions.filter((card) => card.questionClass === 'interview_practice').length,
+  35,
+  'The interview-standard practice expansion must contain 35 complete questions.',
+);
+for (const topicId of [
+  'financial_management',
+  'accounting',
+  'financial_statements',
+  'book_entry',
+  'ratios',
+  'rectification_entries',
+  'journal_entries',
+]) {
+  assert.ok(
+    ironsidesAssessmentQuestions.filter((card) => card.questionClass === 'interview_practice' && card.moduleId === topicId).length >= 5,
+    `${topicId} needs at least five interview-standard practice questions.`,
+  );
+}
 const standardQuestions = ironsidesAssessmentQuestions.filter((card) => card.id.startsWith('isa_standard_'));
 assert.equal(standardQuestions.length, 44, 'The standard-difficulty expansion must add exactly 44 complete questions.');
 assert.ok(
@@ -432,6 +451,8 @@ for (const visualEvidence of [
   assert.ok(ironSidesVisualSource.includes(visualEvidence), `IronSides visual system is missing: ${visualEvidence}`);
 }
 assert.ok(ironSidesViewSource.includes('subconcept.title'), 'IronSides must render named subtopics directly in the reading flow.');
+assert.ok(ironSidesViewSource.includes('<details '), 'IronSides subtopics must open on demand instead of rendering as an undifferentiated wall of text.');
+assert.ok(ironSidesViewSource.includes('<summary '), 'IronSides subtopics need clickable summaries.');
 assert.ok(ironSidesViewSource.includes('How to post a journal entry into a ledger') || zeroToHeroModules.some((module) => module.concepts.some((concept) => concept.subconcepts?.some((subconcept) => /post.*ledger/i.test(subconcept.title)))), 'IronSides must teach ledger posting as an explicit procedure.');
 assert.ok(ironSidesViewSource.includes('<TopicNavigation previousTopic={previousTopic} nextTopic={nextTopic} onSelect={selectModule} />'), 'Learn and Practice must render topic navigation.');
 assert.ok((ironSidesViewSource.match(/<TopicNavigation /g) || []).length === 2, 'Both Learn and Practice require bottom Previous/Next topic navigation.');

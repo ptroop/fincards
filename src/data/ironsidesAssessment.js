@@ -4,6 +4,7 @@ import { ironsidesStandardQuestions } from './ironsidesStandardQuestions.js';
 import { ironsidesJournalQuestions } from './ironsidesJournalQuestions.js';
 import { ironsidesInterviewBenchmarkQuestions } from './ironsidesInterviewBenchmarkQuestions.js';
 import { ironsidesLedgerQuestions } from './ironsidesLedgerQuestions.js';
+import { ironsidesInterviewPracticeQuestions } from './ironsidesInterviewPracticeQuestions.js';
 
 const concept = (id, title, explanation, formulae = [], example = '', trap = '') => ({
   id,
@@ -622,6 +623,8 @@ const supplementalConcept = ({
   subconcepts,
   formulae = [],
   workedExample,
+  simpleMeaning = definition,
+  eli5 = workedExample,
   indianExample,
   realEvent,
   trap,
@@ -630,8 +633,8 @@ const supplementalConcept = ({
   id,
   title,
   definition,
-  simpleMeaning: definition,
-  eli5: workedExample,
+  simpleMeaning,
+  eli5,
   explanation,
   subconcepts,
   formulae,
@@ -656,18 +659,22 @@ const financeSources = [
 const supplementalConcepts = [
   supplementalConcept({
     id: 'gap_accounting_framework',
-    title: 'Accounting concepts, policies, estimates, and materiality',
-    definition: 'Accounting concepts are the underlying assumptions and qualitative principles used to recognise, measure and present transactions; an accounting policy is the specific basis selected for recurring treatment, while an estimate is a measured amount subject to uncertainty.',
-    explanation: 'Accrual records economic effects when rights and obligations arise. Going concern assumes the entity will continue operating unless evidence indicates otherwise. Consistency supports comparison across periods, but does not prohibit a justified policy change. Prudence requires caution under uncertainty without deliberate understatement. Materiality asks whether omission or misstatement could influence a user’s decision. Substance over form requires accounting for economic reality rather than relying only on legal labels. An accounting policy change alters the governing recognition or measurement basis; an accounting estimate change updates an amount because new information becomes available. An error is a misuse or omission of information that was available when the statements were prepared.',
+    title: 'Accrual, going concern, policy, estimate and error',
+    definition: 'These are different questions about the same accounts: when to record an event, which accounting policy to apply, what amount to estimate, and whether the original numbers were wrong.',
+    simpleMeaning: 'Do not put every accounting judgement into one bucket. First identify the timing rule, then the accounting method, then the uncertain number, and finally whether the information was already available when the earlier statements were made.',
+    eli5: 'A policy is the method, an estimate is the number produced by that method, and an error is using the wrong information or leaving information out.',
+    explanation: 'Accrual accounting answers when an item belongs in the books. Record revenue when the promised goods or service have been delivered and record an expense when the business has received the related benefit or incurred the obligation; payment and invoicing are often earlier or later. Going concern answers what operating assumption underlies measurement. A business expected to continue normally measures assets and liabilities for use and settlement, not as if everything were being sold tomorrow.\n\nAn accounting policy is the method selected where the standards permit a choice—for example, the cost model or revaluation model for a class of PPE, or the permitted inventory cost formula. An accounting estimate is an amount that cannot be known precisely at the reporting date: useful life, residual value, expected credit loss or warranty obligation. New evidence can change an accounting estimate without making the earlier estimate an error. An error is different: the invoice, contract, calculation or rule was available when the earlier statements were prepared but was omitted, misapplied or calculated incorrectly.\n\nConsistency means applying the same policy to comparable items until a justified policy change is required or produces more reliable and relevant information. Prudence means not overstating uncertain assets or income and not understating uncertain obligations, but it does not permit hidden reserves or deliberate pessimism. Materiality is the decision-usefulness threshold: a small amount can matter because of its nature or context. Substance over form matters when the legal label does not describe the economic rights, obligations or control.',
     subconcepts: [
-      { title: 'Accrual and going concern', explanation: 'Accrual determines timing from economic events; going concern affects measurement and classification because forced-sale assumptions are normally inappropriate for a continuing business.' },
-      { title: 'Consistency and comparability', explanation: 'Apply policies consistently and disclose justified changes so users can compare like periods without treating consistency as a ban on better information.' },
-      { title: 'Prudence and materiality', explanation: 'Exercise caution in uncertain estimates and focus reporting effort on matters capable of influencing decisions; materiality depends on size, nature and context.' },
-      { title: 'Policy, estimate, and error', explanation: 'A policy is the rule applied, an estimate is an uncertain amount calculated under that rule, and an error is an incorrect use or omission of information that was available.' },
+      { title: 'Accrual: the period of the economic event', explanation: 'If a service is received in March and paid in April, March records the expense and payable. April clears the payable. Cash timing settles the balance; it does not decide the period of consumption.' },
+      { title: 'Going concern: the operating assumption', explanation: 'If the entity is expected to continue, equipment is measured for continued use and liabilities for normal settlement. Evidence of insolvency or a decision to liquidate can change that basis and the resulting presentation.' },
+      { title: 'Policy: the accounting method', explanation: 'A policy is the method used repeatedly—for example, the chosen permitted basis for measuring PPE or inventory. It is not the same as the useful life or loss percentage calculated under that method.' },
+      { title: 'Estimate: the uncertain amount', explanation: 'Useful life, residual value, warranty provision and expected credit loss are estimates because the final amount is unknown. New evidence updates the estimate prospectively under the applicable rule.' },
+      { title: 'Error: information was available but misused', explanation: 'An omitted supplier invoice, a reversed debit and credit, or a calculation based on an available but ignored contract is an error. It is not re-labelled an estimate change merely because correcting it changes profit.' },
+      { title: 'Materiality and prudence', explanation: 'Materiality asks whether the omission or misstatement could influence a user’s decision, considering size, nature and context. Prudence demands supportable caution without deliberate understatement or hidden smoothing.' },
     ],
-    workedExample: 'Changing the expected useful life of a machine after new maintenance evidence is an estimate change applied prospectively. Discovering that last year’s invoice was omitted despite being available is an error, not an estimate revision.',
-    indianExample: 'An Indian company applying Ind AS cannot classify a change in inventory cost formula as a routine estimate update merely to smooth profit. The nature, justification and applicable transition treatment must be identified.',
-    realEvent: 'Accounting failures commonly begin with aggressive judgements being presented as mechanical facts. Separating policy choice, estimation uncertainty and error is therefore central to both audit and financial due diligence.',
+    workedExample: 'A machine has a carrying amount of ₹6,00,000 and three years of remaining useful life. New maintenance evidence shows it will last five more years: revise the depreciation estimate prospectively. If a ₹2,00,000 invoice for work already received was available but omitted from last year’s close, record an error correction under the applicable prior-period rule. If management changes the permitted inventory measurement method, analyse it as a policy change and apply the required transition treatment.',
+    indianExample: 'An Indian company applying Ind AS must separate a change in inventory cost formula, a revised machine useful life and an omitted supplier invoice. The first is a policy question, the second is normally an estimate question, and the third is an error question. Calling all three “accounting judgement” hides the required treatment.',
+    realEvent: 'In financial due diligence, a buyer separates a genuine forecast revision from an accounting error because the two have different implications for historical EBITDA, working capital, tax and purchase-price adjustments.',
     trap: 'Do not describe every revised number as an error. New information can legitimately change an estimate without making the earlier estimate incorrect.',
     sources: accountingSources,
   }),
@@ -1109,6 +1116,7 @@ const sourceAssessmentQuestions = [
   ...ironsidesJournalQuestions,
   ...ironsidesStandardQuestions,
   ...ironsidesLedgerQuestions,
+  ...ironsidesInterviewPracticeQuestions,
   ...zeroToHeroQuestions,
   ...ironsidesAuditQuestions,
   ...legacyIronsidesAssessmentQuestions,
