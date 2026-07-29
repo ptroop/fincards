@@ -3,6 +3,7 @@ import { ironsidesAuditQuestions } from './ironsidesAuditQuestions.js';
 import { ironsidesStandardQuestions } from './ironsidesStandardQuestions.js';
 import { ironsidesJournalQuestions } from './ironsidesJournalQuestions.js';
 import { ironsidesInterviewBenchmarkQuestions } from './ironsidesInterviewBenchmarkQuestions.js';
+import { ironsidesLedgerQuestions } from './ironsidesLedgerQuestions.js';
 
 const concept = (id, title, explanation, formulae = [], example = '', trap = '') => ({
   id,
@@ -953,9 +954,9 @@ export const ironsidesModules = [
     order: 2,
     title: 'Accounting',
     shortTitle: 'Accounting',
-    description: 'Transaction recognition; accounting equation; account classification; accounting concepts, policies, estimates and materiality; capital and revenue classification; accrual accounting; inventory; PPE and depreciation; intangibles; revenue; provisions, reserves and contingencies; foreign exchange and tax timing; cost classification; contribution; break-even; relevant costing; budgets; variances; and inventory control.',
-    opening: 'Accounting is the disciplined record of an entity’s economic activity. It converts evidence—contracts, invoices, receipts, bank records and payroll data—into dated amounts that explain what the entity controls, what it owes, and what it earned or consumed during the period. The order matters: identify the event and reporting entity; classify the accounts; decide when and at what amount the event belongs in the books; record the entry; post it to the ledger; and read its effect in the statements. This chapter follows that sequence, then applies it to inventory, fixed assets, revenue, provisions and management decisions.',
-    capability: 'Analyse the substance of a transaction, apply recognition and measurement rules, distinguish financial from management-accounting treatments, and calculate the accounting amounts used in commercial and operating decisions.',
+    description: 'How accounting turns business events into measured records: the equation; account classes; debit and credit; accrual accounting; inventory; PPE and depreciation; intangibles; revenue; provisions; tax timing; cost classification; contribution; break-even; relevant costing; budgets; variances; and inventory control.',
+    opening: 'Accounting is the measurement system behind the financial statements. It records a business’s resources, obligations, owner claims, income and costs from invoices, contracts, bank records, payroll and other evidence. A customer collection, a loan, an owner contribution and a customer advance can all increase bank balance but produce different entries and different statement effects. The chapter builds that distinction through concrete transactions, then applies it to assets, revenue, estimates and management decisions.',
+    capability: 'Record a business event in the correct period and accounts, post it to the ledger, explain its effect on profit, cash, assets, liabilities and equity, and calculate the resulting accounting or management measure.',
     conceptIds: [
       'zth_accounting_purpose',
       'zth_equation_accounts',
@@ -1033,7 +1034,7 @@ export const ironsidesModules = [
     title: 'Journal Entries',
     shortTitle: 'Journal Entries',
     description: 'Debit-credit method; simple and compound entries; cash and credit transactions; sales, purchases, returns and discounts; receivables and payables; accruals and deferrals; inventory; GST and TDS; payroll; provisions; fixed assets and depreciation; disposals; loans; equity; drawings; and dividends.',
-    opening: 'A journal entry is not a debit-credit puzzle. It is a compact description of an economic event. Begin with what happened; identify every account affected; decide whether each account increased or decreased; assign the normal side; and check the result against profit, cash and the balance sheet. The examples here cover sales, purchases, accruals, taxes, payroll, assets, loans and distributions.',
+    opening: 'A journal is the dated source record of a transaction. A strong entry identifies the accounts, amount and period, then survives three tests: the debits equal the credits, the entry agrees with the supporting evidence, and the resulting ledger and statements describe the business event correctly. The questions cover sales, purchases, accruals, taxes, payroll, assets, loans, distributions and compound transactions.',
     capability: 'Construct balanced journal entries from economic substance and explain the effect of each entry on profit, cash, assets, liabilities and equity across operating, statutory, asset and financing transactions.',
     assessmentWeight: 'Highest accounting weight',
     conceptIds: [
@@ -1104,12 +1105,13 @@ const topicIdForQuestion = (card) => {
 };
 
 const sourceAssessmentQuestions = [
-  ...legacyIronsidesAssessmentQuestions,
+  ...ironsidesInterviewBenchmarkQuestions,
+  ...ironsidesJournalQuestions,
+  ...ironsidesStandardQuestions,
+  ...ironsidesLedgerQuestions,
   ...zeroToHeroQuestions,
   ...ironsidesAuditQuestions,
-  ...ironsidesStandardQuestions,
-  ...ironsidesJournalQuestions,
-  ...ironsidesInterviewBenchmarkQuestions,
+  ...legacyIronsidesAssessmentQuestions,
 ];
 
 const genuinelyAdvancedQuestionIds = new Set([

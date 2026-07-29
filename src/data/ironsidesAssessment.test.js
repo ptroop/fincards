@@ -50,7 +50,7 @@ assert.deepEqual(
 
 const questionIds = ironsidesAssessmentQuestions.map((card) => card.id);
 assert.equal(new Set(questionIds).size, questionIds.length, 'IronSides question IDs must be unique.');
-assert.equal(ironsidesAssessmentQuestions.length, 259, 'IronSides assessment question count changed unexpectedly.');
+assert.equal(ironsidesAssessmentQuestions.length, 273, 'IronSides assessment question count changed unexpectedly.');
 assert.ok(ironsidesAssessmentQuestions.every((card) => ['reported interview question', 'assessment-standard'].includes(card.evidenceType)), 'Every question must disclose whether it is reported or assessment-standard.');
 assert.ok(ironsidesAssessmentQuestions.filter((card) => card.evidenceType === 'reported interview question').every((card) => card.sourceUrl), 'Reported questions must retain public source provenance.');
 
@@ -117,6 +117,10 @@ assert.ok(
 assert.ok(
   ironsidesAssessmentQuestions.filter((card) => card.questionClass === 'journal_entry').length >= 5,
   'Journal entries must retain extra assessment weight.',
+);
+assert.ok(
+  ironsidesAssessmentQuestions.filter((card) => card.questionClass === 'ledger_practice').length >= 8,
+  'Book Entry must include explicit ledger-posting and reconciliation practice.',
 );
 const standardQuestions = ironsidesAssessmentQuestions.filter((card) => card.id.startsWith('isa_standard_'));
 assert.equal(standardQuestions.length, 44, 'The standard-difficulty expansion must add exactly 44 complete questions.');
