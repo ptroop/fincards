@@ -1,4 +1,6 @@
 import { zeroToHeroModules, zeroToHeroQuestions } from './ironsidesZeroToHero.js';
+import { ironsidesAuditQuestions } from './ironsidesAuditQuestions.js';
+import { ironsidesStandardQuestions } from './ironsidesStandardQuestions.js';
 
 const concept = (id, title, explanation, formulae = [], example = '', trap = '') => ({
   id,
@@ -373,6 +375,47 @@ const legacyIronsidesModules = [
         '₹10,000 compounded annually at 10% for two years becomes ₹12,100.',
         'Do not multiply a compound rate by years as though it were simple interest.',
       ),
+      concept(
+        'arithmetic_averages',
+        'Averages, combined averages, and mixtures',
+        'An arithmetic mean equals the total of observations divided by their count. A combined average reconstructs the underlying totals of two or more groups before division by the combined count. Mixture questions use the same weighted-average principle: concentration, price, return, or score must be weighted by the relevant quantity rather than averaged without regard to volume.',
+        [
+          { label: 'Arithmetic mean', expression: 'Mean = Sum of observations ÷ Number of observations', variables: 'Every observation receives equal weight.' },
+          { label: 'Combined average', expression: '(n₁a₁ + n₂a₂) ÷ (n₁ + n₂)', variables: 'n is group size and a is group average.' },
+        ],
+        'A team of 20 has average salary ₹6 lakh and a team of 30 has average ₹8 lakh. Combined average is (20×6 + 30×8)÷50 = ₹7.2 lakh.',
+        'Do not average group averages directly unless group sizes are equal.',
+      ),
+      concept(
+        'arithmetic_profit_discount',
+        'Profit, loss, markup, margin, and discount',
+        'Profit is selling price less cost, while profit percentage may be stated on cost or sales. Markup is commonly measured on cost; margin is measured on selling price. A discount applies to the marked or quoted price. Successive discounts multiply their remaining-price factors and cannot be added unless the question explicitly defines a single combined discount.',
+        [
+          { label: 'Profit on cost', expression: '(Selling price − Cost) ÷ Cost × 100%', variables: 'The denominator is cost.' },
+          { label: 'Margin on sales', expression: '(Selling price − Cost) ÷ Selling price × 100%', variables: 'The denominator is selling price.' },
+        ],
+        'An item costing ₹800 and sold for ₹1,000 has 25% markup on cost but 20% margin on sales.',
+        'Markup and margin are not interchangeable because they use different denominators.',
+      ),
+      concept(
+        'arithmetic_work_speed',
+        'Time and work, speed, distance, and relative motion',
+        'Work-rate problems convert completion time into work performed per unit of time; combined rates are added only when parties work simultaneously on the same task. Speed equals distance divided by time. Relative speed is the rate at which separation changes: add speeds for opposite directions and subtract for the same direction. Units must be converted before calculation.',
+        [
+          { label: 'Combined work rate', expression: '1/T = 1/T₁ + 1/T₂', variables: 'T values are individual completion times for the same whole task.' },
+          { label: 'Motion', expression: 'Distance = Speed × Time', variables: 'Use consistent distance and time units.' },
+        ],
+        'If A completes a task in 6 days and B in 3 days, their combined daily rate is 1/6 + 1/3 = 1/2, so completion takes 2 days.',
+        'Do not add completion times; add work rates.',
+      ),
+      concept(
+        'arithmetic_data_interpretation',
+        'Tables, charts, and numerical data interpretation',
+        'Data interpretation requires extraction of the correct observations, preservation of units, selection of an appropriate denominator, and a calculation tied to the exact comparison requested. Common tasks include totals, shares, weighted averages, growth, index changes, margins, and inference from incomplete data. Approximation is appropriate only when answer choices permit it.',
+        [],
+        'If revenue rises from ₹80 crore to ₹100 crore while profit rises from ₹8 crore to ₹9 crore, revenue grows 25%, profit grows 12.5%, and margin falls from 10% to 9%.',
+        'Do not infer causation from a chart that establishes only association or change.',
+      ),
     ],
   },
   {
@@ -413,6 +456,38 @@ const legacyIronsidesModules = [
         [],
         'To determine x, x+y=10 is insufficient and x−y=2 is insufficient; together they are sufficient.',
         'Finding one possible answer does not prove sufficiency; establish uniqueness.',
+      ),
+      concept(
+        'lr_critical_reasoning',
+        'Arguments, assumptions, strengthen, and weaken',
+        'A critical-reasoning argument contains evidence and a conclusion connected by an inferential gap. An assumption is an unstated condition required for the conclusion to follow. A strengthening statement makes the conclusion more probable by supporting the link or excluding an alternative explanation; a weakening statement damages that link without needing to prove the opposite conclusion.',
+        [],
+        'If sales rose after an advertisement, the claim that the advertisement caused the increase assumes that no other material cause, such as a price reduction, explains the rise.',
+        'Do not select a statement merely because it discusses the same subject; it must affect the argument’s inferential link.',
+      ),
+      concept(
+        'lr_order_inequality',
+        'Ordering, ranking, and coded inequalities',
+        'Ordering questions translate comparative statements into a consistent chain. Ranking from opposite ends uses the total-count relationship, while coded inequalities require substitution of the symbol meanings before inference. Equality and strict inequality must be preserved; if two elements are only known to exceed a third, their order relative to each other remains undetermined.',
+        [{ label: 'Opposite-end rank', expression: 'Total persons = Rank from left/top + Rank from right/bottom − 1', variables: 'Both ranks refer to the same person.' }],
+        'If A>B, C>A and D<C, then C>A>B is certain, while the relative order of D and A is not determined without another condition.',
+        'Do not impose a complete order when the statements establish only a partial order.',
+      ),
+      concept(
+        'lr_relations_directions',
+        'Family relations and direction sense',
+        'Family-relation problems should be represented by generation, gender, marriage, and parent-child links rather than verbal intuition. Direction questions should be placed on a coordinate grid: north-south movements affect the vertical coordinate and east-west movements affect the horizontal coordinate. Final displacement is distinct from total distance travelled.',
+        [{ label: 'Displacement', expression: '√(Horizontal change² + Vertical change²)', variables: 'Use only net coordinate changes, not the full path length.' }],
+        'A person walking 4 km north, 3 km east and 4 km south finishes 3 km east of the start after travelling 11 km.',
+        'Do not treat “brother of my father” and “father of my brother” as equivalent relationships.',
+      ),
+      concept(
+        'lr_statement_analysis',
+        'Statements, assumptions, cause-effect, and courses of action',
+        'Statement-analysis questions distinguish what is explicitly established from what is merely plausible. A valid assumption is necessary or taken for granted by the statement. A cause must precede and plausibly produce the stated effect; temporal association alone is insufficient. A course of action must address the problem, be feasible, and avoid relying on facts absent from the prompt.',
+        [],
+        'A decline in collections after credit terms were extended is consistent with the policy causing slower cash conversion, but customer distress or billing errors remain alternative causes unless excluded.',
+        'Do not choose an extreme course of action when a narrower response directly addresses the stated problem.',
       ),
     ],
   },
@@ -458,7 +533,7 @@ const legacyIronsidesAssessmentQuestions = [
   solve('034', 'financial_statements', 'Medium', 'Revenue is ₹2,000,000, COGS ₹1,200,000, operating expenses excluding depreciation ₹400,000, and depreciation ₹100,000. Calculate gross profit, EBITDA, EBIT, and relevant margins.', 'Gross profit is ₹800,000 with 40% gross margin. EBITDA is ₹400,000 with 20% EBITDA margin. EBIT is ₹300,000 with 15% EBIT margin.', 'Gross profit = ₹2,000,000 − ₹1,200,000. EBITDA subtracts cash operating expenses of ₹400,000; EBIT also subtracts ₹100,000 depreciation.'),
   solve('035', 'financial_statements', 'Hard', 'Net income is ₹250,000. Depreciation is ₹60,000, receivables increase ₹40,000, inventory decreases ₹25,000, payables decrease ₹15,000, and there are no other adjustments. Calculate CFO.', 'CFO is ₹280,000.', 'Start with ₹250,000, add depreciation ₹60,000, subtract AR increase ₹40,000, add inventory decrease ₹25,000, and subtract AP decrease ₹15,000: ₹250,000 + ₹60,000 − ₹40,000 + ₹25,000 − ₹15,000 = ₹280,000.', 'CFO = Net income + Non-cash charges − Increase in operating assets + Increase in operating liabilities'),
   solve('036', 'financial_statements', 'Hard', 'A company purchases equipment for ₹500,000 cash and records ₹50,000 annual depreciation. Explain the first-year effect across all three statements, ignoring tax.', 'Income statement: depreciation lowers EBIT and net income by ₹50,000. Cash flow: CFO adds back ₹50,000 depreciation, while investing cash flow records ₹500,000 capex outflow, so total cash falls ₹500,000. Balance sheet: cash falls ₹500,000, gross PP&E rises ₹500,000, accumulated depreciation rises ₹50,000, net PP&E rises ₹450,000, and retained earnings fall ₹50,000.', 'The balance sheet remains balanced because total assets fall net ₹50,000 and equity falls ₹50,000.'),
-  solve('037', 'financial_statements', 'Hard', 'Beginning retained earnings are ₹900,000, net income is ₹240,000, dividends declared are ₹80,000, and a prior-period correction reduces equity by ₹20,000. Calculate ending retained earnings.', 'Ending retained earnings are ₹1,040,000.', '₹900,000 + ₹240,000 − ₹80,000 − ₹20,000 = ₹1,040,000.', 'Ending retained earnings = Beginning retained earnings + Net income − Dividends ± Prior-period adjustments'),
+  solve('037', 'financial_statements', 'Hard', 'Beginning retained earnings are ₹900,000, net income is ₹240,000, dividends declared are ₹80,000, and a prior-period correction reduces equity by ₹20,000. Calculate ending retained earnings.', 'Ending retained earnings are ₹1,040,000.', 'Begin with ₹900,000, add current-period net income of ₹240,000, subtract the ₹80,000 distribution and subtract the ₹20,000 direct correction: ₹900,000 + ₹240,000 − ₹80,000 − ₹20,000 = ₹1,040,000.', 'Ending retained earnings = Beginning retained earnings + Net income − Dividends ± Prior-period adjustments'),
   solve('038', 'financial_statements', 'Hard', 'A company reports rising EBITDA but falling operating cash flow. Give four analytical explanations and state what schedules you would inspect.', 'Possible explanations include slower customer collections, inventory build, faster supplier payment, higher cash taxes, restructuring cash costs, or aggressive revenue recognition. Inspect AR aging and DSO, inventory by SKU and DIO, AP aging and DPO, tax payments, one-time cash-cost schedules, and the EBITDA-to-CFO bridge.', 'EBITDA excludes working capital, tax, capex, and many cash timing effects. The correct answer reconciles the two measures rather than treating either as automatically superior.'),
   solve('039', 'financial_statements', 'Hard', 'Current assets are ₹1,500,000 including ₹300,000 cash, and current liabilities are ₹1,000,000 including ₹200,000 short-term debt. Calculate reported NWC and operating NWC assuming all other balances are operating.', 'Reported NWC is ₹500,000. Operating current assets are ₹1,200,000 and operating current liabilities are ₹800,000, so operating NWC is ₹400,000.', 'Reported NWC uses all current balances. Operating NWC excludes cash and interest-bearing debt to isolate capital tied up in operations.'),
   solve('040', 'financial_statements', 'Hard', 'Explain the statement effect of a ₹100 increase in depreciation at a 30% tax rate.', 'EBIT falls ₹100, tax expense falls ₹30, and net income falls ₹70. CFO adds back ₹100 depreciation but starts from net income lower by ₹70, so cash rises by the ₹30 tax shield if taxes are paid. PP&E falls ₹100, cash rises ₹30, and retained earnings fall ₹70, leaving assets and equity both lower by ₹70.', 'The answer must include the tax shield. Without tax, depreciation has no cash effect; with deductible depreciation, it reduces cash taxes by ₹30.'),
@@ -479,7 +554,7 @@ const legacyIronsidesAssessmentQuestions = [
   mcq('053', 'financial_management', 'Hard', 'A project has substantially greater business risk than the company’s existing operations. The best discount-rate approach is to:', ['Use the company WACC unchanged', 'Use the risk-free rate', 'Estimate a project-appropriate cost of capital', 'Use the project IRR as the discount rate'], 2, 'Estimate a project-appropriate cost of capital.', 'The discount rate must match the project’s systematic risk and financing assumptions. Company WACC can misvalue a project with different risk.'),
   solve('054', 'financial_management', 'Medium', 'Calculate the future value of ₹500,000 invested for three years at 8% compounded annually.', 'Future value is ₹629,856.', 'Apply the annual growth factor three times: ₹500,000 × 1.08³ = ₹629,856. The second and third years earn returns on previously accumulated returns, which is why the compound result exceeds simple interest.', 'FV = PV × (1 + r)^n'),
   solve('055', 'financial_management', 'Medium', 'A project costs ₹1,000,000 and generates ₹450,000 at each year-end for three years. Calculate NPV at 10%.', 'NPV is approximately ₹119,083.', 'PV of inflows = ₹450,000/1.10 + ₹450,000/1.10² + ₹450,000/1.10³ ≈ ₹1,119,083. Subtract initial investment ₹1,000,000. The positive NPV suggests acceptance, subject to assumptions and capital constraints.', 'NPV = Σ[CF_t ÷ (1 + r)^t] − Initial investment'),
-  solve('056', 'financial_management', 'Hard', 'Risk-free rate is 6%, market risk premium 7%, and beta 1.2. Calculate cost of equity using CAPM.', 'Cost of equity is 14.4%.', '6% + 1.2 × 7% = 14.4%. Beta scales exposure to systematic market risk.', 'Ke = Rf + β × Market risk premium'),
+  solve('056', 'financial_management', 'Hard', 'Risk-free rate is 6%, market risk premium 7%, and beta 1.2. Calculate cost of equity using CAPM.', 'Cost of equity is 14.4%.', 'CAPM gives 6% + 1.2×7% = 14.4%. Beta scales the equity risk premium for systematic market exposure; it does not measure total volatility or probability of default.', 'Ke = Rf + β × Market risk premium'),
   solve('057', 'financial_management', 'Hard', 'A company is financed by 40% debt and 60% equity. Pre-tax debt cost is 9%, equity cost 15%, and tax rate 25%. Calculate WACC.', 'WACC is 11.7%.', 'Equity component = 60% × 15% = 9.0%. Debt component = 40% × 9% × (1−25%) = 2.7%. Total = 11.7%.', 'WACC = E/V × Ke + D/V × Kd × (1−T)'),
   solve('058', 'financial_management', 'Hard', 'Sales are ₹2,000, variable costs ₹1,200, fixed operating costs ₹500, and interest ₹100. Calculate DOL, DFL, and DCL.', 'Contribution is ₹800, EBIT is ₹300, and earnings before tax are ₹200. DOL = 2.67x, DFL = 1.50x, and DCL = 4.0x.', 'DOL = 800/300. DFL = 300/200. DCL = 2.67×1.5 ≈ 4.0, meaning a 1% sales change produces roughly a 4% pre-tax earnings change near this operating level.', 'DOL = Contribution/EBIT; DFL = EBIT/EBT; DCL = DOL × DFL'),
   solve('059', 'financial_management', 'Hard', 'Project A requires ₹1 million and has NPV ₹250,000. Project B requires ₹5 million and has NPV ₹700,000. A has the higher IRR. If projects are mutually exclusive and capital is available, which should be selected?', 'Select Project B based on its higher NPV, assuming comparable risk and correctly estimated cash flows.', 'IRR gives a percentage return and can favor the smaller project. NPV shows Project B adds ₹450,000 more absolute value.'),
@@ -491,10 +566,10 @@ const legacyIronsidesAssessmentQuestions = [
   mcq('064', 'arithmetic', 'Medium', 'A value falls by 20% and then rises by 20%. Compared with the original value, it is:', ['Unchanged', '4% lower', '4% higher', '8% lower'], 1, 'It is 4% lower.', 'Starting from 100, the value falls to 80 and then rises to 96. Successive percentages apply to different bases.'),
   mcq('065', 'arithmetic', 'Medium', 'A portfolio has 60% invested at an 8% return and 40% at a 14% return. The weighted return is:', ['10.0%', '10.4%', '11.0%', '11.6%'], 1, '10.4%.', 'Weight each return by the proportion of capital exposed to it: 0.60×8% + 0.40×14% = 4.8% + 5.6% = 10.4%. A simple average of 11% would incorrectly give both investments equal economic weight.'),
   solve('066', 'arithmetic', 'Medium', 'Revenue rises from ₹80 million to ₹125 million over three years. Calculate CAGR.', 'CAGR is approximately 16.0%.', '(125/80)^(1/3) − 1 ≈ 16.0%. The three-year period contains three compounding intervals.', 'CAGR = (Ending/Beginning)^(1/n) − 1'),
-  solve('067', 'arithmetic', 'Medium', 'A product costs ₹800 and is marked up by 25% on cost, then discounted by 10% on selling price. Calculate final price and profit percentage on cost.', 'Marked price is ₹1,000. Final price is ₹900. Profit is ₹100, or 12.5% of cost.', '₹800×1.25 = ₹1,000; ₹1,000×0.90 = ₹900; profit percentage = ₹100/₹800 = 12.5%.'),
+  solve('067', 'arithmetic', 'Medium', 'A product costs ₹800 and is marked up by 25% on cost, then discounted by 10% on selling price. Calculate final price and profit percentage on cost.', 'Marked price is ₹1,000. Final price is ₹900. Profit is ₹100, or 12.5% of cost.', 'Apply the markup to cost: ₹800×1.25 = ₹1,000. Apply the discount to marked price: ₹1,000×0.90 = ₹900. Profit is ₹900−₹800 = ₹100, and ₹100÷₹800 = 12.5% on cost.'),
   solve('068', 'arithmetic', 'Medium', 'The ratio of debt to equity is 3:2 and total capital is ₹25 million. Calculate debt and equity.', 'Debt is ₹15 million and equity is ₹10 million.', 'The total contains five ratio parts. Each part equals ₹25 million ÷ 5 = ₹5 million. Debt has three parts and equity two.'),
   solve('069', 'arithmetic', 'Hard', 'Division A earns a 30% margin on ₹40 million revenue and Division B earns a 10% margin on ₹60 million. Calculate the consolidated margin.', 'Consolidated profit is ₹18 million and consolidated margin is 18%.', 'Division A profit is ₹12 million and Division B profit ₹6 million. Total profit ₹18 million divided by total revenue ₹100 million gives 18%. A simple average of 30% and 10% would be wrong.'),
-  solve('070', 'arithmetic', 'Medium', '₹200,000 earns 12% simple interest for 18 months. Calculate interest and maturity amount.', 'Interest is ₹36,000 and maturity amount is ₹236,000.', 'Time is 1.5 years. Interest = ₹200,000×12%×1.5 = ₹36,000.', 'SI = Principal × Rate × Time'),
+  solve('070', 'arithmetic', 'Medium', '₹200,000 earns 12% simple interest for 18 months. Calculate interest and maturity amount.', 'Interest is ₹36,000 and maturity amount is ₹236,000.', 'Convert 18 months to 1.5 years because the rate is annual. Simple interest is ₹200,000×12%×1.5 = ₹36,000. Adding interest to principal gives a maturity amount of ₹236,000.', 'SI = Principal × Rate × Time'),
   solve('071', 'arithmetic', 'Hard', 'Revenue is 20% above budget, but price is 10% below budget. Assuming one product, estimate unit volume relative to budget.', 'Unit volume is approximately 33.3% above budget.', 'Revenue = Price×Volume. Actual revenue index is 1.20 and price index 0.90, so volume index = 1.20/0.90 = 1.333.'),
   solve('072', 'arithmetic', 'Hard', 'A table shows sales of ₹100, ₹120, and ₹150 million over three years, with margins of 20%, 18%, and 16%. Calculate profit each year and explain the trend.', 'Profit is ₹20 million, ₹21.6 million, and ₹24 million. Profit rises, but incremental profitability weakens because margin declines each year.', 'Compute sales×margin. Revenue grows 50% from year one to three, while profit grows only 20%, indicating margin dilution.'),
 
@@ -503,7 +578,7 @@ const legacyIronsidesAssessmentQuestions = [
   mcq('075', 'logical_reasoning', 'Medium', 'If FINANCE is coded as GJOBODF by shifting each letter forward once, how is RATIO coded?', ['SBUJP', 'SBTJP', 'QZSHN', 'SBUKO'], 0, 'SBUJP.', 'Apply the same transformation independently to every letter rather than looking for a whole-word pattern: R→S, A→B, T→U, I→J, and O→P. Combining the transformed letters produces SBUJP.'),
   mcq('076', 'logical_reasoning', 'Hard', 'Statement 1: x + y = 20. Statement 2: x − y = 4. Are the statements sufficient to determine x?', ['Statement 1 alone', 'Statement 2 alone', 'Both together, neither alone', 'Even both together are insufficient'], 2, 'Both together are sufficient, but neither alone is sufficient.', 'Each equation alone permits many pairs. Together they produce 2x = 24, so x = 12 uniquely.'),
   solve('077', 'logical_reasoning', 'Medium', 'Five people A, B, C, D, and E sit in a row. B is immediately right of A. C is at the left end. E is immediately left of D. If A is not next to C, determine the order.', 'The order is C, E, D, A, B.', 'Treat AB and ED as blocks. C occupies position 1. AB cannot occupy positions 2–3 because A would be next to C, so AB must occupy 4–5 and ED occupies 2–3.'),
-  solve('078', 'logical_reasoning', 'Medium', 'A person walks 6 km north, 8 km east, and 6 km south. How far and in which direction is the person from the starting point?', 'The person is 8 km east of the starting point.', 'The north and south movements cancel. Only the 8 km east displacement remains.'),
+  solve('078', 'logical_reasoning', 'Medium', 'A person walks 6 km north, 8 km east, and 6 km south. How far and in which direction is the person from the starting point?', 'The person is 8 km east of the starting point.', 'Represent the path on coordinates. The 6 km north and 6 km south movements cancel to zero vertical displacement. The horizontal coordinate changes by 8 km east, so final displacement is 8 km east although total distance travelled is 20 km.'),
   solve('079', 'logical_reasoning', 'Hard', 'Four reports P, Q, R, and S are reviewed one at a time. P is before Q, R is after Q, and S is before P. Determine the only valid order.', 'S, P, Q, R.', 'The constraints form a complete chain: S before P before Q before R. No alternative order satisfies all three.'),
   solve('080', 'logical_reasoning', 'Hard', 'A box contains eight identical-looking balls; one is heavier. What is the minimum number of balance-scale weighings needed to guarantee finding it?', 'Two weighings.', 'Weigh three against three. If equal, the heavy ball is among the remaining two, requiring one final weighing. If unequal, it is among the heavier group of three; weigh two of those against each other to identify it.'),
   solve('081', 'logical_reasoning', 'Hard', 'In a six-person circular arrangement, A sits opposite D, B sits immediately clockwise of A, and C sits immediately clockwise of D. Explain what can and cannot yet be determined.', 'The relative positions of A, B, C, and D are fixed up to rotation: place A anywhere, D opposite, B clockwise of A, and C clockwise of D. The remaining two people can occupy the two unfilled seats in either order.', 'Circular rotations are equivalent without a fixed reference point. The clues do not distinguish the remaining pair, so a unique full arrangement cannot be claimed.'),
@@ -516,8 +591,8 @@ const assessmentOnlyModules = legacyIronsidesModules
     ...module,
     order: zeroToHeroModules.length + index + 1,
     description: module.id === 'arithmetic'
-      ? 'Practise the numerical language used throughout MBA assessments: percentages, ratios, averages, weighted averages, growth, interest, profit, mixtures, work-rate, and data interpretation. Theory is intentionally concise because mastery comes from timed calculation.'
-      : 'Practise conclusion discipline through arrangements, syllogisms, series, coding, directions, data sufficiency, critical reasoning, and constraint-based puzzles. Theory is intentionally concise because mastery comes from representing and testing conditions.',
+      ? 'Scope: percentages; ratios and proportions; averages and weighted averages; growth and interest; profit, markup and discount; mixtures; time, work and speed; and numerical data interpretation.'
+      : 'Scope: syllogisms; arrangements; sequences; coding; directions; data sufficiency; ordering and inequalities; family relations; critical reasoning; assumptions; and cause-effect analysis.',
     concepts: module.concepts.map((item) => ({
       ...item,
       definition: item.explanation,
@@ -534,8 +609,532 @@ const assessmentOnlyModules = legacyIronsidesModules
     })),
   }));
 
-export const ironsidesModules = [...zeroToHeroModules, ...assessmentOnlyModules];
-export const ironsidesAssessmentQuestions = [...legacyIronsidesAssessmentQuestions, ...zeroToHeroQuestions];
+const sourceModules = [...zeroToHeroModules, ...assessmentOnlyModules];
+const sourceModuleById = new Map(sourceModules.map((module) => [module.id, module]));
+const supplementalConcept = ({
+  id,
+  title,
+  definition,
+  explanation,
+  subconcepts,
+  formulae = [],
+  workedExample,
+  indianExample,
+  realEvent,
+  trap,
+  sources,
+}) => ({
+  id,
+  title,
+  definition,
+  simpleMeaning: definition,
+  eli5: workedExample,
+  explanation,
+  subconcepts,
+  formulae,
+  workedExample,
+  indianExample,
+  realEvent,
+  journalEntries: [],
+  trap,
+  sources,
+  example: workedExample,
+});
+
+const accountingSources = [
+  { label: 'ICAI — Foundation Accounting curriculum', url: 'https://www.icai.org/post/sm-foundation-p1-may2025' },
+  { label: 'NPTEL — Financial Accounting, IIT Bombay', url: 'https://www.nptel.ac.in/courses/110101131' },
+];
+const financeSources = [
+  { label: 'NPTEL — Financial Management for Managers', url: 'https://www.nptel.ac.in/courses/110107144' },
+  { label: 'IGNOU — MBA Financial Management', url: 'https://www.ignou.ac.in/schools/programme/MBAFM' },
+];
+
+const supplementalConcepts = [
+  supplementalConcept({
+    id: 'gap_accounting_framework',
+    title: 'Accounting concepts, policies, estimates, and materiality',
+    definition: 'Accounting concepts are the underlying assumptions and qualitative principles used to recognise, measure and present transactions; an accounting policy is the specific basis selected for recurring treatment, while an estimate is a measured amount subject to uncertainty.',
+    explanation: 'Accrual records economic effects when rights and obligations arise. Going concern assumes the entity will continue operating unless evidence indicates otherwise. Consistency supports comparison across periods, but does not prohibit a justified policy change. Prudence requires caution under uncertainty without deliberate understatement. Materiality asks whether omission or misstatement could influence a user’s decision. Substance over form requires accounting for economic reality rather than relying only on legal labels. An accounting policy change alters the governing recognition or measurement basis; an accounting estimate change updates an amount because new information becomes available. An error is a misuse or omission of information that was available when the statements were prepared.',
+    subconcepts: [
+      { title: 'Accrual and going concern', explanation: 'Accrual determines timing from economic events; going concern affects measurement and classification because forced-sale assumptions are normally inappropriate for a continuing business.' },
+      { title: 'Consistency and comparability', explanation: 'Apply policies consistently and disclose justified changes so users can compare like periods without treating consistency as a ban on better information.' },
+      { title: 'Prudence and materiality', explanation: 'Exercise caution in uncertain estimates and focus reporting effort on matters capable of influencing decisions; materiality depends on size, nature and context.' },
+      { title: 'Policy, estimate, and error', explanation: 'A policy is the rule applied, an estimate is an uncertain amount calculated under that rule, and an error is an incorrect use or omission of information that was available.' },
+    ],
+    workedExample: 'Changing the expected useful life of a machine after new maintenance evidence is an estimate change applied prospectively. Discovering that last year’s invoice was omitted despite being available is an error, not an estimate revision.',
+    indianExample: 'An Indian company applying Ind AS cannot classify a change in inventory cost formula as a routine estimate update merely to smooth profit. The nature, justification and applicable transition treatment must be identified.',
+    realEvent: 'Accounting failures commonly begin with aggressive judgements being presented as mechanical facts. Separating policy choice, estimation uncertainty and error is therefore central to both audit and financial due diligence.',
+    trap: 'Do not describe every revised number as an error. New information can legitimately change an estimate without making the earlier estimate incorrect.',
+    sources: accountingSources,
+  }),
+  supplementalConcept({
+    id: 'gap_capital_revenue',
+    title: 'Capital and revenue expenditure, receipts, provisions, and reserves',
+    definition: 'Capital expenditure creates or improves a controlled resource expected to benefit future periods; revenue expenditure consumes a service or maintains current operations. Capital and revenue receipts are classified by their economic source rather than simply by whether cash was received.',
+    explanation: 'Expenditure is capitalised only when it satisfies the relevant asset-recognition requirements and is directly attributable to bringing the resource to the condition required for use. Routine repairs, training, advertising and general administration are normally current expenses. Borrowing and owner contributions are capital receipts because they finance the business without creating operating income; customer revenue is a revenue receipt when earned. A provision is a liability recognised for a present obligation whose timing or amount is uncertain. A reserve is part of equity, commonly representing retained profit or another prescribed equity component. Misclassifying expenditure affects both current profit and the balance sheet and often reverses through future depreciation or amortisation.',
+    subconcepts: [
+      { title: 'Capital expenditure', explanation: 'Acquisition, construction and qualifying improvement costs are capitalised when they create future benefit and satisfy recognition requirements.' },
+      { title: 'Revenue expenditure', explanation: 'Costs that maintain existing capacity or consume current-period services are expensed, even when they may indirectly support future sales.' },
+      { title: 'Capital and revenue receipts', explanation: 'Debt and owner funding create liability or equity; earned sales and service consideration create income. Cash receipt alone does not establish revenue.' },
+      { title: 'Provision versus reserve', explanation: 'A provision is a liability charged against profit when recognised; a reserve is an equity appropriation or component and is not a substitute for an obligation.' },
+    ],
+    workedExample: '₹8 lakh spent replacing a machine component that substantially extends useful life may be capitalised if recognition criteria are met. ₹80,000 of routine servicing that merely preserves current performance is expensed.',
+    indianExample: 'For factory installation, non-recoverable taxes and necessary freight may form part of asset cost, while recoverable GST and general staff training are separated from the capitalised amount.',
+    realEvent: 'Capitalising ordinary operating expenditure can temporarily inflate EBITDA and profit while creating future depreciation. Transaction and audit teams therefore test additions for invoices, business purpose and evidence of incremental future benefit.',
+    trap: 'A large payment is not automatically capital expenditure, and expenditure does not become an asset merely because management expects it to help future business.',
+    sources: accountingSources,
+  }),
+  supplementalConcept({
+    id: 'gap_statement_comparative',
+    title: 'Comparative, common-size, and trend analysis',
+    definition: 'Comparative analysis measures absolute and percentage change across periods, common-size analysis expresses each statement line as a common base, and trend analysis converts a time series into index numbers relative to a selected base period.',
+    explanation: 'Comparative statements show where balances and flows changed, but percentage growth can be misleading when the base is small or negative. A common-size income statement normally expresses each line as a percentage of revenue, revealing changes in cost structure and margins. A common-size balance sheet commonly expresses each line as a percentage of total assets or total financing, revealing shifts in asset intensity and funding mix. Trend indices help compare growth paths across several years. These methods do not replace ratio or cash-flow analysis: they identify patterns that require causal investigation, policy normalisation and comparison with volume, price, acquisitions and one-off items.',
+    subconcepts: [
+      { title: 'Absolute change', explanation: 'Subtract the earlier amount from the later amount to show the rupee movement and preserve economic scale.' },
+      { title: 'Percentage change', explanation: 'Divide change by the appropriate earlier-period base, while flagging zero, near-zero or negative bases that make the result unstable.' },
+      { title: 'Common-size statements', explanation: 'Use revenue for income-statement lines and total assets or total financing for balance-sheet lines, with the chosen convention stated.' },
+      { title: 'Trend index', explanation: 'Set a base year to 100 and express later values relative to it so divergent growth rates become visible.' },
+    ],
+    formulae: [
+      { label: 'Percentage change', expression: '(Current amount − Prior amount) ÷ Prior amount × 100', variables: 'The prior amount is the comparison base and must be economically meaningful.' },
+      { label: 'Trend index', expression: 'Current-period amount ÷ Base-period amount × 100', variables: 'The base-period index equals 100.' },
+    ],
+    workedExample: 'Revenue rises from ₹100 crore to ₹120 crore while COGS rises from ₹60 crore to ₹78 crore. Revenue grows 20%, COGS grows 30%, and gross margin falls from 40% to 35%.',
+    indianExample: 'A multi-year analysis of an Indian retailer should compare common-size inventory and lease-related balances with store expansion, seasonality and like-for-like sales rather than treating every increase as deterioration.',
+    realEvent: 'Analysts use common-size and trend schedules to locate where a reported earnings change originated before testing ledger detail, management explanations and cash conversion.',
+    trap: 'Do not calculate a percentage change mechanically when the earlier amount is zero or negative; explain why the percentage is undefined or economically misleading.',
+    sources: [
+      { label: 'NPTEL — Managerial Accounting', url: 'https://nptel.ac.in/courses/110101003' },
+      { label: 'NPTEL — Decision Making Using Financial Accounting', url: 'https://archive.nptel.ac.in/content/syllabus_pdf/110106135.pdf' },
+    ],
+  }),
+  supplementalConcept({
+    id: 'gap_financial_planning',
+    title: 'Financial planning, forecasting, and sources of finance',
+    definition: 'Financial planning converts operating assumptions into forecast statements and funding requirements; financing then selects instruments whose cost, maturity, risk and control implications fit those requirements.',
+    explanation: 'A forecast begins with operational drivers such as volume, price, margins, collection days, inventory policy, capital expenditure and tax. These assumptions produce forecast income, balance-sheet and cash-flow statements and reveal the external financing need. Short-term operating gaps may use bank facilities, commercial credit, factoring or commercial paper where available. Long-term investment may use retained earnings, term debt, leases, equity or hybrid instruments. The selection is not based on nominal cost alone: maturity matching, refinancing exposure, security, covenants, dilution, tax effects, cash-flow volatility and financial flexibility matter. Sustainable growth is constrained by profitability, asset intensity, payout and leverage when the firm does not issue new equity.',
+    subconcepts: [
+      { title: 'Forecast drivers', explanation: 'Build statements from volume, price, cost, working-capital and investment assumptions rather than applying one unsupported growth percentage to every line.' },
+      { title: 'External financing need', explanation: 'Funding is required when internally generated cash and existing liquidity are insufficient for operating and investment plans.' },
+      { title: 'Short- and long-term sources', explanation: 'Match instrument maturity and repayment pattern with the life and cash-generation profile of the financed need.' },
+      { title: 'Financing constraints', explanation: 'Cost, covenants, collateral, dilution, market access, refinancing risk and flexibility can dominate the stated coupon or dividend expectation.' },
+    ],
+    formulae: [
+      { label: 'External financing need', expression: 'Forecast asset requirement − Forecast spontaneous liabilities − Forecast retained earnings − Existing available funding', variables: 'The exact model depends on how cash, debt and dividends are forecast.' },
+    ],
+    workedExample: 'If seasonal inventory requires ₹4 crore for four months, a revolving working-capital facility may fit better than permanent equity. A five-year plant should not depend entirely on a facility repayable on demand.',
+    indianExample: 'An Indian MSME may compare bank working-capital limits, supplier credit, invoice discounting through TReDS and promoter funds while considering collateral, customer concentration and payment timing.',
+    realEvent: 'Rapidly growing businesses can report rising profit while facing a funding shortage because receivables, inventory and capex absorb cash before earnings are collected.',
+    trap: 'Do not treat forecast profit as available cash or select the cheapest quoted source without checking maturity, repayment timing, covenants and refinancing risk.',
+    sources: financeSources,
+  }),
+  supplementalConcept({
+    id: 'gap_arr_rationing',
+    title: 'Accounting rate of return and capital rationing',
+    definition: 'Accounting rate of return relates average accounting profit to an investment base, while capital rationing allocates a limited investment budget among acceptable projects to maximise value subject to funding and project constraints.',
+    explanation: 'ARR uses accounting profit rather than cash flow and does not discount timing, so it is a supplementary screening measure rather than a value criterion. The denominator may be initial investment or average investment; an assessment must state the convention. Capital rationing arises when all positive-NPV projects cannot be funded. For divisible projects under a single-period constraint, profitability index can help rank value created per rupee invested. For indivisible projects, combinations must be evaluated because selecting the highest individual PI may leave unused budget or produce less total NPV. Mutually exclusive projects still require direct comparison of incremental value and risk.',
+    subconcepts: [
+      { title: 'ARR numerator', explanation: 'Use average annual accounting profit after depreciation under the convention stated, not project cash inflow.' },
+      { title: 'ARR denominator', explanation: 'Use initial or average investment exactly as defined; average investment often reflects depreciating book value plus working capital.' },
+      { title: 'Divisible projects', explanation: 'PI can rank NPV generated per unit of scarce capital when projects can be undertaken fractionally and assumptions are comparable.' },
+      { title: 'Indivisible projects', explanation: 'Evaluate feasible project combinations and select the set with the highest total NPV within the budget.' },
+    ],
+    formulae: [
+      { label: 'Accounting rate of return', expression: 'Average annual accounting profit ÷ Stated investment base × 100', variables: 'Confirm whether the base is initial investment or average book investment.' },
+      { label: 'Profitability index', expression: 'Present value of future cash inflows ÷ Initial investment', variables: 'A PI above one corresponds to positive NPV for a conventional project.' },
+    ],
+    workedExample: 'A ₹10 lakh project earns average annual accounting profit of ₹1.5 lakh. ARR on initial investment is 15%. That result does not reveal whether late cash flows create positive NPV.',
+    indianExample: 'A company with a ₹20 crore capex ceiling should test combinations of indivisible expansion projects by total NPV rather than automatically funding projects in descending ARR order.',
+    realEvent: 'Internal investment committees often display payback and ARR because they are easy to communicate, but value decisions still require incremental cash flows, discount rates and NPV.',
+    trap: 'Do not confuse ARR with IRR: ARR uses accounting profit and no discounting, whereas IRR is the discount rate that sets cash-flow NPV to zero.',
+    sources: financeSources,
+  }),
+  supplementalConcept({
+    id: 'gap_security_valuation',
+    title: 'Bond, preference-share, and equity valuation',
+    definition: 'The value of a financial security is the present value of the cash flows its holder expects to receive, discounted at a required return consistent with the timing and risk of those cash flows.',
+    explanation: 'A conventional bond pays coupons and principal; its price equals the present value of both. When required yield rises above the coupon rate, price falls below face value, and the reverse holds when required yield falls. A perpetual preference share is valued by dividing its fixed annual dividend by the required return. Ordinary equity has no fixed maturity, so valuation depends on expected distributable cash flows and growth. The Gordon growth model values a stable-growth share from next-period dividend, required return and perpetual growth, with required return exceeding growth. Market price can differ from estimated intrinsic value because assumptions, information and risk assessments differ.',
+    subconcepts: [
+      { title: 'Bond cash flows', explanation: 'Discount each coupon and the redemption amount at a yield appropriate to maturity, credit risk, currency and liquidity.' },
+      { title: 'Yield and price', explanation: 'For an existing fixed-coupon bond, required yield and price move inversely because promised cash flows do not change with market rates.' },
+      { title: 'Preference shares', explanation: 'A perpetual fixed dividend is a perpetuity when payment and risk assumptions support that treatment.' },
+      { title: 'Ordinary equity', explanation: 'Stable-growth dividend valuation requires sustainable payout and growth; high-growth or irregular businesses require a multi-stage or cash-flow approach.' },
+    ],
+    formulae: [
+      { label: 'Bond value', expression: 'Σ[Coupon ÷ (1 + yield)^t] + Face value ÷ (1 + yield)^n', variables: 'Use the cash-flow frequency and periodic yield consistently.' },
+      { label: 'Preference-share value', expression: 'Annual preference dividend ÷ Required return', variables: 'Assumes a perpetual fixed dividend.' },
+      { label: 'Gordon growth value', expression: 'Next-period dividend ÷ (Required return − Growth rate)', variables: 'Required return must exceed a sustainable perpetual growth rate.' },
+    ],
+    workedExample: 'A three-year ₹1,000 bond with an ₹80 annual coupon and 10% required yield is worth less than ₹1,000 because its 8% coupon rate is below the market-required return.',
+    indianExample: 'When RBI-linked market yields rise, prices of existing fixed-rate Indian government and corporate bonds generally fall, with longer-duration securities usually showing greater sensitivity.',
+    realEvent: 'Interest-rate cycles repeatedly demonstrate that a fixed promised coupon does not make a bond price stable. Market value changes as the return demanded on comparable securities changes.',
+    trap: 'Do not discount a bond’s face value alone or use the coupon rate as the discount rate merely because it appears on the certificate.',
+    sources: financeSources,
+  }),
+  supplementalConcept({
+    id: 'gap_funds_flow',
+    title: 'Funds flow and statement of changes in working capital',
+    definition: 'A funds-flow statement explains sources and applications of long-term funds between two balance-sheet dates, commonly using changes in net working capital as the connecting measure rather than tracking cash and cash equivalents alone.',
+    explanation: 'An increase in net working capital is an application of funds because more long-term financing is tied in current assets net of current liabilities; a decrease is a source. Long-term sources commonly include share issues, long-term borrowing, asset-sale proceeds and funds generated from operations. Applications include acquisition of non-current assets, repayment of long-term debt, dividends and tax under the convention stated. Funds from operations adjusts accounting profit for non-fund and non-operating items such as depreciation and gains on asset sale. The funds-flow statement is broader and older than the modern cash-flow statement: it can explain financing of working-capital change but does not report operating, investing and financing cash movements with the same precision.',
+    subconcepts: [
+      { title: 'Working-capital schedule', explanation: 'Compare eligible current assets and current liabilities across dates to calculate the increase or decrease in net working capital.' },
+      { title: 'Funds from operations', explanation: 'Adjust profit for non-fund and non-operating items to estimate internally generated long-term funds under the stated convention.' },
+      { title: 'Sources of funds', explanation: 'Identify long-term financing inflows and releases from non-current assets rather than treating every current-liability movement as a separate source.' },
+      { title: 'Applications of funds', explanation: 'Identify long-term investment, financing repayment and distributions, then reconcile sources with applications and working-capital change.' },
+    ],
+    formulae: [
+      { label: 'Net working capital', expression: 'Current assets − Current liabilities', variables: 'Use the classification convention required by the question.' },
+      { label: 'Funds-flow reconciliation', expression: 'Sources of funds − Applications of funds = Increase in net working capital', variables: 'A decrease in net working capital reverses the direction.' },
+    ],
+    workedExample: 'If current assets rise from ₹20 lakh to ₹27 lakh while current liabilities rise from ₹12 lakh to ₹15 lakh, net working capital rises from ₹8 lakh to ₹12 lakh. The ₹4 lakh increase is an application of funds.',
+    indianExample: 'Indian university and aptitude questions may still test funds-flow schedules even though published company reporting focuses on the statutory cash-flow statement. The two statements should not be treated as synonyms.',
+    realEvent: 'A business can raise long-term debt and use part of it to build inventory and receivables. Funds-flow analysis shows the financing source and working-capital application even before operating cash conversion improves.',
+    trap: 'Do not classify every increase in a current liability as a standalone source in the funds-flow statement; it is normally incorporated into the net working-capital schedule.',
+    sources: [
+      { label: 'IGNOU — Financial Management curriculum', url: 'https://www.ignou.ac.in/schools/programme/MCOMOL' },
+      { label: 'NPTEL — Managerial Accounting', url: 'https://nptel.ac.in/courses/110101003' },
+    ],
+  }),
+  supplementalConcept({
+    id: 'gap_extended_ratios',
+    title: 'Operating, solvency, and market ratios',
+    definition: 'Operating ratios connect revenue with cost structure and asset use, solvency ratios assess long-term financial claims and payment capacity, and market ratios connect accounting performance with the price investors assign to equity.',
+    explanation: 'Operating ratio compares operating cost with revenue; a lower result generally indicates more operating margin, subject to classification consistency. Asset turnover relates revenue to average assets, fixed-asset turnover to average net PPE, and working-capital turnover to average operating working capital. Debt-to-equity and proprietary ratios describe funding structure but not maturity. Interest coverage uses earnings before interest, while debt-service coverage should use a stated cash or earnings measure against interest plus scheduled principal. EPS uses profit attributable to ordinary shareholders and weighted-average shares. P/E divides price by EPS and becomes uninformative when earnings are negative or unusually depressed. Dividend payout and yield answer different questions: distribution relative to earnings versus cash dividend relative to market price.',
+    subconcepts: [
+      { title: 'Operating and asset-use ratios', explanation: 'Match revenue or operating cost with the average resource base used to generate it and investigate outsourcing, idle capacity and acquisitions.' },
+      { title: 'Capital-structure ratios', explanation: 'Debt-to-equity and proprietary ratio show claim mix; definitions must state whether debt is gross, net, interest-bearing or total liabilities.' },
+      { title: 'Debt-service capacity', explanation: 'Interest coverage tests interest cushion, while DSCR includes scheduled principal and therefore addresses a different burden.' },
+      { title: 'Market ratios', explanation: 'EPS, P/E, payout and dividend yield link reported earnings and distributions with share count and market price.' },
+    ],
+    formulae: [
+      { label: 'Asset turnover', expression: 'Revenue ÷ Average total assets', variables: 'Use average assets for a period flow where possible.' },
+      { label: 'Debt-service coverage', expression: 'Cash available for debt service ÷ (Interest + Scheduled principal)', variables: 'State the exact cash-available convention used.' },
+      { label: 'Dividend payout', expression: 'Ordinary dividends ÷ Profit attributable to ordinary shareholders', variables: 'May also be expressed as dividend per share divided by EPS.' },
+    ],
+    workedExample: 'Revenue of ₹120 crore on average assets of ₹80 crore gives asset turnover of 1.5x. If net margin is 6%, the corresponding ROA is approximately 9% before definitional differences.',
+    indianExample: 'When comparing Indian listed companies, use consolidated or standalone figures consistently and check whether promoter holdings, exceptional items or a recent share issue distort EPS and market multiples.',
+    realEvent: 'A company can report a low P/E because the market expects decline or because current earnings are temporarily high. The multiple is therefore a valuation signal, not a standalone recommendation.',
+    trap: 'Do not compare P/E when EPS is negative as though the resulting negative multiple had the same meaning as an ordinary positive P/E.',
+    sources: [
+      { label: 'NPTEL — Financial Accounting and Analysis', url: 'https://www.nptel.ac.in/courses/110107073' },
+      { label: 'NPTEL — Financial Accounting, IIT Bombay', url: 'https://www.nptel.ac.in/courses/110101131' },
+    ],
+  }),
+];
+
+const conceptVisuals = {
+  zth_equation_accounts: {
+    type: 'accounting-equation',
+    title: 'Transaction-to-equation worksheet',
+    note: 'Each row preserves Assets = Liabilities + Equity while showing whether profit changes.',
+  },
+  zth_cycle_evidence: {
+    type: 'bookkeeping-flow',
+    title: 'Invoice-to-trial-balance posting map',
+    note: 'Follow one ₹1.20 lakh credit sale through the books without recording revenue twice.',
+  },
+  zth_errors_rectification: {
+    type: 'rectification-sheet',
+    title: 'Wrong entry → required entry → correcting difference',
+    note: 'The marked cells isolate the minimum entry needed to transform the books.',
+  },
+  zth_three_statement: {
+    type: 'statement-bridge',
+    title: 'Three-statement bridge for a credit sale',
+    note: 'The same transaction changes profit and receivables but creates no immediate cash.',
+  },
+  zth_indirect_cfo: {
+    type: 'cashflow-bridge',
+    title: 'Indirect CFO reconciliation worksheet',
+    note: 'Running totals make every working-capital sign visible.',
+  },
+  zth_profit_return_leverage: {
+    type: 'dupont-tree',
+    title: 'DuPont return-driver tree',
+    note: 'ROE is decomposed into margin, asset use and leverage rather than treated as one score.',
+  },
+  zth_npv_irr: {
+    type: 'npv-sheet',
+    title: 'Capital-budgeting discount worksheet',
+    note: 'Cash flows are moved to one date before the accept/reject decision.',
+  },
+  zth_wc_cycle: {
+    type: 'working-capital-timeline',
+    title: 'Cash-conversion operating timeline',
+    note: 'Inventory and collection days absorb cash; supplier credit delays the cash payment.',
+  },
+};
+
+const sourceConceptById = new Map(
+  [
+    ...sourceModules.flatMap((module) => module.concepts),
+    ...supplementalConcepts,
+  ].map((item) => [
+    item.id,
+    conceptVisuals[item.id] ? { ...item, visual: conceptVisuals[item.id] } : item,
+  ]),
+);
+
+const topic = ({
+  id,
+  order,
+  title,
+  shortTitle,
+  description,
+  capability,
+  conceptIds,
+  assessmentWeight = '',
+}) => ({
+  id,
+  order,
+  title,
+  shortTitle,
+  description,
+  capability,
+  assessmentWeight,
+  concepts: conceptIds.map((conceptId) => {
+    const item = sourceConceptById.get(conceptId);
+    if (!item) throw new Error(`Unknown IronSides concept: ${conceptId}`);
+    return item;
+  }),
+});
+
+export const ironsidesModules = [
+  topic({
+    id: 'financial_management',
+    order: 1,
+    title: 'Financial Management',
+    shortTitle: 'Financial Management',
+    description: 'Financial planning and forecasting; sources of finance; time value of money; bond, preference-share and equity valuation; risk and return; capital budgeting; project cash flows; NPV, IRR, ARR, payback, profitability index and capital rationing; project risk; cost of capital; capital structure; leverage; dividend policy; working-capital management; and short-term finance.',
+    capability: 'Value cash flows, evaluate investment proposals, estimate required returns and financing costs, analyse financing and payout choices, and quantify the liquidity and risk consequences of working-capital decisions.',
+    conceptIds: [
+      'zth_fm_objective',
+      'gap_financial_planning',
+      'zth_tvm',
+      'zth_risk_return',
+      'zth_project_cashflow',
+      'zth_npv_irr',
+      'gap_arr_rationing',
+      'gap_security_valuation',
+      'zth_project_risk',
+      'zth_cost_capital',
+      'zth_capital_structure',
+      'zth_dividend',
+      'zth_wc_cycle',
+      'zth_cash_receivables',
+      'zth_inventory_payables',
+    ],
+  }),
+  topic({
+    id: 'accounting',
+    order: 2,
+    title: 'Accounting',
+    shortTitle: 'Accounting',
+    description: 'Transaction recognition; accounting equation; account classification; accounting concepts, policies, estimates and materiality; capital and revenue classification; accrual accounting; inventory; PPE and depreciation; intangibles; revenue; provisions, reserves and contingencies; foreign exchange and tax timing; cost classification; contribution; break-even; relevant costing; budgets; variances; and inventory control.',
+    capability: 'Analyse the substance of a transaction, apply recognition and measurement rules, distinguish financial from management-accounting treatments, and calculate the accounting amounts used in commercial and operating decisions.',
+    conceptIds: [
+      'zth_accounting_purpose',
+      'zth_equation_accounts',
+      'gap_accounting_framework',
+      'gap_capital_revenue',
+      'zth_inventory',
+      'zth_ppe_intangibles',
+      'zth_revenue_provisions',
+      'zth_cost_classification',
+      'zth_cvp_relevant',
+      'zth_budget_variance_eoq',
+    ],
+  }),
+  topic({
+    id: 'financial_statements',
+    order: 3,
+    title: 'Financial Statements',
+    shortTitle: 'Financial Statements',
+    description: 'Income statement; balance sheet; statement of changes in equity; Schedule III presentation; three-statement linkage; earnings quality; comparative, common-size and trend analysis; funds flow and changes in working capital; cash-flow classification; indirect operating cash flow; capital expenditure; free cash flow; and cash conversion.',
+    capability: 'Read, construct and connect the principal financial statements, classify cash flows, reconcile profit to operating cash, calculate free cash flow, and identify accounting-quality signals across statements and notes.',
+    conceptIds: [
+      'zth_income_balance',
+      'zth_three_statement',
+      'zth_quality_analysis',
+      'gap_statement_comparative',
+      'gap_funds_flow',
+      'zth_cash_classification',
+      'zth_indirect_cfo',
+      'zth_fcf',
+    ],
+  }),
+  topic({
+    id: 'book_entry',
+    order: 4,
+    title: 'Book Entry',
+    shortTitle: 'Book Entry',
+    description: 'Source documents; books of original entry; subsidiary books; journal and ledger roles; posting and balancing; personal ledgers; receivables and payables control accounts; cash book; petty cash; bills receivable and payable; trial balance; closing; and bank reconciliation.',
+    capability: 'Move a transaction from source evidence through the appropriate book of original entry and ledger, balance accounts, reconcile control totals and bank balances, and prepare a trial balance without confusing bookkeeping records with financial statements.',
+    conceptIds: [
+      'zth_cycle_evidence',
+      'zth_ledgers_control_accounts',
+      'zth_brs',
+    ],
+  }),
+  topic({
+    id: 'ratios',
+    order: 5,
+    title: 'Ratios',
+    shortTitle: 'Ratios',
+    description: 'Ratio-analysis method; comparability and average balances; liquidity; operating and asset turnover; DSO, DIO and DPO; cash conversion cycle; margins; ROA, ROE, ROIC and DuPont; leverage, proprietary ratio, interest coverage and DSCR; EPS, P/E, payout and dividend yield; and interpretation of business drivers.',
+    capability: 'Calculate the principal liquidity, efficiency, profitability, return, market and leverage ratios with consistent inputs, then explain the operating or financing drivers behind a movement instead of treating the number as a conclusion.',
+    conceptIds: [
+      'zth_ratio_framework',
+      'zth_liquidity_efficiency',
+      'zth_profit_return_leverage',
+      'gap_extended_ratios',
+    ],
+  }),
+  topic({
+    id: 'rectification_entries',
+    order: 6,
+    title: 'Rectification Entries',
+    shortTitle: 'Rectification',
+    description: 'Accrued income and expenses; prepayments; unearned income; cut-off adjustments; errors disclosed and not disclosed by a trial balance; errors of omission, commission and principle; compensating errors; suspense accounts; profit effects; and difference-entry rectification.',
+    capability: 'Determine what was recorded and what should have been recorded, identify whether the error affects the trial balance or profit, and post the minimum adjusting or rectification entry with the correct use of suspense.',
+    conceptIds: [
+      'zth_accrual_deferral',
+      'zth_errors_rectification',
+    ],
+  }),
+  topic({
+    id: 'journal_entries',
+    order: 7,
+    title: 'Journal Entries',
+    shortTitle: 'Journal Entries',
+    description: 'Debit-credit method; simple and compound entries; cash and credit transactions; sales, purchases, returns and discounts; receivables and payables; accruals and deferrals; inventory; GST and TDS; payroll; provisions; fixed assets and depreciation; disposals; loans; equity; drawings; and dividends.',
+    capability: 'Construct balanced journal entries from economic substance and explain the effect of each entry on profit, cash, assets, liabilities and equity across operating, statutory, asset and financing transactions.',
+    assessmentWeight: 'Highest accounting weight',
+    conceptIds: [
+      'zth_journal_method',
+      'zth_indian_commercial_entries',
+      'zth_operating_entries',
+      'zth_financing_asset_entries',
+    ],
+  }),
+  topic({
+    id: 'arithmetic',
+    order: 8,
+    title: sourceModuleById.get('arithmetic').title,
+    shortTitle: sourceModuleById.get('arithmetic').shortTitle,
+    description: sourceModuleById.get('arithmetic').description,
+    capability: 'Solve the percentage, ratio, average, growth, interest, profit, work-rate and data-interpretation calculations used throughout the assessment without denominator or unit errors.',
+    conceptIds: sourceModuleById.get('arithmetic').concepts.map((item) => item.id),
+  }),
+  topic({
+    id: 'logical_reasoning',
+    order: 9,
+    title: sourceModuleById.get('logical_reasoning').title,
+    shortTitle: sourceModuleById.get('logical_reasoning').shortTitle,
+    description: sourceModuleById.get('logical_reasoning').description,
+    capability: 'Translate verbal information into sets, orders, positions, relations and argument structures, then select only conclusions forced by the stated evidence.',
+    conceptIds: sourceModuleById.get('logical_reasoning').concepts.map((item) => item.id),
+  }),
+];
+
+const bookkeepingQuestionTopics = {
+  book_entry: new Set([
+    'isa_008',
+    'isa_zth_051',
+    'isa_zth_052',
+    'isa_zth_053',
+    'isa_audit_033',
+    'isa_audit_034',
+  ]),
+  rectification_entries: new Set([
+    'isa_002',
+    'isa_006',
+    'isa_007',
+    'isa_zth_004',
+    'isa_zth_054',
+  ]),
+};
+
+const rectificationQuestionTopics = {
+  book_entry: new Set(['isa_zth_010', 'isa_zth_011']),
+  accounting: new Set(['isa_023', 'isa_029']),
+};
+
+const topicIdForQuestion = (card) => {
+  if (card.moduleId === 'bookkeeping') {
+    if (bookkeepingQuestionTopics.book_entry.has(card.id)) return 'book_entry';
+    if (bookkeepingQuestionTopics.rectification_entries.has(card.id)) return 'rectification_entries';
+    return 'accounting';
+  }
+  if (card.moduleId === 'rectification') {
+    if (rectificationQuestionTopics.book_entry.has(card.id)) return 'book_entry';
+    if (rectificationQuestionTopics.accounting.has(card.id)) return 'accounting';
+    return 'rectification_entries';
+  }
+  if (['accounting_measurement', 'cost_management'].includes(card.moduleId)) return 'accounting';
+  if (['financial_statements', 'cash_flow'].includes(card.moduleId)) return 'financial_statements';
+  if (['financial_management', 'capital_budgeting', 'financing_decisions', 'working_capital'].includes(card.moduleId)) return 'financial_management';
+  return card.moduleId;
+};
+
+const sourceAssessmentQuestions = [
+  ...legacyIronsidesAssessmentQuestions,
+  ...zeroToHeroQuestions,
+  ...ironsidesAuditQuestions,
+  ...ironsidesStandardQuestions,
+];
+
+const genuinelyAdvancedQuestionIds = new Set([
+  'isa_058',
+  'isa_062',
+  'isa_zth_042',
+  'isa_zth_045',
+  'isa_zth_046',
+  'isa_zth_049',
+  'isa_zth_050',
+  'isa_audit_015',
+  'isa_audit_018',
+  'isa_audit_024',
+  'isa_zth_033',
+  'isa_audit_009',
+  'isa_audit_011',
+  'isa_audit_012',
+  'isa_038',
+  'isa_040',
+  'isa_zth_020',
+  'isa_zth_021',
+  'isa_zth_025',
+  'isa_audit_008',
+  'isa_audit_034',
+  'isa_zth_027',
+  'isa_zth_029',
+  'isa_018',
+  'isa_zth_007',
+  'isa_zth_056',
+  'isa_069',
+  'isa_071',
+  'isa_072',
+  'isa_audit_026',
+  'isa_audit_028',
+  'isa_076',
+  'isa_079',
+  'isa_080',
+  'isa_081',
+  'isa_082',
+  'isa_audit_029',
+  'isa_audit_031',
+  'isa_audit_032',
+]);
+
+export const ironsidesAssessmentQuestions = sourceAssessmentQuestions
+  .map((card) => ({
+    ...card,
+    moduleId: topicIdForQuestion(card),
+    difficulty: card.difficulty === 'Hard' && !genuinelyAdvancedQuestionIds.has(card.id)
+      ? 'Medium'
+      : card.difficulty,
+  }));
 
 export const ironsidesModuleOrder = ironsidesModules
   .slice()

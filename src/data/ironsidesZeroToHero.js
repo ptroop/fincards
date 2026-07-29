@@ -66,26 +66,26 @@ export const zeroToHeroModules = [
     1,
     'Accounting Foundations',
     'Foundations',
-    'Begin with the purpose and language of accounting, then move through the accounting equation, account classification, debit-credit logic, evidence, journals, ledgers, trial balance, accruals, and closing. No prior accounting knowledge is assumed.',
+    'Scope: accounting elements and equation; account classification; debit and credit; source documents; journals; subsidiary books; ledgers and control accounts; trial balance; accrual accounting; and period closing.',
     [
       lesson({
         id: 'zth_accounting_purpose',
-        title: 'What accounting measures and why it exists',
-        definition: 'Financial accounting is a structured process for identifying, measuring, recording, classifying, summarising, and communicating the financial effects of an entity’s transactions and events to users who make economic decisions.',
-        simpleMeaning: 'Accounting converts business activity—sales, purchases, salaries, loans, assets and obligations—into financial statements that can be checked and compared.',
-        eli5: 'Think of a business as a water tank. Accounting labels every pipe through which value enters, leaves, or remains in the tank, and then reports what happened during the period and what is left at the end.',
-        explanation: 'Accounting is not merely cash tracking. A profitable business may lack cash because customers have not paid, while a cash-rich business may be heavily indebted. Financial statements therefore separate performance over a period from financial position at a date and from cash movement during the period. The reporting entity is treated separately from its owners. Monetary measurement permits unlike transactions to be aggregated, while accrual accounting recognises economic effects when they arise rather than only when cash moves. Useful information should be relevant and faithfully represented; comparability, verifiability, timeliness and understandability improve its usefulness. An entry is justified by the underlying economic event and supporting evidence, not by the desire to produce a target profit.',
+        title: 'Analyse a transaction before recording it',
+        definition: 'A transaction is recorded only after its economic substance, affected accounts, recognition date and measurable amount have been identified.',
+        simpleMeaning: 'For every event, determine what the entity obtained, what it gave up or owes, whether income or expense arose, and whether cash moved.',
+        eli5: 'Transaction analysis precedes debit and credit.',
+        explanation: 'Use five questions. First, what happened economically: purchase, sale, borrowing, owner contribution, consumption of a service, or settlement of an existing balance? Second, which entity is reporting? A proprietor’s personal expenditure is not a business expense. Third, which financial-statement elements changed: asset, liability, equity, income or expense? Fourth, when should the change be recognised? Accrual accounting records the effect when the right, obligation, performance or consumption arises, not automatically when cash moves. Fifth, what amount is supportable from the contract, invoice, receipt, estimate or valuation rule?\n\nThis method separates transactions that are commonly confused. Borrowing increases cash and debt but creates no income. Buying machinery for cash exchanges one asset for another and creates no immediate expense. A credit sale creates revenue and a receivable but no cash. Collecting that receivable changes only the composition of assets. Paying an expense already accrued reduces cash and the payable without recording the expense again. If these effects cannot be stated before the entry is written, the debit and credit are being guessed.',
         subconcepts: [
-          { title: 'Entity concept', explanation: 'The business records its own assets, liabilities, income and expenses separately from the personal affairs of owners.' },
-          { title: 'Period versus point in time', explanation: 'Profit and cash flow describe a period; the balance sheet describes balances at a reporting date.' },
-          { title: 'Recognition and measurement', explanation: 'Recognition asks whether an item belongs in the statements; measurement asks the amount at which it should be recorded.' },
-          { title: 'Capital and revenue items', explanation: 'Capital expenditure creates or improves a resource benefiting more than the current period; revenue expenditure is consumed in current operations.' },
+          { title: 'Economic substance', explanation: 'Describe the business event without accounting vocabulary before selecting accounts. The same cash movement can be revenue, borrowing, capital contribution or customer advance.' },
+          { title: 'Reporting entity', explanation: 'Record only resources, obligations, income and expenses belonging to the entity. Owner withdrawals affect equity rather than business profit.' },
+          { title: 'Recognition date', explanation: 'Identify when control, performance, consumption or obligation arises. Invoice and payment dates are evidence but are not universal recognition rules.' },
+          { title: 'Measurement and evidence', explanation: 'Use the amount supported by the relevant measurement rule and retain source evidence sufficient to verify existence, amount and business purpose.' },
         ],
         formulae: [{ label: 'Period profit', expression: 'Profit = Income recognised − Expenses recognised', variables: 'Income and expenses are determined under recognition rules; they are not simply cash received and cash paid.' }],
-        workedExample: 'A Bengaluru design firm bills ₹2,00,000 in March, collects it in April, and pays March salaries of ₹80,000 in April. March accrual profit includes the ₹2,00,000 revenue and ₹80,000 salary expense even though neither March item moved cash in March.',
-        indianExample: 'An Indian MSME commonly maintains invoices, e-way or delivery evidence, bank records and GST records. These documents support accounting entries but do not by themselves decide recognition; the accountant must determine what economic event occurred and when.',
+        workedExample: 'A Bengaluru design firm completes ₹2,00,000 of contracted work in March and collects in April. March records Receivable Dr and Service Revenue Cr. March salaries of ₹80,000 paid in April require Salary Expense Dr and Salary Payable Cr in March; April payment debits the payable. March profit is ₹1,20,000 before other costs, while March cash from these two events is nil.',
+        indianExample: 'An MSME receives ₹1,18,000 from a customer before delivery. Bank increases, but the receipt is not automatically revenue: the undelivered obligation is recorded as a customer advance or contract liability, with GST treatment determined separately under the applicable tax rule.',
         realEvent: 'Satyam, 2009: SEBI recorded that reported financial statements had been overstated. The episode shows why bank confirmation, receivable existence, cut-off, internal control and faithful reporting matter; a balanced set of books can still depict a false business.',
-        trap: 'Do not equate accounting profit, taxable profit and cash flow. They answer different questions and may legitimately differ.',
+        trap: 'Do not start from “cash came in, therefore credit revenue.” First determine whether the receipt is earned income, a loan, owner capital, settlement of a receivable or an advance carrying a future obligation.',
         sources: [source.ifrsStandards, source.icaiProcess, source.sebiSatyam],
       }),
       lesson({
@@ -145,6 +145,8 @@ export const zeroToHeroModules = [
           { title: 'Balancing', explanation: 'Total both sides, insert the difference as balance carried down, and bring it into the next period on its normal side.' },
           { title: 'Subsidiary ledgers', explanation: 'Maintain individual customer and supplier balances so collections, disputes, credit limits and confirmations can be controlled.' },
           { title: 'Control accounts', explanation: 'General-ledger totals for receivables and payables should reconcile to the sum of individual subsidiary balances.' },
+          { title: 'Cash book and petty cash', explanation: 'The cash book records cash and bank transactions and can function as both a book of original entry and the relevant ledger account. An imprest petty-cash system restores a fixed float by reimbursing documented expenditure.' },
+          { title: 'Bills receivable and payable', explanation: 'Acceptance of a bill converts an ordinary receivable or payable into a formal instrument balance; collection, endorsement, discounting, honour and dishonour require distinct entries.' },
         ],
         formulae: [
           { label: 'Receivables control closing balance', expression: 'Opening receivables + Credit sales − Cash collected − Sales returns − Discounts allowed − Bad debts ± Other adjustments', variables: 'Add or subtract bills, dishonours, contra entries and corrections when the question includes them.' },
@@ -164,7 +166,7 @@ export const zeroToHeroModules = [
     2,
     'Double Entry and Journal Entries',
     'Journal Entries',
-    'Master entries through economic analysis rather than memorised rules: identify the event, identify and classify the accounts, determine increases and decreases, apply normal balances, and trace the statement effect.',
+    'Scope: transaction analysis; account identification and classification; debit-credit application; operating, financing and non-current-asset entries; GST, TDS and payroll balances; and financial-statement effects.',
     [
       lesson({
         id: 'zth_journal_method',
@@ -260,7 +262,7 @@ export const zeroToHeroModules = [
     3,
     'Accruals, Adjustments, Bank Reconciliation, and Rectification',
     'Adjust & Correct',
-    'Learn period-end timing entries and error correction from first principles: cut-off, accruals, deferrals, estimates, bank reconciliation, suspense accounts, and the distinction between errors that do and do not disturb trial-balance equality.',
+    'Scope: accruals, deferrals, estimates, cut-off, bank reconciliation, error classification, suspense accounts, rectification entries, and effects on profit and financial position.',
     [
       lesson({
         id: 'zth_accrual_deferral',
@@ -332,7 +334,7 @@ export const zeroToHeroModules = [
     4,
     'Inventory, PPE, Intangibles, Provisions, and Revenue Measurement',
     'Measurement',
-    'Move beyond basic entries into the measurement topics that repeatedly appear in MBA and analyst assessments: inventory cost and NRV, depreciation and impairment, intangible assets, provisions and contingencies, revenue recognition, leases, foreign currency, and deferred tax awareness.',
+    'Scope: inventory cost and net realisable value; PPE, depreciation and impairment; intangible assets; leases; revenue recognition; provisions and contingencies; foreign-currency balances; and deferred-tax principles.',
     [
       lesson({
         id: 'zth_inventory',
@@ -371,7 +373,10 @@ export const zeroToHeroModules = [
           { title: 'Research versus development', explanation: 'Research uncertainty generally requires expense; development may qualify only after technical and commercial feasibility criteria are demonstrated.' },
           { title: 'Lease substance', explanation: 'A long-term right to use an identified asset can create both an asset and financing obligation.' },
         ],
-        formulae: [{ label: 'Carrying amount', expression: 'Carrying amount = Cost − Accumulated depreciation/amortisation − Accumulated impairment', variables: 'Revaluation effects apply only when the chosen standard and policy permit.' }],
+        formulae: [
+          { label: 'Carrying amount', expression: 'Carrying amount = Cost − Accumulated depreciation/amortisation − Accumulated impairment', variables: 'Revaluation effects apply only when the chosen standard and policy permit.' },
+          { label: 'Written-down-value depreciation', expression: 'Depreciation = Opening carrying amount × WDV rate', variables: 'The declining carrying amount normally produces a smaller charge in later periods.' },
+        ],
         workedExample: 'Equipment costing ₹24 lakh has residual value ₹4 lakh and five-year life. Annual straight-line depreciation is ₹4 lakh. After two years, carrying amount before impairment is ₹16 lakh; if recoverable amount is ₹13 lakh, recognise ₹3 lakh impairment.',
         indianExample: 'A software services company must not capitalise all developer salaries automatically; it must distinguish research, maintenance and qualifying development phases.',
         realEvent: 'Telecom spectrum, towers, leases and network equipment make Indian telecom statements a practical case for separating intangible amortisation, PPE depreciation, lease liabilities and capex.',
@@ -407,7 +412,7 @@ export const zeroToHeroModules = [
     5,
     'Financial Statements and Three-Statement Linkage',
     'Statements',
-    'Construct and connect the statement of profit and loss, balance sheet, statement of changes in equity, and notes. Learn classification, Schedule III awareness, three-statement mechanics, accounting quality, and the distinction between earnings and cash.',
+    'Scope: statement of profit and loss, balance sheet, changes in equity, Schedule III presentation, notes, three-statement linkage, accounting estimates, earnings quality, and cash conversion.',
     [
       lesson({
         id: 'zth_income_balance',
@@ -479,7 +484,7 @@ export const zeroToHeroModules = [
     6,
     'Cash Flow Statement and Free Cash Flow',
     'Cash Flow',
-    'Build operating, investing, and financing cash flow from first principles, master the indirect method and working-capital signs, and distinguish cash generated by operations from free cash available after reinvestment.',
+    'Scope: operating, investing and financing cash flows; direct and indirect presentation; non-cash and working-capital adjustments; capital expenditure; free cash flow; and cash conversion.',
     [
       lesson({
         id: 'zth_cash_classification',
@@ -548,7 +553,7 @@ export const zeroToHeroModules = [
     7,
     'Ratio Analysis and Business Interpretation',
     'Ratios',
-    'Calculate and interpret profitability, liquidity, efficiency, leverage, coverage, return, market, and cash-flow ratios. Every answer must connect numerator and denominator to a business cause, benchmark, limitation, and follow-up evidence.',
+    'Scope: liquidity, profitability, efficiency, leverage, coverage, return and cash-flow ratios; DuPont decomposition; cash conversion cycle; benchmarking; accounting comparability; and interpretation limits.',
     [
       lesson({
         id: 'zth_ratio_framework',
@@ -610,7 +615,10 @@ export const zeroToHeroModules = [
         formulae: [
           { label: 'DuPont ROE', expression: 'ROE = Net margin × Asset turnover × Equity multiplier', variables: 'Equivalent to Net income ÷ Average equity when definitions align.' },
           { label: 'ROIC', expression: 'ROIC = NOPAT ÷ Average invested capital', variables: 'NOPAT = EBIT × (1 − operating tax rate); define invested capital consistently.' },
+          { label: 'ROCE', expression: 'ROCE = EBIT ÷ Average capital employed', variables: 'Capital employed is commonly equity plus non-current debt or total assets less current liabilities; state the convention.' },
           { label: 'Interest coverage', expression: 'EBIT ÷ Interest expense', variables: 'State whether capitalised interest, lease interest or other fixed charges are included.' },
+          { label: 'Basic EPS', expression: 'Profit attributable to ordinary shareholders ÷ Weighted-average ordinary shares', variables: 'Preference dividends and share-count changes require appropriate treatment.' },
+          { label: 'Price-earnings ratio', expression: 'Market price per share ÷ Earnings per share', variables: 'Interpret growth, risk, accounting quality and cyclicality; a high multiple is not automatically overvaluation.' },
         ],
         workedExample: 'Net margin 8%, asset turnover 1.5x and equity multiplier 2.0x imply ROE 24%. If margin and turnover are stable but ROE rises, greater leverage may be the cause.',
         indianExample: 'A highly leveraged infrastructure firm and an asset-light IT exporter should not be compared on ROE without decomposing capital intensity and leverage.',
@@ -625,7 +633,7 @@ export const zeroToHeroModules = [
     8,
     'Cost and Management Accounting',
     'Cost Accounting',
-    'Cover the MBA assessment core that financial accounting alone misses: cost classification, cost sheets, absorption and marginal costing, contribution, break-even, relevant cost, make-or-buy, limiting factors, budgets, variances, overhead allocation, and basic EOQ.',
+    'Scope: cost classification and cost sheets; overhead allocation; absorption and marginal costing; contribution and break-even; relevant-cost decisions; limiting factors; budgets; variances; and economic order quantity.',
     [
       lesson({
         id: 'zth_cost_classification',
@@ -705,7 +713,7 @@ export const zeroToHeroModules = [
     9,
     'Financial Management Foundations and Time Value of Money',
     'Finance Basics',
-    'Build finance from its objective: value creation under risk and time. Learn simple and compound interest, present and future value, annuities, effective rates, risk and return, inflation, and the difference between accounting profit and economic cash flow.',
+    'Scope: financial objective; investment, financing and payout decisions; simple and compound interest; present and future value; annuities; effective and real rates; expected return; diversification; beta; and CAPM.',
     [
       lesson({
         id: 'zth_fm_objective',
@@ -781,7 +789,7 @@ export const zeroToHeroModules = [
     10,
     'Capital Budgeting and Project Evaluation',
     'Capital Budgeting',
-    'Evaluate projects using incremental after-tax cash flows, NPV, IRR, payback, discounted payback and profitability index. Handle working capital, depreciation tax shields, sunk and opportunity costs, mutually exclusive choices, risk, sensitivity and scenario analysis.',
+    'Scope: incremental after-tax project cash flows; working capital and terminal value; NPV, IRR, payback, discounted payback and profitability index; mutually exclusive projects; sensitivity, scenarios and decision trees.',
     [
       lesson({
         id: 'zth_project_cashflow',
@@ -853,7 +861,7 @@ export const zeroToHeroModules = [
     11,
     'Cost of Capital, Capital Structure, Leverage, and Dividend Policy',
     'Financing',
-    'Learn cost of debt and equity, WACC weights, market versus book value, capital structure trade-offs, operating and financial leverage, coverage, debt maturity, dividend policy, and the correct matching of cash flow with discount rate.',
+    'Scope: cost of debt and equity; WACC and market-value weights; hurdle rates; debt-equity trade-offs; operating, financial and combined leverage; coverage; maturity risk; dividends; and repurchases.',
     [
       lesson({
         id: 'zth_cost_capital',
@@ -926,7 +934,7 @@ export const zeroToHeroModules = [
     12,
     'Working Capital, Cash, Inventory, Receivables, and Short-Term Finance',
     'Working Capital',
-    'Integrate the operating cycle with liquidity policy. Learn gross and net working capital, permanent and seasonal needs, cash budgets, receivables policy, inventory control, supplier credit, bank finance, factoring, TReDS, and the profitability-liquidity trade-off.',
+    'Scope: gross, net and operating working capital; operating and cash-conversion cycles; permanent and seasonal funding; cash budgets; receivables and inventory policy; supplier credit; factoring; TReDS; and short-term finance.',
     [
       lesson({
         id: 'zth_wc_cycle',
@@ -1037,16 +1045,16 @@ export const zeroToHeroQuestions = [
   mcq('005', 'journal_entries', 'Medium', 'A customer pays ₹1.18 lakh including GST before any service is delivered. Which account besides Bank is normally credited initially?', ['Revenue only', 'Contract liability/customer advance and applicable tax liability under the stated tax point', 'Receivable', 'Share capital'], 1, 'Credit the applicable customer-advance/contract-liability and tax accounts under the question’s assumptions.', 'Cash receipt does not prove revenue performance. The assessment must separate accounting performance from applicable GST timing.', 'journal_entry'),
   mcq('006', 'journal_entries', 'Hard', 'Which item is least likely to form part of machinery cost?', ['Freight to site', 'Installation testing', 'Recoverable GST', 'Foundation constructed specifically for the machine'], 2, 'Recoverable GST is recorded separately rather than included in asset cost.', 'Directly attributable costs make the asset ready for use; recoverable tax is not a cost of the resource.', 'accounting_aptitude'),
   solve('007', 'journal_entries', 'Hard', 'Goods costing ₹3 lakh are sold for ₹5 lakh plus 18% GST on credit under a perpetual system. Record the complete entry.', 'Customer Dr ₹5.90 lakh; Sales Cr ₹5 lakh; Output GST Cr ₹0.90 lakh. COGS Dr ₹3 lakh; Inventory Cr ₹3 lakh.', 'Two economic effects occur: revenue and tax liability arise at selling value, while the sold inventory’s carrying cost becomes expense.', '', 'journal_entry'),
-  solve('008', 'journal_entries', 'Hard', 'A vehicle cost ₹8 lakh, accumulated depreciation is ₹5 lakh, and it is sold for ₹3.6 lakh. Record disposal.', 'Bank Dr ₹3.6 lakh; Accumulated Depreciation Dr ₹5 lakh; Vehicle Cr ₹8 lakh; Gain on Disposal Cr ₹0.6 lakh.', 'Carrying amount is ₹3 lakh. Proceeds exceed carrying amount by ₹0.6 lakh.', 'Gain = Proceeds − Carrying amount', 'journal_entry'),
+  solve('008', 'journal_entries', 'Hard', 'A vehicle cost ₹8 lakh, accumulated depreciation is ₹5 lakh, and it is sold for ₹3.6 lakh. Record disposal.', 'Bank Dr ₹3.6 lakh; Accumulated Depreciation Dr ₹5 lakh; Vehicle Cr ₹8 lakh; Gain on Disposal Cr ₹0.6 lakh.', 'Carrying amount is original cost ₹8 lakh less accumulated depreciation ₹5 lakh = ₹3 lakh. Cash proceeds exceed carrying amount by ₹60,000, so the balancing credit is a gain while cost and accumulated depreciation are removed.', 'Gain = Proceeds − Carrying amount', 'journal_entry'),
   solve('009', 'journal_entries', 'Hard', 'A ₹1.10 lakh EMI includes ₹80,000 principal and ₹30,000 interest. It was wholly debited to Interest Expense. Rectify it.', 'Borrowing Dr ₹80,000; Interest Expense Cr ₹80,000.', 'Bank was correctly credited ₹1.10 lakh and genuine interest is ₹30,000. Reclassify the excess expense to reduction of principal.', '', 'journal_entry'),
   mcq('055', 'journal_entries', 'Hard', 'When TDS is withheld from a qualifying professional fee, which principle is correct?', ['Record only the net cash as expense', 'Record the full underlying fee and a separate TDS payable for the withheld amount', 'Treat TDS as revenue', 'Reduce input GST by the TDS amount'], 1, 'Recognise the full qualifying fee and separately credit TDS payable for the amount withheld.', 'Withholding changes settlement, not the underlying cost. The payable is cleared when the tax is deposited with government under the applicable rules.', 'accounting_aptitude'),
   solve('056', 'journal_entries', 'Hard', 'A fee is ₹2,00,000 plus ₹36,000 eligible GST. The question assumes ₹20,000 TDS. Record recognition and immediate net payment.', 'Professional Fee Dr ₹2,00,000; Input GST Dr ₹36,000; Consultant/Bank Cr ₹2,16,000; TDS Payable Cr ₹20,000.', 'The gross supplier invoice is ₹2,36,000. The company pays ₹2,16,000 and withholds ₹20,000 for government. Fee and eligible tax are not reduced merely because settlement is split.', '', 'journal_entry'),
   solve('057', 'journal_entries', 'Hard', 'A consultant earns ₹1,00,000 and the customer withholds ₹10,000 TDS, paying ₹90,000. Record the consultant’s entry, ignoring GST.', 'Bank Dr ₹90,000; TDS Receivable Dr ₹10,000; Professional Income Cr ₹1,00,000.', 'The consultant recognises gross income of ₹1,00,000. The ₹10,000 withheld is not an expense; it is tax credit recoverable or adjustable against the consultant’s tax liability, subject to applicable law.', '', 'journal_entry'),
 
   mcq('010', 'rectification', 'Hard', 'Which item normally requires a cash-book entry during bank reconciliation?', ['Cheque issued but not presented', 'Deposit in transit', 'Bank charge first seen on statement', 'Bank’s posting error'], 2, 'A bank charge first seen on the statement requires Expense Dr; Bank Cr.', 'Timing items already exist in the cash book. An entity omission must be entered in its ledger.', 'accounting_aptitude'),
-  solve('011', 'rectification', 'Hard', 'Cash book shows ₹4,20,000. Bank charges ₹10,000, customer direct deposit ₹75,000 and dishonoured cheque ₹20,000 are unrecorded. Calculate adjusted cash book and entries.', 'Adjusted cash book is ₹4,65,000. Bank Charges Dr ₹10,000; Bank Cr ₹10,000. Bank Dr ₹75,000; Receivable Cr ₹75,000. Receivable Dr ₹20,000; Bank Cr ₹20,000.', '₹4,20,000 − ₹10,000 + ₹75,000 − ₹20,000 = ₹4,65,000.', '', 'journal_entry'),
+  solve('011', 'rectification', 'Hard', 'Cash book shows ₹4,20,000. Bank charges ₹10,000, customer direct deposit ₹75,000 and dishonoured cheque ₹20,000 are unrecorded. Calculate adjusted cash book and entries.', 'Adjusted cash book is ₹4,65,000. Bank Charges Dr ₹10,000; Bank Cr ₹10,000. Bank Dr ₹75,000; Receivable Cr ₹75,000. Receivable Dr ₹20,000; Bank Cr ₹20,000.', 'Adjust the entity’s ledger for items known first from the bank statement: ₹4,20,000 − ₹10,000 charges + ₹75,000 receipt − ₹20,000 dishonour = ₹4,65,000. Each adjustment also records its correct expense or customer effect.', '', 'journal_entry'),
   solve('012', 'rectification', 'Hard', 'A credit sale of ₹84,000 was posted to the customer as ₹48,000 while Sales was correct. Give rectification.', 'Customer/Trade Receivable Dr ₹36,000; Suspense Cr ₹36,000.', 'Receivable is short by ₹36,000. The one-sided error caused excess credits, so the missing debit is posted and suspense credited.', '', 'journal_entry'),
-  solve('013', 'rectification', 'Medium', '₹2.4 lakh insurance paid on 1 January for twelve months was fully expensed. At 31 March, adjust the books.', 'Prepaid Insurance Dr ₹1.8 lakh; Insurance Expense Cr ₹1.8 lakh.', 'Only three months, ₹60,000, are consumed. Nine months remain an asset.', 'Prepayment = ₹2.4 lakh × 9/12', 'accounting_aptitude'),
+  solve('013', 'rectification', 'Medium', '₹2.4 lakh insurance paid on 1 January for twelve months was fully expensed. At 31 March, adjust the books.', 'Prepaid Insurance Dr ₹1.8 lakh; Insurance Expense Cr ₹1.8 lakh.', 'Three of twelve months have expired, so current expense is ₹2.4 lakh×3/12 = ₹60,000. The unexpired nine-month benefit is ₹1.8 lakh and must be reclassified from expense to a prepaid asset.', 'Prepayment = ₹2.4 lakh × 9/12', 'accounting_aptitude'),
 
   mcq('014', 'accounting_measurement', 'Hard', 'Closing inventory is overstated by ₹4 lakh. Ignoring tax, current profit and assets are:', ['Both understated ₹4 lakh', 'Both overstated ₹4 lakh', 'Profit overstated but assets understated', 'Unaffected'], 1, 'Profit and assets are both overstated by ₹4 lakh.', 'Excess closing stock lowers COGS and raises the inventory asset by the same amount.', 'accounting_aptitude'),
   mcq('015', 'accounting_measurement', 'Hard', 'Which expenditure is most likely capitalised as development rather than research?', ['Initial search for alternatives', 'General staff training', 'Cost after technical feasibility and commercial intent are demonstrated, subject to all criteria', 'Advertising a new product'], 2, 'Qualifying development expenditure after all recognition criteria are met.', 'Research and general training or advertising are ordinarily expensed; development has a stricter conditional route to capitalisation.', 'accounting_aptitude'),
@@ -1054,7 +1062,7 @@ export const zeroToHeroQuestions = [
   solve('017', 'accounting_measurement', 'Hard', 'A product population has 70% probability of no warranty cost, 25% probability of ₹1 lakh and 5% probability of ₹5 lakh. Estimate expected provision.', 'Expected provision is ₹50,000, recorded as Warranty Expense Dr and Provision Cr.', 'Weight each possible cash outflow by probability: 0.70×0 + 0.25×₹1 lakh + 0.05×₹5 lakh = ₹25,000 + ₹25,000. The expected-value method is appropriate for this population-style estimate.', 'Expected value = Σp×outcome', 'accounting_aptitude'),
 
   mcq('018', 'financial_statements', 'Hard', 'Capitalising a current repair as PPE initially causes:', ['Assets and profit understated', 'Assets and profit overstated', 'Cash overstated only', 'Liabilities understated only'], 1, 'Assets and profit are initially overstated.', 'The required current expense is omitted and an unsupported asset remains, though later depreciation may partially reverse the pattern.', 'accounting_aptitude'),
-  solve('019', 'financial_statements', 'Hard', 'Revenue ₹50 lakh, COGS ₹28 lakh, cash operating expense ₹12 lakh, depreciation ₹3 lakh, interest ₹2 lakh and tax ₹1 lakh. Compute gross profit, EBITDA, EBIT, PBT and PAT.', 'Gross profit ₹22 lakh; EBITDA ₹10 lakh; EBIT ₹7 lakh; PBT ₹5 lakh; PAT ₹4 lakh.', 'Subtract each layer in sequence to preserve the meaning of each subtotal.', '', 'accounting_aptitude'),
+  solve('019', 'financial_statements', 'Hard', 'Revenue ₹50 lakh, COGS ₹28 lakh, cash operating expense ₹12 lakh, depreciation ₹3 lakh, interest ₹2 lakh and tax ₹1 lakh. Compute gross profit, EBITDA, EBIT, PBT and PAT.', 'Gross profit ₹22 lakh; EBITDA ₹10 lakh; EBIT ₹7 lakh; PBT ₹5 lakh; PAT ₹4 lakh.', 'Revenue less COGS gives ₹22 lakh gross profit. Subtract ₹12 lakh cash operating expense for ₹10 lakh EBITDA, then ₹3 lakh depreciation for ₹7 lakh EBIT, ₹2 lakh interest for ₹5 lakh PBT and ₹1 lakh tax for ₹4 lakh PAT.', '', 'accounting_aptitude'),
   solve('020', 'financial_statements', 'Hard', 'Explain a ₹100 increase in depreciation at 30% tax across the statements, assuming tax is paid.', 'EBIT and PP&E fall ₹100; tax falls and cash rises ₹30; net income and retained earnings fall ₹70. CFO adds back ₹100 to net income lower by ₹70, producing ₹30 net cash benefit.', 'The depreciation charge is non-cash but creates a ₹30 tax shield under the assumption. Assets fall net ₹70 and equity falls ₹70.', '', 'three_statement'),
   solve('021', 'financial_statements', 'Hard', 'Revenue grows 15%, receivables 55%, allowance is flat and CFO declines. Give a disciplined interpretation and four checks.', 'The pattern suggests weaker collection, looser credit, cut-off risk or customer concentration, but does not prove manipulation. Check DSO, ageing and subsequent receipts, customer concentration and confirmations, contract/delivery evidence, and allowance methodology.', 'A high-quality answer separates the signal, plausible causes and evidence needed to decide.', '', 'interpretation'),
 
@@ -1063,35 +1071,35 @@ export const zeroToHeroQuestions = [
   solve('024', 'cash_flow', 'Hard', 'EBIT ₹80 lakh, tax 25%, D&A ₹12 lakh, capex ₹25 lakh and operating NWC increase ₹9 lakh. Compute FCFF.', 'FCFF is ₹38 lakh, available to debt and equity capital providers before financing distributions.', 'NOPAT is ₹80 lakh × 75% = ₹60 lakh. Add back ₹12 lakh non-cash D&A, subtract ₹25 lakh capex and subtract the ₹9 lakh operating-working-capital investment: ₹60 + ₹12 − ₹25 − ₹9 = ₹38 lakh.', 'FCFF = EBIT(1−T)+D&A−Capex−ΔNWC', 'numerical'),
   solve('025', 'cash_flow', 'Hard', 'A company reports EBITDA growth but falling CFO and FCF. List the reconciliation order.', 'Bridge EBITDA to EBIT and PAT through D&A, interest and tax; bridge PAT to CFO through non-cash items and working capital; bridge CFO to FCF through capex. Then inspect one-offs, classification and sustainability.', 'The sequence prevents EBITDA, operating cash and post-reinvestment cash from being conflated.', '', 'interpretation'),
 
-  mcq('026', 'ratios', 'Hard', 'ROE rises solely because average equity falls after a debt-funded buyback. The best conclusion is:', ['Operating quality necessarily improved', 'Leverage mechanically increased ROE; risk and value still require analysis', 'Sales increased', 'Cash conversion improved'], 1, 'ROE improved mechanically through leverage; this does not by itself prove value creation.', 'DuPont isolates the higher equity multiplier while operations may be unchanged.', 'mba_mcq'),
+  mcq('026', 'ratios', 'Hard', 'ROE rises solely because average equity falls after a debt-funded buyback. The best conclusion is:', ['Operating quality necessarily improved', 'Leverage mechanically increased ROE; risk and value still require analysis', 'Sales increased', 'Cash conversion improved'], 1, 'ROE improved mechanically through leverage; this does not by itself prove value creation.', 'DuPont analysis isolates a higher equity multiplier while net margin and asset turnover may remain unchanged. The buyback can increase financial risk and may destroy value if shares are repurchased above intrinsic value.', 'mba_mcq'),
   solve('027', 'ratios', 'Hard', 'Credit sales ₹73 crore, average AR ₹8 crore, COGS ₹48 crore, average inventory ₹6 crore, purchases ₹45 crore and average AP ₹5 crore. Compute DSO, DIO, DPO and CCC using 365.', 'DSO 40 days; DIO 45.6 days; DPO 40.6 days; CCC about 45 days.', 'Apply the matching flow denominator to each average balance: 8/73×365, 6/48×365 and 5/45×365.', 'CCC = DIO+DSO−DPO', 'numerical'),
   solve('028', 'ratios', 'Hard', 'PAT ₹12 crore, sales ₹150 crore, average assets ₹100 crore and average equity ₹40 crore. Decompose ROE.', 'Net margin 8%, asset turnover 1.5x, equity multiplier 2.5x and ROE 30%.', 'Net margin is ₹12/₹150 = 8%; asset turnover is ₹150/₹100 = 1.5x; equity multiplier is ₹100/₹40 = 2.5x. Multiplying 8%×1.5×2.5 gives 30%, agreeing with direct ROE of ₹12/₹40.', 'ROE = margin×turnover×multiplier', 'numerical'),
   solve('029', 'ratios', 'Hard', 'Current ratio rises while CFO, quick ratio and inventory turnover all fall. Interpret.', 'The headline liquidity improvement is likely driven by inventory accumulation or other less-liquid current assets. Investigate stock ageing, demand, write-downs, purchasing, supplier terms and short-term debt maturity.', 'Triangulation across ratios and cash flow is stronger than treating the current ratio alone as decisive.', '', 'interpretation'),
 
   mcq('030', 'cost_management', 'Hard', 'Which cost is relevant to a make-or-buy decision?', ['Allocated head-office rent unchanged either way', 'Historical machine purchase price', 'Avoidable supervisor salary if production stops', 'Past research expense'], 2, 'The avoidable supervisor salary is relevant.', 'It is future and differs between alternatives; the others are sunk or unchanged allocated costs.', 'accounting_aptitude'),
   solve('031', 'cost_management', 'Medium', 'Selling price ₹800, variable cost ₹500, fixed cost ₹18 lakh. Compute contribution, P/V ratio and break-even units.', 'Contribution is ₹300 per unit, P/V ratio 37.5%, and break-even is 6,000 units.', 'Contribution equals ₹800 − ₹500 = ₹300. P/V ratio is ₹300/₹800 = 37.5%. Break-even units are fixed cost ₹18,00,000 divided by ₹300 contribution, giving 6,000 units.', 'BEP units = Fixed cost/Contribution per unit', 'accounting_aptitude'),
-  solve('032', 'cost_management', 'Hard', 'Product A contributes ₹240 using 3 machine hours; B contributes ₹180 using 2 hours. Rank under a machine-hour constraint.', 'Rank B first at ₹90 contribution per machine hour, then A at ₹80.', 'The scarce resource, not contribution per unit, determines ranking.', 'Contribution per limiting factor', 'accounting_aptitude'),
-  solve('033', 'cost_management', 'Hard', 'Standard material for 500 units is 1,000 kg at ₹40. Actual is 1,080 kg at ₹38. Compute price and usage variances.', 'Price variance ₹2,160 favourable; usage variance ₹3,200 adverse; net ₹1,040 adverse.', 'AQ(SP−AP)=1,080×₹2 favourable. SP(SQ−AQ)=₹40×(1,000−1,080)=₹3,200 adverse.', '', 'accounting_aptitude'),
+  solve('032', 'cost_management', 'Hard', 'Product A contributes ₹240 using 3 machine hours; B contributes ₹180 using 2 hours. Rank under a machine-hour constraint.', 'Rank B first at ₹90 contribution per machine hour, then A at ₹80.', 'Under a machine-hour constraint, contribution per product unit is not the correct ranking. Product A yields ₹240÷3 = ₹80 per scarce hour, while B yields ₹180÷2 = ₹90, so B receives priority.', 'Contribution per limiting factor', 'accounting_aptitude'),
+  solve('033', 'cost_management', 'Hard', 'Standard material for 500 units is 1,000 kg at ₹40. Actual is 1,080 kg at ₹38. Compute price and usage variances.', 'Price variance ₹2,160 favourable; usage variance ₹3,200 adverse; net ₹1,040 adverse.', 'Actual price is ₹2 below standard, so 1,080×₹2 = ₹2,160 favourable. Actual quantity exceeds the 1,000 kg standard by 80 kg, so usage variance is 80×₹40 = ₹3,200 adverse. Net effect is ₹1,040 adverse.', '', 'accounting_aptitude'),
   solve('034', 'cost_management', 'Hard', 'Annual demand 16,000 units, ordering cost ₹450 and holding cost ₹18 per unit. Compute EOQ.', 'EOQ is approximately 894 units per order under the basic stable-demand model.', 'Substitute annual demand, ordering cost and annual per-unit holding cost: √(2×16,000×450/18) = √800,000 ≈ 894. This quantity balances annual ordering and carrying cost under the model assumptions.', 'EOQ=√(2DS/H)', 'accounting_aptitude'),
 
-  mcq('035', 'financial_management', 'Hard', 'Which pair is internally consistent?', ['Nominal cash flows and real discount rate', 'Rupee cash flows and arbitrary dollar rate', 'Real cash flows and real discount rate', 'Equity cash flows and WACC'], 2, 'Real cash flows should be discounted at a real rate.', 'Inflation, currency, risk and capital-provider definitions must match.', 'mba_mcq'),
+  mcq('035', 'financial_management', 'Hard', 'Which pair is internally consistent?', ['Nominal cash flows and real discount rate', 'Rupee cash flows and arbitrary dollar rate', 'Real cash flows and real discount rate', 'Equity cash flows and WACC'], 2, 'Real cash flows should be discounted at a real rate.', 'Cash flow and discount rate must match on inflation, currency, risk and capital-provider basis. Nominal cash flows require nominal rates, and equity cash flows ordinarily require cost of equity rather than WACC.', 'mba_mcq'),
   solve('036', 'financial_management', 'Medium', 'Compute the effective annual rate on 12% nominal interest compounded monthly.', 'The effective annual rate is approximately 12.68%, which exceeds the 12% quoted nominal rate.', 'The monthly periodic rate is 1%. Compound it for twelve months: (1+0.12/12)^12−1 = 1.01^12−1 ≈ 12.68%. The difference is interest earned on prior months’ interest.', 'EAR=(1+j/m)^m−1', 'numerical'),
   solve('037', 'financial_management', 'Hard', 'A cash flow has 40% chance of ₹20 lakh, 40% of ₹10 lakh and 20% of −₹5 lakh. Compute expected cash flow.', 'Expected cash flow is ₹11 lakh; it is a probability-weighted mean, not a guaranteed realised amount.', 'Multiply every mutually exclusive outcome by its probability and add: 0.4×₹20 lakh + 0.4×₹10 lakh + 0.2×(−₹5 lakh) = ₹8 lakh + ₹4 lakh − ₹1 lakh = ₹11 lakh.', 'Expected value=Σp×outcome', 'numerical'),
   solve('038', 'financial_management', 'Hard', 'Risk-free rate 7%, beta 1.25 and equity risk premium 6.4%. Compute cost of equity and explain beta.', 'Cost of equity is 15%. Beta 1.25 indicates estimated market sensitivity 25% above the market, not a 25% default probability.', 'CAPM gives 7% + 1.25×6.4% = 15%. The beta multiplies the equity risk premium because it measures systematic market exposure; company-specific risk is assumed diversifiable in this model.', 'Ke=Rf+βERP', 'mba_case'),
 
-  mcq('039', 'capital_budgeting', 'Hard', 'A feasibility report already paid for before project approval is usually:', ['Initial capex', 'Sunk and excluded', 'Working capital', 'Terminal flow'], 1, 'It is a sunk cost and excluded from incremental project cash flow.', 'The payment cannot be changed by today’s accept-or-reject decision.', 'mba_mcq'),
+  mcq('039', 'capital_budgeting', 'Hard', 'A feasibility report already paid for before project approval is usually:', ['Initial capex', 'Sunk and excluded', 'Working capital', 'Terminal flow'], 1, 'It is a sunk cost and excluded from incremental project cash flow.', 'The payment occurred before the present decision and cannot be recovered or changed by accepting or rejecting the project. Only future cash flows that differ between alternatives belong in the evaluation.', 'mba_mcq'),
   solve('040', 'capital_budgeting', 'Hard', 'A project costs ₹15 lakh and pays ₹6 lakh at each year-end for three years. Compute NPV at 10%.', 'NPV is approximately −₹7,889, so it is marginally value-destroying under the assumptions.', 'PV annuity factor at 10% for three years is about 2.48685; inflow PV ≈ ₹14.921 lakh; subtract ₹15 lakh.', 'NPV=ΣCF/(1+r)^t', 'numerical'),
-  solve('041', 'capital_budgeting', 'Hard', 'Project A has NPV ₹3 lakh and IRR 24%; Project B has NPV ₹8 lakh and IRR 18%. They are mutually exclusive with comparable risk. Choose.', 'Choose Project B because it adds ₹5 lakh more value, assuming the common required return and forecasts are valid.', 'IRR can favour a smaller project. NPV measures absolute wealth addition.', '', 'mba_case'),
+  solve('041', 'capital_budgeting', 'Hard', 'Project A has NPV ₹3 lakh and IRR 24%; Project B has NPV ₹8 lakh and IRR 18%. They are mutually exclusive with comparable risk. Choose.', 'Choose Project B because it adds ₹5 lakh more value, assuming the common required return and forecasts are valid.', 'IRR can favour a smaller or earlier-returning project because it is a percentage measure. NPV measures absolute value added at the required return, so B dominates when only one project can be selected.', '', 'mba_case'),
   solve('042', 'capital_budgeting', 'Hard', 'Upside NPV ₹20 lakh at 25%, base ₹6 lakh at 50%, downside −₹10 lakh at 25%. Compute expected NPV and state one limitation.', 'Expected NPV is ₹5.5 lakh.', '0.25×20 + 0.50×6 − 0.25×10 = 5.5. The expected value hides the ₹10 lakh downside and depends on subjective probabilities.', 'Expected NPV=Σp×NPV', 'mba_case'),
 
   mcq('043', 'financing_decisions', 'Hard', 'For WACC, which weights are generally preferred in valuation?', ['Historical book values', 'Market values or defensible target market weights', 'Equal weights', 'Face value of shares only'], 1, 'Use market values or defensible target market weights.', 'WACC is a current opportunity cost; historical accounting amounts need not represent economic claim values.', 'mba_mcq'),
   solve('044', 'financing_decisions', 'Hard', 'Debt market value ₹40 crore, equity ₹60 crore, pre-tax Kd 10%, Ke 16%, tax 25%. Compute WACC.', 'WACC is 12.6% using the stated market-value capital weights and usable debt tax shield.', 'Debt weight is 40% and equity weight 60%. After-tax debt component is 0.4×10%×(1−25%) = 3%; equity component is 0.6×16% = 9.6%. Their sum is 12.6%.', 'WACC=E/V Ke + D/V Kd(1−T)', 'numerical'),
   solve('045', 'financing_decisions', 'Hard', 'Contribution ₹120 lakh, EBIT ₹50 lakh and interest ₹20 lakh. Compute DOL, DFL and DCL.', 'DOL is 2.4x, DFL is approximately 1.67x and combined leverage is 4.0x at the stated activity level.', 'DOL = ₹120/₹50 = 2.4. EBT is ₹30 lakh, so DFL = ₹50/₹30 = 1.667. DCL = 2.4×1.667 ≈ 4, implying a 1% sales movement produces roughly a 4% EBT movement locally.', 'DOL=Contribution/EBIT; DFL=EBIT/EBT; DCL=DOL×DFL', 'numerical'),
-  solve('046', 'financing_decisions', 'Hard', 'Explain why replacing equity with debt can raise EPS yet reduce value.', 'Lower share count and tax-deductible interest can raise EPS, but added distress risk can increase required returns, restrict flexibility and make the debt-funded repurchase overpriced. Value depends on cash flows, risk and price paid, not EPS alone.', 'This tests capital-structure economics rather than a mechanical accretion rule.', '', 'mba_case'),
+  solve('046', 'financing_decisions', 'Hard', 'Explain why replacing equity with debt can raise EPS yet reduce value.', 'Lower share count and tax-deductible interest can raise EPS, but added distress risk can increase required returns, restrict flexibility and make the debt-funded repurchase overpriced. Value depends on cash flows, risk and price paid, not EPS alone.', 'The share-count reduction can create mechanical EPS accretion even when operating cash flow is unchanged. If added interest, distress cost, covenant restrictions or an excessive repurchase price exceed tax benefits, enterprise or equity value falls.', '', 'mba_case'),
 
   mcq('047', 'working_capital', 'Hard', 'Which action most directly shortens the cash conversion cycle?', ['Increase DIO', 'Increase DSO', 'Decrease DPO', 'Reduce DSO without harming sales'], 3, 'Reducing collection days shortens the cash conversion cycle when other components remain unchanged.', 'CCC = DIO + DSO − DPO. Lower DSO reduces the positive collection-days component. Increasing DIO or DSO lengthens the cycle, while decreasing DPO removes supplier financing and also lengthens it.', 'mba_mcq'),
-  solve('048', 'working_capital', 'Medium', 'Annual credit sales are ₹73 crore. Estimate cash released by reducing DSO from 55 to 40 days.', 'Approximately ₹3 crore is released.', 'Daily sales are ₹20 lakh; 15 days × ₹20 lakh = ₹3 crore.', 'Release≈Δdays×annual sales/365', 'numerical'),
-  solve('049', 'working_capital', 'Hard', 'Terms are 2/10, net 40. Estimate the annualised simple cost of forgoing the discount using 365 days.', 'Approximately 24.8%.', 'Cost per 30-day extension = 2/98 = 2.0408%; annualise ×365/30 ≈ 24.8%.', 'Discount/(1−discount) × 365/(net day−discount day)', 'numerical'),
+  solve('048', 'working_capital', 'Medium', 'Annual credit sales are ₹73 crore. Estimate cash released by reducing DSO from 55 to 40 days.', 'Approximately ₹3 crore is released.', 'Annual credit sales of ₹73 crore equal ₹20 lakh per day using 365 days. A sustainable 15-day reduction releases about 15×₹20 lakh = ₹3 crore from receivables, before collection cost or growth effects.', 'Release≈Δdays×annual sales/365', 'numerical'),
+  solve('049', 'working_capital', 'Hard', 'Terms are 2/10, net 40. Estimate the annualised simple cost of forgoing the discount using 365 days.', 'Approximately 24.8%.', 'Forgoing a 2% discount means paying ₹100 instead of ₹98 for 30 additional days, a periodic cost of 2÷98 = 2.0408%. Simple annualisation gives 2.0408%×365÷30 ≈ 24.8%.', 'Discount/(1−discount) × 365/(net day−discount day)', 'numerical'),
   solve('050', 'working_capital', 'Hard', 'A firm has negative NWC. Give one healthy and one distressed explanation.', 'Healthy: customers pay immediately while suppliers grant long credit, creating a structurally negative cycle. Distressed: cash and collectible assets are insufficient because overdue suppliers and short-term debt have accumulated.', 'Interpret operating model, ageing, cash generation and maturity rather than the sign alone.', '', 'mba_case'),
 ];
 

@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { interviewReadyCards } from './interviewReadyCards.js';
 import {
   ironsidesAssessmentQuestions,
@@ -7,26 +8,21 @@ import {
 } from './ironsidesAssessment.js';
 import { zeroToHeroSourceCount } from './ironsidesZeroToHero.js';
 
-assert.equal(ironsidesModules.length, 14, 'IronSides must cover the complete zero-to-hero curriculum plus aptitude practice.');
+assert.equal(ironsidesModules.length, 9, 'IronSides must use the seven requested recruitment topics plus Arithmetic and Logical Reasoning.');
 assert.deepEqual(
   ironsidesModuleOrder,
   [
-    'bookkeeping',
-    'journal_entries',
-    'rectification',
-    'accounting_measurement',
-    'financial_statements',
-    'cash_flow',
-    'ratios',
-    'cost_management',
     'financial_management',
-    'capital_budgeting',
-    'financing_decisions',
-    'working_capital',
+    'accounting',
+    'financial_statements',
+    'book_entry',
+    'ratios',
+    'rectification_entries',
+    'journal_entries',
     'arithmetic',
     'logical_reasoning',
   ],
-  'IronSides concepts must remain in the intended learning order.',
+  'IronSides must remain organised by the reported recruitment topics rather than course difficulty.',
 );
 
 const moduleIds = new Set(ironsidesModules.map((module) => module.id));
@@ -34,15 +30,32 @@ assert.equal(moduleIds.size, ironsidesModules.length, 'IronSides module IDs must
 
 const conceptIds = ironsidesModules.flatMap((module) => module.concepts.map((item) => item.id));
 assert.equal(new Set(conceptIds).size, conceptIds.length, 'IronSides concept IDs must be unique.');
-assert.ok(conceptIds.length >= 46, 'IronSides needs a substantial concept layer.');
+assert.equal(conceptIds.length, 62, 'IronSides concept count changed unexpectedly.');
+const visualConcepts = ironsidesModules.flatMap((module) => module.concepts).filter((item) => item.visual);
+assert.equal(visualConcepts.length, 8, 'IronSides needs exactly eight high-value teaching exhibits.');
+assert.deepEqual(
+  new Set(visualConcepts.map((item) => item.visual.type)),
+  new Set([
+    'accounting-equation',
+    'bookkeeping-flow',
+    'rectification-sheet',
+    'statement-bridge',
+    'cashflow-bridge',
+    'dupont-tree',
+    'npv-sheet',
+    'working-capital-timeline',
+  ]),
+  'Each teaching exhibit must represent a distinct accounting or finance transformation.',
+);
 
 const questionIds = ironsidesAssessmentQuestions.map((card) => card.id);
 assert.equal(new Set(questionIds).size, questionIds.length, 'IronSides question IDs must be unique.');
-assert.equal(ironsidesAssessmentQuestions.length, 139, 'IronSides assessment question count changed unexpectedly.');
+assert.equal(ironsidesAssessmentQuestions.length, 219, 'IronSides assessment question count changed unexpectedly.');
 
 for (const module of ironsidesModules) {
-  assert.ok(module.description.length >= 80, `${module.id} needs a meaningful module explanation.`);
-  assert.ok(module.concepts.length >= 3, `${module.id} needs at least three ordered concept chapters.`);
+  assert.ok(module.description.length >= 80, `${module.id} needs a complete topic scope.`);
+  assert.ok(module.capability.length >= 120, `${module.id} needs a specific assessable capability.`);
+  assert.ok(module.concepts.length >= 2, `${module.id} needs independently expandable subtopics.`);
   for (const item of module.concepts) {
     assert.ok((item.definition || item.explanation).length >= 100, `${item.id} needs an academic definition.`);
     assert.ok(item.simpleMeaning.length >= 35, `${item.id} needs a plain-language translation.`);
@@ -60,7 +73,7 @@ for (const module of ironsidesModules) {
   }
 
   const cards = ironsidesAssessmentQuestions.filter((card) => card.moduleId === module.id);
-  assert.ok(cards.length >= 4, `${module.id} needs at least four assessment questions.`);
+  assert.ok(cards.length >= 8, `${module.id} needs at least eight assessment questions.`);
   assert.ok(cards.some((card) => card.type === 'mcq'), `${module.id} is missing MCQs.`);
   assert.ok(cards.some((card) => card.type === 'solving'), `${module.id} is missing solving questions.`);
 }
@@ -69,13 +82,30 @@ for (const card of ironsidesAssessmentQuestions) {
   assert.ok(moduleIds.has(card.moduleId), `${card.id} references an unknown module.`);
   assert.ok(['mcq', 'solving'].includes(card.type), `${card.id} has an unsupported question type.`);
   assert.ok(card.answer.length >= 3, `${card.id} needs an explicit answer.`);
-  assert.ok(card.explanation.length >= 50, `${card.id} needs worked reasoning.`);
+  assert.ok(card.explanation.length >= 80, `${card.id} needs detailed worked reasoning.`);
   assert.ok(card.answer.length + card.explanation.length >= 90, `${card.id} needs a detailed answer and explanation.`);
   if (card.type === 'mcq') {
     assert.equal(card.options.length, 4, `${card.id} must have four options.`);
+    assert.equal(new Set(card.options.map((option) => option.trim().toLowerCase())).size, 4, `${card.id} has repeated answer options.`);
     assert.ok(Number.isInteger(card.correctOption) && card.correctOption >= 0 && card.correctOption < 4, `${card.id} has an invalid correct option.`);
   }
 }
+
+const normalise = (value) => value.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+assert.equal(
+  new Set(ironsidesAssessmentQuestions.map((card) => normalise(card.question))).size,
+  ironsidesAssessmentQuestions.length,
+  'IronSides contains repeated questions.',
+);
+assert.equal(
+  new Set(ironsidesAssessmentQuestions.map((card) => normalise(card.answer))).size,
+  ironsidesAssessmentQuestions.length,
+  'IronSides contains repeated answers.',
+);
+assert.ok(
+  ironsidesAssessmentQuestions.every((card) => normalise(card.answer) !== normalise(card.explanation)),
+  'An answer must not repeat its explanation verbatim.',
+);
 
 assert.ok(zeroToHeroSourceCount >= 12, 'The curriculum needs a diverse authoritative and practitioner source base.');
 assert.ok(
@@ -85,6 +115,50 @@ assert.ok(
 assert.ok(
   ironsidesAssessmentQuestions.filter((card) => card.questionClass === 'journal_entry').length >= 5,
   'Journal entries must retain extra assessment weight.',
+);
+const standardQuestions = ironsidesAssessmentQuestions.filter((card) => card.id.startsWith('isa_standard_'));
+assert.equal(standardQuestions.length, 44, 'The standard-difficulty expansion must add exactly 44 complete questions.');
+assert.ok(
+  standardQuestions.every((card) => ['Easy', 'Medium'].includes(card.difficulty)),
+  'The standard expansion must not use artificial Hard labels.',
+);
+assert.ok(
+  standardQuestions.filter((card) => card.difficulty === 'Medium').length >= 39,
+  'The standard expansion should be concentrated at ordinary MBA-assessment difficulty.',
+);
+assert.ok(
+  ironsidesAssessmentQuestions.filter((card) => card.difficulty === 'Medium').length / ironsidesAssessmentQuestions.length >= 0.75,
+  'At least three quarters of the full bank should be calibrated to standard Medium difficulty.',
+);
+assert.ok(
+  ironsidesAssessmentQuestions.filter((card) => card.difficulty === 'Hard').length / ironsidesAssessmentQuestions.length <= 0.20,
+  'No more than one fifth of the full bank should be genuinely advanced.',
+);
+for (const topicId of [
+  'financial_management',
+  'accounting',
+  'financial_statements',
+  'book_entry',
+  'ratios',
+  'rectification_entries',
+  'journal_entries',
+]) {
+  assert.ok(
+    standardQuestions.filter((card) => card.moduleId === topicId).length >= 5,
+    `${topicId} needs at least five newly added standard questions.`,
+  );
+}
+const questionsByTopic = Object.fromEntries(ironsidesModules.map((module) => [
+  module.id,
+  ironsidesAssessmentQuestions.filter((card) => card.moduleId === module.id).length,
+]));
+assert.ok(questionsByTopic.journal_entries >= 20, 'Journal Entries needs a substantial dedicated question bank.');
+assert.ok(questionsByTopic.journal_entries > questionsByTopic.book_entry, 'Journal Entries must carry more weight than Book Entry.');
+assert.ok(questionsByTopic.journal_entries > questionsByTopic.rectification_entries, 'Journal Entries must carry more weight than Rectification Entries.');
+assert.equal(
+  ironsidesAssessmentQuestions.reduce((sum, card) => sum + Number(moduleIds.has(card.moduleId)), 0),
+  ironsidesAssessmentQuestions.length,
+  'Every question must be assigned to exactly one requested topic.',
 );
 
 const archive = interviewReadyCards.filter((card) => card.tag === 'archive' && /ironsides/i.test(card.firm || ''));
@@ -105,15 +179,259 @@ for (const requiredPhrase of [
   'subsidiary ledgers',
   'control accounts',
   'tds payable',
+  'petty cash',
+  'bills receivable',
   'inventory',
   'depreciation',
   'break-even',
   'wacc',
+  'price-earnings ratio',
   'weighted averages',
   'valid conclusions',
 ]) {
   const curriculumText = JSON.stringify(ironsidesModules).toLowerCase();
   assert.ok(curriculumText.includes(requiredPhrase), `Missing core IronSides concept: ${requiredPhrase}`);
 }
+
+const requiredTopicCoverage = {
+  financial_management: [
+    'investment decision',
+    'financial planning',
+    'external financing need',
+    'sources of finance',
+    'time value of money',
+    'compounding',
+    'annuity',
+    'beta',
+    'capm',
+    'initial flow',
+    'terminal flow',
+    'npv',
+    'irr',
+    'payback',
+    'profitability index',
+    'accounting rate of return',
+    'capital rationing',
+    'bond value',
+    'preference-share value',
+    'gordon growth value',
+    'sensitivity',
+    'scenario',
+    'decision tree',
+    'cost of debt',
+    'cost of equity',
+    'wacc',
+    'operating leverage',
+    'financial leverage',
+    'dividend',
+    'repurchase',
+    'cash conversion cycle',
+    'factoring',
+    'treds',
+    'eoq',
+    'safety stock',
+  ],
+  accounting: [
+    'accrual accounting',
+    'accounting equation',
+    'accounting policy',
+    'accounting estimate',
+    'materiality',
+    'substance over form',
+    'capital expenditure',
+    'revenue expenditure',
+    'provision versus reserve',
+    'assets',
+    'liabilities',
+    'contra-account',
+    'inventory',
+    'fifo',
+    'weighted average',
+    'net realisable value',
+    'depreciation',
+    'impairment',
+    'intangible assets',
+    'leases',
+    'revenue five-step',
+    'provision',
+    'contingent liability',
+    'temporary difference',
+    'cost object',
+    'fixed cost',
+    'variable cost',
+    'cost sheet',
+    'contribution',
+    'break-even',
+    'relevant cost',
+    'flexible budget',
+    'standard variances',
+    'overhead absorption',
+  ],
+  financial_statements: [
+    'income statement',
+    'balance sheet',
+    'equity movement',
+    'schedule iii',
+    'three statements',
+    'earnings quality',
+    'common-size',
+    'trend index',
+    'funds-flow statement',
+    'funds from operations',
+    'cash equivalents',
+    'direct method',
+    'indirect method',
+    'operating',
+    'investing',
+    'financing',
+    'free cash flow',
+    'fcff',
+    'fcfe',
+    'cash conversion',
+  ],
+  book_entry: [
+    'source documents',
+    'books of original entry',
+    'sales book',
+    'purchases book',
+    'ledger',
+    'trial balance',
+    'closing process',
+    'subsidiary ledgers',
+    'control accounts',
+    'cash book',
+    'petty cash',
+    'bills receivable and payable',
+    'bank reconciliation',
+  ],
+  ratios: [
+    'current ratio',
+    'quick ratio',
+    'dio',
+    'dso',
+    'dpo',
+    'cash conversion cycle',
+    'gross margin',
+    'ebitda margin',
+    'asset turnover',
+    'roa',
+    'roe',
+    'roic',
+    'dupont',
+    'debt/ebitda',
+    'interest coverage',
+    'debt-service coverage',
+    'roce',
+    'basic eps',
+    'price-earnings ratio',
+    'dividend payout',
+  ],
+  rectification_entries: [
+    'accrued expense',
+    'accrued income',
+    'prepayment',
+    'unearned revenue',
+    'cut-off',
+    'errors of omission',
+    'errors of commission',
+    'errors of principle',
+    'compensating errors',
+    'one-sided errors',
+    'two-sided errors',
+    'suspense account',
+    'difference method',
+    'profit effect',
+  ],
+  journal_entries: [
+    'debit',
+    'credit',
+    'simple entry',
+    'compound entry',
+    'cash purchases',
+    'credit purchases',
+    'output gst',
+    'input gst',
+    'tds',
+    'payroll',
+    'sales returns',
+    'purchase returns',
+    'trade discounts',
+    'cash discounts',
+    'receivable',
+    'payable',
+    'perpetual inventory',
+    'periodic inventory',
+    'expected credit losses',
+    'capital expenditure',
+    'depreciation',
+    'borrowing',
+    'owner contributions',
+    'dividends',
+    'disposal',
+  ],
+};
+
+for (const [topicId, requiredPhrases] of Object.entries(requiredTopicCoverage)) {
+  const topicText = JSON.stringify(ironsidesModules.find((module) => module.id === topicId)).toLowerCase();
+  for (const requiredPhrase of requiredPhrases) {
+    assert.ok(topicText.includes(requiredPhrase), `${topicId} is missing required subtopic: ${requiredPhrase}`);
+  }
+}
+
+const interviewBenchmarkText = JSON.stringify(ironsidesAssessmentQuestions).toLowerCase();
+for (const benchmarkPhrase of [
+  'accrued',
+  'prepaid',
+  'depreciation',
+  'unearned revenue',
+  'bad debt',
+  'inventory write-down',
+  'three statements',
+  'capital expenditure',
+  'bank reconciliation',
+  'journal',
+  'ledger',
+  'ratio',
+  'working capital',
+]) {
+  assert.ok(
+    interviewBenchmarkText.includes(benchmarkPhrase),
+    `Question bank is missing comparable finance-interview pattern: ${benchmarkPhrase}`,
+  );
+}
+
+const ironSidesViewSource = readFileSync(new URL('../components/IronSidesView.jsx', import.meta.url), 'utf8');
+const ironSidesVisualSource = readFileSync(new URL('../components/IronSidesConceptVisual.jsx', import.meta.url), 'utf8');
+for (const removedFiller of [
+  'Business evidence',
+  'Tomorrow-first plan',
+  'Read for the decision rule',
+  'Attempt first',
+  'No prior accounting knowledge is assumed',
+  'ELI5',
+  'Why it matters',
+]) {
+  assert.ok(!ironSidesViewSource.includes(removedFiller), `IronSides UI still contains filler: ${removedFiller}`);
+}
+assert.ok(ironSidesViewSource.includes('function TopicNavigation'), 'IronSides needs bottom topic navigation.');
+assert.ok(ironSidesViewSource.includes('<details'), 'IronSides subtopics must be independently expandable.');
+assert.ok(ironSidesViewSource.includes('<IronSidesConceptVisual visual={item.visual} />'), 'Concept visuals must render inside their teaching subtopics.');
+for (const visualEvidence of [
+  'Accounting equation transaction worksheet',
+  'Wrong debit',
+  'Running cash',
+  'Return on equity',
+  'Cash conversion cycle',
+  'Present value',
+]) {
+  assert.ok(ironSidesVisualSource.includes(visualEvidence), `IronSides visual system is missing: ${visualEvidence}`);
+}
+assert.ok(ironSidesViewSource.includes('Subtopic {index + 1}'), 'Expandable sections must be labelled as subtopics.');
+assert.ok(ironSidesViewSource.includes('Rules and distinctions'), 'IronSides concepts must render as handbook sections.');
+assert.ok(ironSidesViewSource.includes('Assessment distinction'), 'IronSides handbook sections need assessment distinctions.');
+assert.ok(ironSidesViewSource.includes('activeModule.capability'), 'Each topic must state the assessable capability it builds.');
+assert.ok(ironSidesViewSource.includes('<TopicNavigation previousTopic={previousTopic} nextTopic={nextTopic} onSelect={selectModule} />'), 'Learn and Practice must render topic navigation.');
+assert.ok((ironSidesViewSource.match(/<TopicNavigation /g) || []).length === 2, 'Both Learn and Practice require bottom Previous/Next topic navigation.');
+assert.ok(ironSidesViewSource.includes("scrollIntoView({ behavior: 'smooth', block: 'start' })"), 'Topic navigation must automatically scroll to the topic heading.');
 
 console.log('IronSides MBA assessment coverage contract passed.');

@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import IronSidesConceptVisual from './IronSidesConceptVisual';
 
 const pageFont = '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
 const textFont = '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
@@ -33,48 +34,45 @@ function Formula({ item }) {
   );
 }
 
-function LessonBlock({ label, children, tone = 'plain' }) {
-  if (!children) return null;
-  const styles = {
-    plain: { background: '#f6f8f6', border: '#dfe7e1', color: '#334038' },
-    simple: { background: '#eef4ef', border: '#cddfd2', color: '#274334' },
-    eli5: { background: '#fff7e9', border: '#ead8b5', color: '#59482d' },
-    event: { background: '#f7f1ec', border: '#e4d2c3', color: '#574337' },
-  }[tone];
-
-  return (
-    <div style={{ marginTop: 16, border: `1px solid ${styles.border}`, borderRadius: 16, background: styles.background, padding: '17px 18px', color: styles.color }}>
-      <div style={{ color: tone === 'eli5' ? '#8b642b' : green, fontSize: 11, fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 8 }}>{label}</div>
-      <div style={{ fontSize: 15, lineHeight: 1.68, fontFamily: textFont }}>
-        {typeof children === 'string' ? <LongText text={children} /> : children}
-      </div>
-    </div>
-  );
-}
-
 function ConceptCard({ item, index }) {
+  const openingDefinition = item.definition && item.definition !== item.explanation ? item.definition : null;
+
   return (
-    <article style={{ padding: '34px 0', borderBottom: `1px solid ${border}` }}>
-      <div style={{ color: green, fontSize: 12, fontWeight: 750, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 10 }}>
-        Executive note {index + 1}
+    <details
+      style={{ borderBottom: `1px solid ${border}` }}
+    >
+      <summary style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) auto', gap: 18, alignItems: 'center', padding: '24px 0', cursor: 'pointer', listStyle: 'none' }}>
+        <div>
+          <div style={{ color: green, fontSize: 11, fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 7 }}>
+            Subtopic {index + 1}
+          </div>
+          <h3 style={{ color: ink, fontSize: 'clamp(20px, 3vw, 27px)', fontWeight: 560, lineHeight: 1.2, margin: 0, letterSpacing: '-0.02em' }}>
+            {item.title}
+          </h3>
+        </div>
+        <span aria-hidden="true" style={{ color: green, width: 32, height: 32, borderRadius: 999, border: `1px solid ${border}`, display: 'grid', placeItems: 'center', fontSize: 20 }}>+</span>
+      </summary>
+      <div style={{ padding: '4px 0 38px' }}>
+      {openingDefinition && (
+        <p style={{ color: ink, fontSize: 17, lineHeight: 1.7, fontWeight: 650, margin: '0 0 14px', fontFamily: textFont }}>
+          {openingDefinition}
+        </p>
+      )}
+      <div style={{ color: '#334038', fontSize: 16, lineHeight: 1.78, fontFamily: textFont }}>
+        <LongText text={item.explanation} />
       </div>
-      <h3 style={{ color: ink, fontSize: 'clamp(24px, 4vw, 32px)', fontWeight: 560, lineHeight: 1.15, margin: '0 0 16px', letterSpacing: '-0.025em' }}>
-        {item.title}
-      </h3>
-      <LessonBlock label="Core rule">
-        <LongText text={item.definition || item.explanation} />
-      </LessonBlock>
-      <LessonBlock label="Why it matters" tone="simple">
-        <LongText text={item.simpleMeaning || item.example} />
-      </LessonBlock>
+      <IronSidesConceptVisual visual={item.visual} />
       {item.subconcepts?.length > 0 && (
         <div style={{ marginTop: 24 }}>
-          <div style={{ color: green, fontSize: 12, fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 10 }}>Mechanism — follow this order</div>
-          <div style={{ display: 'grid', gap: 9 }}>
+          <h4 style={{ color: ink, fontSize: 16, fontWeight: 750, margin: '0 0 12px' }}>Rules and distinctions</h4>
+          <div style={{ display: 'grid', gap: 10 }}>
             {item.subconcepts.map((subconcept, subIndex) => (
-              <div key={`${item.id}_${subconcept.title}`} style={{ borderLeft: '3px solid #b8cfbf', padding: '4px 0 4px 14px' }}>
-                <div style={{ color: ink, fontSize: 15, fontWeight: 750 }}>{subIndex + 1}. {subconcept.title}</div>
-                <div style={{ color: muted, fontSize: 14, lineHeight: 1.6, marginTop: 3 }}>{subconcept.explanation}</div>
+              <div key={`${item.id}_${subconcept.title}`} style={{ display: 'grid', gridTemplateColumns: '24px minmax(0, 1fr)', gap: 8 }}>
+                <div style={{ color: green, fontSize: 13, fontWeight: 800, paddingTop: 2 }}>{subIndex + 1}</div>
+                <div>
+                  <div style={{ color: ink, fontSize: 15, fontWeight: 750 }}>{subconcept.title}</div>
+                  <div style={{ color: '#46534b', fontSize: 14, lineHeight: 1.65, marginTop: 3 }}>{subconcept.explanation}</div>
+                </div>
               </div>
             ))}
           </div>
@@ -85,11 +83,18 @@ function ConceptCard({ item, index }) {
           {item.formulae.map((formula) => <Formula key={`${item.id}_${formula.label}`} item={formula} />)}
         </div>
       )}
-      <LessonBlock label="Indian mini-case" tone="eli5"><LongText text={item.indianExample || item.workedExample || item.example} /></LessonBlock>
-      {item.workedExample && item.workedExample !== item.indianExample && (
-        <LessonBlock label="Apply it"><LongText text={item.workedExample} /></LessonBlock>
+      {(item.indianExample || item.workedExample || item.example) && (
+        <div style={{ marginTop: 22, padding: '16px 18px', borderLeft: '3px solid #79a88d', background: '#f5f8f5' }}>
+          <div style={{ color: green, fontSize: 11, fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 7 }}>Indian business application</div>
+          <div style={{ color: '#334038', fontSize: 15, lineHeight: 1.7, fontFamily: textFont }}><LongText text={item.indianExample || item.workedExample || item.example} /></div>
+        </div>
       )}
-      <LessonBlock label="Business evidence" tone="event"><LongText text={item.realEvent} /></LessonBlock>
+      {item.workedExample && item.workedExample !== item.indianExample && (
+        <div style={{ marginTop: 18 }}>
+          <h4 style={{ color: ink, fontSize: 16, fontWeight: 750, margin: '0 0 8px' }}>Worked example</h4>
+          <div style={{ color: '#334038', fontSize: 15, lineHeight: 1.7, fontFamily: textFont }}><LongText text={item.workedExample} /></div>
+        </div>
+      )}
       {item.journalEntries?.length > 0 && (
         <div style={{ marginTop: 18, borderRadius: 16, background: '#17211b', color: '#eaf1ec', padding: '17px 18px' }}>
           <div style={{ color: '#9cc2a8', fontSize: 11, fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 9 }}>Journal-entry patterns</div>
@@ -99,13 +104,13 @@ function ConceptCard({ item, index }) {
         </div>
       )}
       {item.trap && (
-        <div style={{ marginTop: 12, paddingLeft: 16, borderLeft: '3px solid #c8925f', color: '#564231', fontSize: 15, lineHeight: 1.6 }}>
-          <strong>Interview decision: </strong>{item.trap}
+        <div style={{ marginTop: 18, paddingTop: 14, borderTop: `1px solid ${border}`, color: '#564231', fontSize: 15, lineHeight: 1.65 }}>
+          <strong>Assessment distinction: </strong>{item.trap}
         </div>
       )}
       {item.sources?.length > 0 && (
         <details style={{ marginTop: 20 }}>
-          <summary style={{ color: muted, fontSize: 12, fontWeight: 750, cursor: 'pointer' }}>Sources used for this note</summary>
+          <summary style={{ color: muted, fontSize: 12, fontWeight: 750, cursor: 'pointer' }}>References</summary>
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
             {item.sources.map((itemSource) => (
               <a key={itemSource.url} href={itemSource.url} target="_blank" rel="noreferrer" style={{ color: green, border: `1px solid ${border}`, background: '#fff', borderRadius: 999, padding: '7px 10px', fontSize: 12, fontWeight: 700, textDecoration: 'none' }}>
@@ -115,7 +120,8 @@ function ConceptCard({ item, index }) {
           </div>
         </details>
       )}
-    </article>
+      </div>
+    </details>
   );
 }
 
@@ -231,11 +237,39 @@ function ArchiveCard({ card }) {
   );
 }
 
+function TopicNavigation({ previousTopic, nextTopic, onSelect }) {
+  return (
+    <nav aria-label="Topic navigation" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 12, paddingTop: 30 }}>
+      <button
+        type="button"
+        disabled={!previousTopic}
+        onClick={() => previousTopic && onSelect(previousTopic.id)}
+        style={{ border: `1px solid ${border}`, borderRadius: 14, background: '#fff', color: previousTopic ? ink : '#aeb5b0', padding: '14px 16px', textAlign: 'left', cursor: previousTopic ? 'pointer' : 'default', fontFamily: textFont }}
+      >
+        <div style={{ color: muted, fontSize: 11, fontWeight: 800, letterSpacing: '0.07em', textTransform: 'uppercase' }}>Previous topic</div>
+        <div style={{ fontSize: 14, fontWeight: 700, marginTop: 5 }}>{previousTopic?.shortTitle || 'First topic'}</div>
+      </button>
+      <button
+        type="button"
+        disabled={!nextTopic}
+        onClick={() => nextTopic && onSelect(nextTopic.id)}
+        style={{ border: `1px solid ${nextTopic ? green : border}`, borderRadius: 14, background: nextTopic ? pale : '#fff', color: nextTopic ? green : '#aeb5b0', padding: '14px 16px', textAlign: 'right', cursor: nextTopic ? 'pointer' : 'default', fontFamily: textFont }}
+      >
+        <div style={{ color: nextTopic ? green : muted, fontSize: 11, fontWeight: 800, letterSpacing: '0.07em', textTransform: 'uppercase' }}>Next topic</div>
+        <div style={{ fontSize: 14, fontWeight: 700, marginTop: 5 }}>{nextTopic?.shortTitle || 'Final topic'}</div>
+      </button>
+    </nav>
+  );
+}
+
 export default function IronSidesView({ modules, questions, archiveCards, onBack }) {
   const [section, setSection] = useState('learn');
   const [activeModuleId, setActiveModuleId] = useState(modules[0]?.id ?? null);
   const [questionType, setQuestionType] = useState('all');
   const activeModule = modules.find((module) => module.id === activeModuleId) ?? modules[0];
+  const activeModuleIndex = modules.findIndex((module) => module.id === activeModule?.id);
+  const previousTopic = activeModuleIndex > 0 ? modules[activeModuleIndex - 1] : null;
+  const nextTopic = activeModuleIndex >= 0 && activeModuleIndex < modules.length - 1 ? modules[activeModuleIndex + 1] : null;
 
   const moduleQuestions = useMemo(
     () => questions.filter((card) => card.moduleId === activeModule?.id && (questionType === 'all' || card.type === questionType)),
@@ -253,6 +287,13 @@ export default function IronSidesView({ modules, questions, archiveCards, onBack
     document.getElementById('ironsides-content')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
+  const selectModule = (moduleId) => {
+    setActiveModuleId(moduleId);
+    requestAnimationFrame(() => {
+      document.getElementById('ironsides-content')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  };
+
   return (
     <div style={{ height: '100%', overflowY: 'auto', background: '#fbfcfa', fontFamily: pageFont }}>
       <div style={{ maxWidth: 1040, margin: '0 auto', padding: '28px 24px 120px' }}>
@@ -268,17 +309,11 @@ export default function IronSidesView({ modules, questions, archiveCards, onBack
             IronSides.
           </h1>
           <p style={{ color: muted, fontSize: 'clamp(19px, 3vw, 26px)', lineHeight: 1.4, maxWidth: 760, margin: '24px 0 0', fontWeight: 380 }}>
-            A last-day executive course: learn the rule, follow the mechanism, decide the Indian mini-case, and immediately test it.
+            Accounting, financial management, quantitative aptitude, and logical reasoning for the IronSides assessment.
           </p>
-          <div style={{ marginTop: 24, maxWidth: 780, border: `1px solid ${border}`, borderRadius: 16, background: '#fff', padding: '16px 18px' }}>
-            <div style={{ color: green, fontSize: 11, fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 7 }}>Tomorrow-first plan</div>
-            <div style={{ color: '#334038', fontSize: 14, lineHeight: 1.65 }}>
-              First finish Modules 1–7, then Modules 9–12. Use Cost Accounting if time remains. End with Journal Entries, Rectification, Accounting Aptitude, and the Archive. Arithmetic and LR need timed practice, not theory rereading.
-            </div>
-          </div>
           <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginTop: 28 }}>
             {[
-              `${totals.concepts} concepts`,
+              `${totals.concepts} handbook sections`,
               `${totals.mcq} MCQs`,
               `${totals.solving} solving questions`,
               `${archiveCards.length} archive questions`,
@@ -291,8 +326,8 @@ export default function IronSidesView({ modules, questions, archiveCards, onBack
         <div style={{ position: 'sticky', top: 0, zIndex: 20, margin: '0 -24px', padding: '14px 24px', background: 'rgba(251,252,250,0.92)', backdropFilter: 'blur(18px)', borderTop: `1px solid ${border}`, borderBottom: `1px solid ${border}` }}>
           <div style={{ display: 'flex', gap: 8, overflowX: 'auto' }}>
             {[
-              ['learn', '1. Learn'],
-              ['practice', '2. Practice'],
+              ['learn', '1. Handbook'],
+              ['practice', '2. Question bank'],
               ['archive', `Archive (${archiveCards.length})`],
             ].map(([value, label]) => (
               <button
@@ -314,7 +349,7 @@ export default function IronSidesView({ modules, questions, archiveCards, onBack
                 <button
                   type="button"
                   key={module.id}
-                  onClick={() => setActiveModuleId(module.id)}
+                  onClick={() => selectModule(module.id)}
                   style={{ flexShrink: 0, border: `1px solid ${activeModule?.id === module.id ? green : border}`, borderRadius: 12, padding: '11px 14px', background: activeModule?.id === module.id ? pale : '#fff', color: activeModule?.id === module.id ? green : muted, fontSize: 13, fontWeight: 700, cursor: 'pointer' }}
                 >
                   {module.order}. {module.shortTitle}
@@ -326,23 +361,28 @@ export default function IronSidesView({ modules, questions, archiveCards, onBack
           {section === 'learn' && activeModule && (
             <section>
               <div style={{ padding: '20px 0 8px' }}>
-                <div style={{ color: green, fontSize: 13, fontWeight: 750, marginBottom: 8 }}>Module {activeModule.order} of {modules.length}</div>
+                <div style={{ color: green, fontSize: 13, fontWeight: 750, marginBottom: 8 }}>Topic {activeModule.order} of {modules.length}</div>
                 <h2 style={{ color: ink, fontSize: 'clamp(34px, 6vw, 52px)', lineHeight: 1.05, fontWeight: 540, letterSpacing: '-0.04em', margin: '0 0 16px' }}>{activeModule.title}</h2>
-                <p style={{ color: muted, fontSize: 17, lineHeight: 1.6, maxWidth: 760, margin: 0 }}>{activeModule.description}</p>
-                <p style={{ color: green, fontSize: 13, lineHeight: 1.6, maxWidth: 760, margin: '12px 0 0', fontWeight: 700 }}>
-                  Read for the decision rule. Do not memorise prose; be able to explain the mechanism and entry in your own words.
-                </p>
+                {activeModule.assessmentWeight && (
+                  <div style={{ color: green, fontSize: 12, fontWeight: 800, letterSpacing: '0.07em', textTransform: 'uppercase', margin: '-6px 0 16px' }}>{activeModule.assessmentWeight}</div>
+                )}
+                <div style={{ maxWidth: 820, borderTop: `1px solid ${border}`, borderBottom: `1px solid ${border}`, padding: '16px 0' }}>
+                  <div style={{ color: green, fontSize: 11, fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 6 }}>Capability</div>
+                  <p style={{ color: ink, fontSize: 17, lineHeight: 1.65, margin: 0 }}>{activeModule.capability}</p>
+                </div>
+                <p style={{ color: muted, fontSize: 14, lineHeight: 1.65, maxWidth: 820, margin: '14px 0 0' }}>{activeModule.description}</p>
+                <div style={{ color: ink, fontSize: 13, fontWeight: 750, marginTop: 16 }}>{activeModule.concepts.length} expandable subtopics</div>
               </div>
               {activeModule.concepts.map((item, index) => <ConceptCard key={item.id} item={item} index={index} />)}
+              <TopicNavigation previousTopic={previousTopic} nextTopic={nextTopic} onSelect={selectModule} />
             </section>
           )}
 
           {section === 'practice' && activeModule && (
             <section>
               <div style={{ padding: '20px 0 12px' }}>
-                <div style={{ color: green, fontSize: 13, fontWeight: 750, marginBottom: 8 }}>Assessment practice</div>
+                <div style={{ color: green, fontSize: 13, fontWeight: 750, marginBottom: 8 }}>Question bank</div>
                 <h2 style={{ color: ink, fontSize: 'clamp(34px, 6vw, 52px)', lineHeight: 1.05, fontWeight: 540, letterSpacing: '-0.04em', margin: '0 0 16px' }}>{activeModule.title}</h2>
-                <p style={{ color: muted, fontSize: 17, lineHeight: 1.6, margin: 0 }}>Attempt first. Reveal the reasoning only after committing to an answer.</p>
                 <div style={{ display: 'flex', gap: 8, marginTop: 20 }}>
                   {[
                     ['all', 'All'],
@@ -361,6 +401,7 @@ export default function IronSidesView({ modules, questions, archiveCards, onBack
                 </div>
               </div>
               {moduleQuestions.map((card, index) => <QuestionCard key={card.id} card={card} number={index + 1} />)}
+              <TopicNavigation previousTopic={previousTopic} nextTopic={nextTopic} onSelect={selectModule} />
             </section>
           )}
 
