@@ -50,13 +50,16 @@ assert.deepEqual(
 
 const questionIds = ironsidesAssessmentQuestions.map((card) => card.id);
 assert.equal(new Set(questionIds).size, questionIds.length, 'IronSides question IDs must be unique.');
-assert.equal(ironsidesAssessmentQuestions.length, 308, 'IronSides assessment question count changed unexpectedly.');
+assert.equal(ironsidesAssessmentQuestions.length, 353, 'IronSides assessment question count changed unexpectedly.');
 assert.ok(ironsidesAssessmentQuestions.every((card) => ['reported interview question', 'assessment-standard'].includes(card.evidenceType)), 'Every question must disclose whether it is reported or assessment-standard.');
 assert.ok(ironsidesAssessmentQuestions.filter((card) => card.evidenceType === 'reported interview question').every((card) => card.sourceUrl), 'Reported questions must retain public source provenance.');
 
 for (const module of ironsidesModules) {
   assert.ok(module.description.length >= 80, `${module.id} needs a complete topic scope.`);
   assert.ok(module.capability.length >= 120, `${module.id} needs a specific assessable capability.`);
+  assert.ok(module.questionMethod?.steps.length >= 5, `${module.id} needs a question-solving method.`);
+  assert.ok(module.questionMethod?.workedExample.length >= 100, `${module.id} needs a worked question pattern.`);
+  assert.ok(module.questionMethod?.traps.length >= 4, `${module.id} needs topic-specific question traps.`);
   assert.ok(module.concepts.length >= 2, `${module.id} needs independently expandable subtopics.`);
   for (const item of module.concepts) {
     assert.ok((item.definition || item.explanation).length >= 100, `${item.id} needs an academic definition.`);
@@ -126,6 +129,24 @@ assert.equal(
   ironsidesAssessmentQuestions.filter((card) => card.questionClass === 'interview_practice').length,
   35,
   'The interview-standard practice expansion must contain 35 complete questions.',
+);
+const processQuestions = ironsidesAssessmentQuestions.filter((card) => card.questionClass === 'benchmark_process');
+assert.equal(processQuestions.length, 27, 'The local-standard benchmark expansion must contain 27 complete questions.');
+assert.ok(processQuestions.every((card) => card.solutionSteps?.length >= 3), 'Every benchmark-process question needs visible step-by-step working.');
+for (const topicId of ironsidesModuleOrder) {
+  assert.equal(processQuestions.filter((card) => card.moduleId === topicId).length, 3, `${topicId} needs three benchmark-process questions.`);
+}
+const frequentJournalQuestions = ironsidesAssessmentQuestions.filter((card) => card.questionClass === 'frequent_journal_entry');
+assert.equal(frequentJournalQuestions.length, 18, 'The frequent journal-entry expansion must contain 18 complete questions.');
+assert.ok(frequentJournalQuestions.every((card) => card.moduleId === 'journal_entries'), 'Frequent journal-entry questions must remain in the weighted journal topic.');
+assert.ok(frequentJournalQuestions.every((card) => card.solutionSteps?.length >= 3), 'Frequent journal-entry questions need explicit working.');
+assert.ok(
+  ironsidesAssessmentQuestions.filter((card) => card.type === 'solving').every((card) => card.solutionSteps?.length >= 3),
+  'Every solving question must expose an ordered solution process.',
+);
+assert.ok(
+  ironsidesAssessmentQuestions.filter((card) => card.type === 'solving').every((card) => card.answer.length + card.explanation.length >= 180),
+  'Every solving question needs an interview-standard answer and explanation.',
 );
 for (const topicId of [
   'financial_management',
@@ -451,9 +472,33 @@ for (const visualEvidence of [
   assert.ok(ironSidesVisualSource.includes(visualEvidence), `IronSides visual system is missing: ${visualEvidence}`);
 }
 assert.ok(ironSidesViewSource.includes('subconcept.title'), 'IronSides must render named subtopics directly in the reading flow.');
-assert.ok(ironSidesViewSource.includes('<details '), 'IronSides subtopics must open on demand instead of rendering as an undifferentiated wall of text.');
-assert.ok(ironSidesViewSource.includes('<summary '), 'IronSides subtopics need clickable summaries.');
+assert.ok(!ironSidesViewSource.includes('<details '), 'IronSides must not hide teaching content in dropdowns.');
+assert.ok(!ironSidesViewSource.includes('<summary '), 'IronSides must not use collapsible subtopic summaries.');
+assert.ok(ironSidesViewSource.includes('<QuestionMethod method={activeModule.questionMethod} />'), 'Every question tab needs its topic-specific solving method before the bank.');
+assert.ok(ironSidesViewSource.includes('card.solutionSteps?.length > 0'), 'Benchmark solutions must render their step-by-step working.');
 assert.ok(ironSidesViewSource.includes('How to post a journal entry into a ledger') || zeroToHeroModules.some((module) => module.concepts.some((concept) => concept.subconcepts?.some((subconcept) => /post.*ledger/i.test(subconcept.title)))), 'IronSides must teach ledger posting as an explicit procedure.');
+const journalMethodConcept = zeroToHeroModules
+  .flatMap((module) => module.concepts)
+  .find((concept) => concept.id === 'zth_journal_method');
+const ledgerMethodConcept = zeroToHeroModules
+  .flatMap((module) => module.concepts)
+  .find((concept) => concept.id === 'zth_ledgers_control_accounts');
+assert.deepEqual(
+  journalMethodConcept.recordFormats?.[0]?.columns,
+  ['Date', 'Particulars', 'L.F.', 'Debit (₹)', 'Credit (₹)'],
+  'Journal teaching must show the complete standard journal format.',
+);
+assert.equal(ledgerMethodConcept.recordFormats?.length, 2, 'Ledger teaching must show both debit and credit sides.');
+assert.ok(
+  ledgerMethodConcept.recordFormats.every((format) => (
+    JSON.stringify(format.columns) === JSON.stringify(['Date', 'Particulars', 'J.F.', 'Amount (₹)'])
+  )),
+  'Each ledger side must show Date, Particulars, J.F. and Amount.',
+);
+const postingSubconcept = ledgerMethodConcept.subconcepts.find((subconcept) => /post.*ledger/i.test(subconcept.title));
+assert.match(postingSubconcept.explanation, /contra-account/i, 'Ledger posting must identify the contra-account in Particulars.');
+assert.doesNotMatch(postingSubconcept.explanation, /preserve.*narration/i, 'Journal narration must not be copied into ledger particulars.');
+assert.ok(ironSidesViewSource.includes('function RecordFormat'), 'IronSides must render standard journal and ledger layouts as tables.');
 assert.ok(ironSidesViewSource.includes('<TopicNavigation previousTopic={previousTopic} nextTopic={nextTopic} onSelect={selectModule} />'), 'Learn and Practice must render topic navigation.');
 assert.ok((ironSidesViewSource.match(/<TopicNavigation /g) || []).length === 2, 'Both Learn and Practice require bottom Previous/Next topic navigation.');
 assert.ok(ironSidesViewSource.includes("scrollIntoView({ behavior: 'smooth', block: 'start' })"), 'Topic navigation must automatically scroll to the topic heading.');

@@ -5,6 +5,10 @@ import { ironsidesJournalQuestions } from './ironsidesJournalQuestions.js';
 import { ironsidesInterviewBenchmarkQuestions } from './ironsidesInterviewBenchmarkQuestions.js';
 import { ironsidesLedgerQuestions } from './ironsidesLedgerQuestions.js';
 import { ironsidesInterviewPracticeQuestions } from './ironsidesInterviewPracticeQuestions.js';
+import { ironsidesQuestionMethods } from './ironsidesQuestionMethods.js';
+import { ironsidesBenchmarkProcessQuestions } from './ironsidesBenchmarkProcessQuestions.js';
+import { ironsidesFrequentJournalQuestions } from './ironsidesFrequentJournalQuestions.js';
+import { enrichIronSidesQuestion } from './ironsidesQuestionQuality.js';
 
 const concept = (id, title, explanation, formulae = [], example = '', trap = '') => ({
   id,
@@ -923,6 +927,7 @@ const topic = ({
   opening,
   capability,
   assessmentWeight,
+  questionMethod: ironsidesQuestionMethods[id],
   concepts: conceptIds.map((conceptId) => {
     const item = sourceConceptById.get(conceptId);
     if (!item) throw new Error(`Unknown IronSides concept: ${conceptId}`);
@@ -1112,6 +1117,8 @@ const topicIdForQuestion = (card) => {
 };
 
 const sourceAssessmentQuestions = [
+  ...ironsidesFrequentJournalQuestions,
+  ...ironsidesBenchmarkProcessQuestions,
   ...ironsidesInterviewBenchmarkQuestions,
   ...ironsidesJournalQuestions,
   ...ironsidesStandardQuestions,
@@ -1175,7 +1182,8 @@ export const ironsidesAssessmentQuestions = sourceAssessmentQuestions
     difficulty: card.difficulty === 'Hard' && !genuinelyAdvancedQuestionIds.has(card.id)
       ? 'Medium'
       : card.difficulty,
-  }));
+  }))
+  .map(enrichIronSidesQuestion);
 
 export const ironsidesModuleOrder = ironsidesModules
   .slice()

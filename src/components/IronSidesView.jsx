@@ -34,6 +34,43 @@ function Formula({ item }) {
   );
 }
 
+function RecordFormat({ format }) {
+  return (
+    <section style={{ border: `1px solid ${border}`, borderRadius: 14, overflow: 'hidden', background: '#fff' }}>
+      <div style={{ padding: '13px 15px', color: ink, fontSize: 15, fontWeight: 800, borderBottom: `1px solid ${border}`, background: '#f5f8f5' }}>
+        {format.title}
+      </div>
+      <div style={{ overflowX: 'auto' }}>
+        <table style={{ width: '100%', minWidth: 620, borderCollapse: 'collapse', color: ink, fontFamily: textFont, fontSize: 15, lineHeight: 1.5 }}>
+          <thead>
+            <tr>
+              {format.columns.map((column) => (
+                <th key={column} scope="col" style={{ padding: '10px 12px', textAlign: column.includes('₹') || column.includes('Amount') ? 'right' : 'left', color: '#fff', background: green, fontSize: 13, fontWeight: 800, borderRight: '1px solid rgba(255,255,255,0.25)' }}>
+                  {column}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {format.rows.map((row, rowIndex) => (
+              <tr key={`${format.title}_${rowIndex}`} style={{ background: rowIndex % 2 === 0 ? '#fff' : '#f5f8f5' }}>
+                {row.map((value, cellIndex) => (
+                  <td key={`${rowIndex}_${cellIndex}`} style={{ padding: '10px 12px', textAlign: format.columns[cellIndex]?.includes('₹') || format.columns[cellIndex]?.includes('Amount') ? 'right' : 'left', borderTop: `1px solid ${border}`, borderRight: cellIndex < row.length - 1 ? `1px solid ${border}` : 0, whiteSpace: cellIndex === 1 ? 'pre-wrap' : 'nowrap' }}>
+                    {value || '—'}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      {format.note && (
+        <p style={{ margin: 0, padding: '12px 15px 14px', color: muted, fontFamily: textFont, fontSize: 14, lineHeight: 1.6, borderTop: `1px solid ${border}` }}>{format.note}</p>
+      )}
+    </section>
+  );
+}
+
 function ConceptCard({ item, index }) {
   const openingDefinition = item.definition && item.definition !== item.explanation ? item.definition : null;
   const openingMeaning = item.simpleMeaning && item.simpleMeaning !== item.definition ? item.simpleMeaning : null;
@@ -61,16 +98,21 @@ function ConceptCard({ item, index }) {
         <LongText text={item.tutorial || item.explanation} />
       </div>
       <IronSidesConceptVisual visual={item.visual} />
+      {item.recordFormats?.length > 0 && (
+        <div style={{ display: 'grid', gap: 12, marginTop: 24 }}>
+          {item.recordFormats.map((format) => <RecordFormat key={`${item.id}_${format.title}`} format={format} />)}
+        </div>
+      )}
       {item.subconcepts?.length > 0 && (
-        <div style={{ marginTop: 28, display: 'grid', gap: 22 }}>
+        <div style={{ marginTop: 30, display: 'grid', gap: 0, borderTop: `1px solid ${border}` }}>
           {item.subconcepts.map((subconcept, subconceptIndex) => (
-            <details key={`${item.id}_${subconcept.title}`} style={{ borderTop: `1px solid ${border}`, paddingTop: 16 }}>
-              <summary style={{ color: ink, fontSize: 20, lineHeight: 1.35, fontWeight: 700, cursor: 'pointer', listStylePosition: 'outside' }}>
-                <span style={{ color: green, fontSize: 13, marginRight: 10 }}>{String(subconceptIndex + 1).padStart(2, '0')}</span>
-                {subconcept.title}
-              </summary>
-              <p style={{ color: '#46534b', fontSize: 19, lineHeight: 1.82, margin: '14px 0 0 24px', fontFamily: textFont }}>{subconcept.explanation}</p>
-            </details>
+            <section key={`${item.id}_${subconcept.title}`} style={{ display: 'grid', gridTemplateColumns: '42px minmax(0, 1fr)', gap: 14, padding: '22px 0', borderBottom: `1px solid ${border}` }}>
+              <div style={{ color: green, fontSize: 13, fontWeight: 800, paddingTop: 4 }}>{String(subconceptIndex + 1).padStart(2, '0')}</div>
+              <div>
+                <h4 style={{ color: ink, fontSize: 21, lineHeight: 1.35, fontWeight: 700, margin: 0 }}>{subconcept.title}</h4>
+                <p style={{ color: '#46534b', fontSize: 19, lineHeight: 1.82, margin: '10px 0 0', fontFamily: textFont }}>{subconcept.explanation}</p>
+              </div>
+            </section>
           ))}
         </div>
       )}
@@ -107,8 +149,8 @@ function ConceptCard({ item, index }) {
         </div>
       )}
       {item.sources?.length > 0 && (
-        <details style={{ marginTop: 20 }}>
-          <summary style={{ color: muted, fontSize: 12, fontWeight: 750, cursor: 'pointer' }}>References</summary>
+        <div style={{ marginTop: 20 }}>
+          <div style={{ color: muted, fontSize: 12, fontWeight: 750 }}>References</div>
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
             {item.sources.map((itemSource) => (
               <a key={itemSource.url} href={itemSource.url} target="_blank" rel="noreferrer" style={{ color: green, border: `1px solid ${border}`, background: '#fff', borderRadius: 999, padding: '7px 10px', fontSize: 12, fontWeight: 700, textDecoration: 'none' }}>
@@ -116,10 +158,38 @@ function ConceptCard({ item, index }) {
               </a>
             ))}
           </div>
-        </details>
+        </div>
       )}
       </div>
     </article>
+  );
+}
+
+function QuestionMethod({ method }) {
+  if (!method) return null;
+  return (
+    <section style={{ margin: '28px 0 34px', padding: '28px 0', borderTop: `1px solid ${border}`, borderBottom: `1px solid ${border}` }}>
+      <div style={{ color: green, fontSize: 12, fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 10 }}>Use this method</div>
+      <h3 style={{ color: ink, fontSize: 'clamp(27px, 4vw, 36px)', lineHeight: 1.18, fontWeight: 560, letterSpacing: '-0.025em', margin: '0 0 22px' }}>{method.title}</h3>
+      <ol style={{ display: 'grid', gap: 14, margin: 0, paddingLeft: 24, color: '#334038', fontFamily: textFont, fontSize: 18, lineHeight: 1.72 }}>
+        {method.steps.map((step) => <li key={step} style={{ paddingLeft: 7 }}>{step}</li>)}
+      </ol>
+      <div style={{ display: 'grid', gap: 9, marginTop: 24 }}>
+        {method.formulae.map((formula) => (
+          <div key={formula} style={{ color: ink, fontFamily: 'ui-monospace, SFMono-Regular, Consolas, monospace', fontSize: 15, lineHeight: 1.6, padding: '11px 14px', borderRadius: 10, background: '#f1f4f1', overflowX: 'auto' }}>{formula}</div>
+        ))}
+      </div>
+      <div style={{ marginTop: 24 }}>
+        <div style={{ color: ink, fontSize: 15, fontWeight: 800, marginBottom: 7 }}>Worked pattern</div>
+        <p style={{ color: '#405048', fontSize: 18, lineHeight: 1.78, margin: 0, fontFamily: textFont }}>{method.workedExample}</p>
+      </div>
+      <div style={{ marginTop: 22 }}>
+        <div style={{ color: ink, fontSize: 15, fontWeight: 800, marginBottom: 8 }}>Common traps</div>
+        <ul style={{ display: 'grid', gap: 7, margin: 0, paddingLeft: 22, color: '#564231', fontSize: 16, lineHeight: 1.65, fontFamily: textFont }}>
+          {method.traps.map((trap) => <li key={trap}>{trap}</li>)}
+        </ul>
+      </div>
+    </section>
   );
 }
 
@@ -199,6 +269,14 @@ function QuestionCard({ card, number }) {
             </div>
           )}
           <div style={{ color: ink, fontSize: 20, lineHeight: 1.75, fontWeight: 580 }}>{card.answer}</div>
+          {card.solutionSteps?.length > 0 && (
+            <div style={{ marginTop: 18 }}>
+              <div style={{ color: ink, fontSize: 14, fontWeight: 800, letterSpacing: '0.04em', textTransform: 'uppercase', marginBottom: 10 }}>Working</div>
+              <ol style={{ display: 'grid', gap: 9, margin: 0, paddingLeft: 23, color: '#334038', fontSize: 18, lineHeight: 1.72, fontFamily: textFont }}>
+                {card.solutionSteps.map((step) => <li key={step} style={{ paddingLeft: 5 }}>{step}</li>)}
+              </ol>
+            </div>
+          )}
           <div style={{ color: '#405048', fontSize: 19, lineHeight: 1.84, marginTop: 12, fontFamily: textFont }}>
             <LongText text={card.explanation} />
           </div>
@@ -379,6 +457,7 @@ export default function IronSidesView({ modules, questions, archiveCards, onBack
                 <p style={{ color: muted, fontSize: 15, lineHeight: 1.65, maxWidth: 760, margin: 0 }}>
                   Reported questions reflect publicly documented interview patterns. Practice questions are original assessment-standard exercises covering the same concepts and the questions you should be able to solve fluently.
                 </p>
+                <QuestionMethod method={activeModule.questionMethod} />
                 <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 20 }}>
                   {[
                     ['all', `All (${questions.filter((card) => card.moduleId === activeModule.id).length})`],

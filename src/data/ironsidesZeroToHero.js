@@ -31,6 +31,7 @@ const lesson = ({
   indianExample,
   realEvent,
   journalEntries = [],
+  recordFormats = [],
   trap,
   sources,
 }) => ({
@@ -46,6 +47,7 @@ const lesson = ({
   indianExample,
   realEvent,
   journalEntries,
+  recordFormats,
   trap,
   sources,
   example: workedExample || indianExample,
@@ -146,7 +148,7 @@ export const zeroToHeroModules = [
         eli5: 'The journal is a chronological inbox. Posting sorts every line of that inbox into named folders. The balance in each folder is what enters the trial balance.',
         explanation: 'Each journal debit is posted to the debit side of the relevant ledger account and each credit to the credit side, preserving date, amount and cross-reference. At period end, the smaller side receives the balancing figure so totals agree; the balance is then brought down on its natural side. Customer and supplier details are commonly maintained in receivables and payables subsidiary ledgers. Receivables and payables control accounts in the general ledger summarise those details. A control-account difference may arise from omitted postings, wrong amounts, contra settlements, returns, discounts, bad debts or an error in the list of individual balances. The trial balance uses general-ledger balances, not the raw total of journal columns.',
         subconcepts: [
-          { title: 'How to post a journal entry into a ledger', explanation: 'Transfer every journal debit to the debit side of the matching account and every journal credit to the credit side. Preserve date, amount, narration and cross-reference. Posting does not create a new transaction; it classifies one already recorded.' },
+          { title: 'How to post a journal entry into a ledger', explanation: 'Transfer every journal debit to the debit side of the matching account and every journal credit to the credit side. Copy the date, amount and journal folio; in Particulars, write the contra-account from the opposite side of the journal entry. Journal narration is not copied into the ledger. Posting does not create a new transaction; it classifies one already recorded.' },
           { title: 'How to balance a ledger account', explanation: 'Total both sides, enter the difference on the smaller side as balance c/d, and bring that balance into the next period as balance b/d on its natural side. A debit balance means debit-side resources or expenses exceed credits; a credit balance means the reverse.' },
           { title: 'Subsidiary ledgers', explanation: 'Maintain individual customer and supplier balances so collections, disputes, credit limits and confirmations can be controlled.' },
           { title: 'Control accounts', explanation: 'General-ledger totals for receivables and payables should reconcile to the sum of individual subsidiary balances.' },
@@ -161,6 +163,26 @@ export const zeroToHeroModules = [
         indianExample: 'An Indian distributor may maintain hundreds of customer accounts in Tally or an ERP. The software automates posting, but the accountant still reconciles the receivables control account with customer ageing and investigates unmatched GST credit notes or collections.',
         realEvent: 'Independent customer and bank confirmations in financial audits rely on reliable subsidiary ledgers. Satyam is the important Indian warning that ledger balances require evidence of existence, not merely internally consistent postings.',
         journalEntries: ['Credit sale posted: Customer/Receivable Dr; Sales and Output GST Cr.', 'Customer return: Sales Return and Output GST adjustment Dr; Customer/Receivable Cr.', 'Customer-supplier contra: Payables Dr; Receivables Cr, only when a valid set-off exists.'],
+        recordFormats: [
+          {
+            title: 'Asha Account - debit side',
+            columns: ['Date', 'Particulars', 'J.F.', 'Amount (₹)'],
+            rows: [
+              ['1 Apr', 'To Sales', 'J5', '50,000'],
+              ['1 May', 'To Balance b/d', '-', '20,000'],
+            ],
+            note: 'The credit sale is posted on Asha’s debit side. The next-period debit balance is the unpaid receivable.',
+          },
+          {
+            title: 'Asha Account - credit side',
+            columns: ['Date', 'Particulars', 'J.F.', 'Amount (₹)'],
+            rows: [
+              ['15 Apr', 'By Bank', 'C12', '30,000'],
+              ['30 Apr', 'By Balance c/d', '-', '20,000'],
+            ],
+            note: 'Bank is the contra-account for the collection. Balance c/d closes the smaller side at ₹50,000.',
+          },
+        ],
         trap: 'Do not confuse journalising with posting, and do not assume a control account proves every individual customer balance is genuine or recoverable.',
         sources: [source.icaiProcess, source.cfiCycle, source.sebiSatyam],
       }),
@@ -193,6 +215,18 @@ export const zeroToHeroModules = [
         indianExample: 'When a registered firm buys office equipment for ₹1,18,000 including eligible GST of ₹18,000, it may debit Equipment ₹1,00,000, debit Input GST ₹18,000 and credit Supplier ₹1,18,000, subject to actual tax-credit eligibility.',
         realEvent: 'GST made separate tax-ledger discipline operationally important: invoice value, taxable value and tax components must not be collapsed into revenue or asset cost when credit is recoverable.',
         journalEntries: ['Accrued salary: Salary Expense Dr; Salary Payable Cr.', 'Customer advance: Bank Dr; Contract Liability/Unearned Revenue Cr.', 'Eligible input tax purchase: Asset/Expense Dr; Input GST Dr; Supplier Cr.'],
+        recordFormats: [
+          {
+            title: 'Standard journal format',
+            columns: ['Date', 'Particulars', 'L.F.', 'Debit (₹)', 'Credit (₹)'],
+            rows: [
+              ['31 Mar', 'Electricity Expense Dr', 'J12', '12,000', ''],
+              ['', '  To Electricity Payable', 'J12', '', '12,000'],
+              ['', '(Being March electricity accrued)', '', '', ''],
+            ],
+            note: 'L.F. is the ledger folio used as the posting cross-reference. Narration explains the transaction below the entry.',
+          },
+        ],
         trap: 'An entry can balance and still be wrong because both sides may use the wrong accounts or period.',
         sources: [source.icaiProcess, source.gstInvoice, source.cfiCycle],
       }),
