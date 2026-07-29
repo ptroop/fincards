@@ -38,44 +38,33 @@ function ConceptCard({ item, index }) {
   const openingDefinition = item.definition && item.definition !== item.explanation ? item.definition : null;
 
   return (
-    <details
-      style={{ borderBottom: `1px solid ${border}` }}
-    >
-      <summary style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) auto', gap: 18, alignItems: 'center', padding: '24px 0', cursor: 'pointer', listStyle: 'none' }}>
+    <article id={item.id} style={{ borderBottom: `1px solid ${border}`, padding: '38px 0 46px', scrollMarginTop: 110 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '42px minmax(0, 1fr)', gap: 16, alignItems: 'start' }}>
+        <div style={{ color: green, fontSize: 13, fontWeight: 800, paddingTop: 5 }}>{String(index + 1).padStart(2, '0')}</div>
         <div>
-          <div style={{ color: green, fontSize: 11, fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 7 }}>
-            Subtopic {index + 1}
-          </div>
-          <h3 style={{ color: ink, fontSize: 'clamp(20px, 3vw, 27px)', fontWeight: 560, lineHeight: 1.2, margin: 0, letterSpacing: '-0.02em' }}>
+          <h3 style={{ color: ink, fontSize: 'clamp(24px, 3vw, 32px)', fontWeight: 560, lineHeight: 1.17, margin: 0, letterSpacing: '-0.025em' }}>
             {item.title}
           </h3>
+          {openingDefinition && (
+            <p style={{ color: ink, fontSize: 18, lineHeight: 1.65, fontWeight: 560, margin: '18px 0 16px', fontFamily: textFont }}>
+              {openingDefinition}
+            </p>
+          )}
         </div>
-        <span aria-hidden="true" style={{ color: green, width: 32, height: 32, borderRadius: 999, border: `1px solid ${border}`, display: 'grid', placeItems: 'center', fontSize: 20 }}>+</span>
-      </summary>
-      <div style={{ padding: '4px 0 38px' }}>
-      {openingDefinition && (
-        <p style={{ color: ink, fontSize: 17, lineHeight: 1.7, fontWeight: 650, margin: '0 0 14px', fontFamily: textFont }}>
-          {openingDefinition}
-        </p>
-      )}
+      </div>
+      <div style={{ marginLeft: 58, paddingTop: openingDefinition ? 0 : 18 }}>
       <div style={{ color: '#334038', fontSize: 16, lineHeight: 1.78, fontFamily: textFont }}>
         <LongText text={item.explanation} />
       </div>
       <IronSidesConceptVisual visual={item.visual} />
       {item.subconcepts?.length > 0 && (
-        <div style={{ marginTop: 24 }}>
-          <h4 style={{ color: ink, fontSize: 16, fontWeight: 750, margin: '0 0 12px' }}>Rules and distinctions</h4>
-          <div style={{ display: 'grid', gap: 10 }}>
-            {item.subconcepts.map((subconcept, subIndex) => (
-              <div key={`${item.id}_${subconcept.title}`} style={{ display: 'grid', gridTemplateColumns: '24px minmax(0, 1fr)', gap: 8 }}>
-                <div style={{ color: green, fontSize: 13, fontWeight: 800, paddingTop: 2 }}>{subIndex + 1}</div>
-                <div>
-                  <div style={{ color: ink, fontSize: 15, fontWeight: 750 }}>{subconcept.title}</div>
-                  <div style={{ color: '#46534b', fontSize: 14, lineHeight: 1.65, marginTop: 3 }}>{subconcept.explanation}</div>
-                </div>
-              </div>
-            ))}
-          </div>
+        <div style={{ marginTop: 28, display: 'grid', gap: 22 }}>
+          {item.subconcepts.map((subconcept) => (
+            <section key={`${item.id}_${subconcept.title}`}>
+              <h4 style={{ color: ink, fontSize: 18, lineHeight: 1.3, fontWeight: 700, margin: '0 0 6px' }}>{subconcept.title}</h4>
+              <p style={{ color: '#46534b', fontSize: 15, lineHeight: 1.72, margin: 0, fontFamily: textFont }}>{subconcept.explanation}</p>
+            </section>
+          ))}
         </div>
       )}
       {(item.formulae?.length ?? 0) > 0 && (
@@ -84,10 +73,12 @@ function ConceptCard({ item, index }) {
         </div>
       )}
       {(item.indianExample || item.workedExample || item.example) && (
-        <div style={{ marginTop: 22, padding: '16px 18px', borderLeft: '3px solid #79a88d', background: '#f5f8f5' }}>
-          <div style={{ color: green, fontSize: 11, fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 7 }}>Indian business application</div>
-          <div style={{ color: '#334038', fontSize: 15, lineHeight: 1.7, fontFamily: textFont }}><LongText text={item.indianExample || item.workedExample || item.example} /></div>
+        <div style={{ marginTop: 26, padding: '16px 18px', borderLeft: '3px solid #79a88d', background: '#f5f8f5' }}>
+          <div style={{ color: '#334038', fontSize: 15, lineHeight: 1.72, fontFamily: textFont }}><LongText text={item.indianExample || item.workedExample || item.example} /></div>
         </div>
+      )}
+      {item.realEvent && (
+        <p style={{ margin: '18px 0 0', color: '#46534b', fontSize: 15, lineHeight: 1.72, fontFamily: textFont }}>{item.realEvent}</p>
       )}
       {item.workedExample && item.workedExample !== item.indianExample && (
         <div style={{ marginTop: 18 }}>
@@ -97,7 +88,7 @@ function ConceptCard({ item, index }) {
       )}
       {item.journalEntries?.length > 0 && (
         <div style={{ marginTop: 18, borderRadius: 16, background: '#17211b', color: '#eaf1ec', padding: '17px 18px' }}>
-          <div style={{ color: '#9cc2a8', fontSize: 11, fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 9 }}>Journal-entry patterns</div>
+          <div style={{ color: '#9cc2a8', fontSize: 11, fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 9 }}>Entry</div>
           <div style={{ display: 'grid', gap: 8, fontFamily: 'ui-monospace, SFMono-Regular, Consolas, monospace', fontSize: 13, lineHeight: 1.6 }}>
             {item.journalEntries.map((entry) => <div key={entry}>{entry}</div>)}
           </div>
@@ -105,7 +96,7 @@ function ConceptCard({ item, index }) {
       )}
       {item.trap && (
         <div style={{ marginTop: 18, paddingTop: 14, borderTop: `1px solid ${border}`, color: '#564231', fontSize: 15, lineHeight: 1.65 }}>
-          <strong>Assessment distinction: </strong>{item.trap}
+            {item.trap}
         </div>
       )}
       {item.sources?.length > 0 && (
@@ -121,7 +112,7 @@ function ConceptCard({ item, index }) {
         </details>
       )}
       </div>
-    </details>
+    </article>
   );
 }
 
@@ -311,30 +302,23 @@ export default function IronSidesView({ modules, questions, archiveCards, onBack
           <p style={{ color: muted, fontSize: 'clamp(19px, 3vw, 26px)', lineHeight: 1.4, maxWidth: 760, margin: '24px 0 0', fontWeight: 380 }}>
             Accounting, financial management, quantitative aptitude, and logical reasoning for the IronSides assessment.
           </p>
-          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginTop: 28 }}>
-            {[
-              `${totals.concepts} handbook sections`,
-              `${totals.mcq} MCQs`,
-              `${totals.solving} solving questions`,
-              `${archiveCards.length} archive questions`,
-            ].map((label) => (
-              <span key={label} style={{ border: `1px solid ${border}`, background: '#fff', color: muted, borderRadius: 999, padding: '8px 12px', fontSize: 13 }}>{label}</span>
-            ))}
-          </div>
+          <p style={{ color: muted, fontSize: 13, lineHeight: 1.6, margin: '24px 0 0' }}>
+            {totals.concepts} reading sections · {totals.mcq} multiple-choice questions · {totals.solving} solving questions · {archiveCards.length} archived questions
+          </p>
         </header>
 
         <div style={{ position: 'sticky', top: 0, zIndex: 20, margin: '0 -24px', padding: '14px 24px', background: 'rgba(251,252,250,0.92)', backdropFilter: 'blur(18px)', borderTop: `1px solid ${border}`, borderBottom: `1px solid ${border}` }}>
-          <div style={{ display: 'flex', gap: 8, overflowX: 'auto' }}>
+          <div style={{ display: 'flex', gap: 24, overflowX: 'auto' }}>
             {[
-              ['learn', '1. Handbook'],
-              ['practice', '2. Question bank'],
+              ['learn', 'Handbook'],
+              ['practice', 'Questions'],
               ['archive', `Archive (${archiveCards.length})`],
             ].map(([value, label]) => (
               <button
                 type="button"
                 key={value}
                 onClick={() => changeSection(value)}
-                style={{ flexShrink: 0, border: 0, borderRadius: 999, padding: '10px 17px', background: section === value ? green : '#e9eeea', color: section === value ? '#fff' : ink, fontSize: 14, fontWeight: 750, cursor: 'pointer' }}
+                style={{ flexShrink: 0, border: 0, borderBottom: `2px solid ${section === value ? green : 'transparent'}`, borderRadius: 0, padding: '9px 0 8px', background: 'transparent', color: section === value ? ink : muted, fontSize: 14, fontWeight: 700, cursor: 'pointer' }}
               >
                 {label}
               </button>
@@ -344,13 +328,13 @@ export default function IronSidesView({ modules, questions, archiveCards, onBack
 
         <div id="ironsides-content" style={{ scrollMarginTop: 80, paddingTop: 34 }}>
           {section !== 'archive' && (
-            <div style={{ display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: 18 }}>
+            <div style={{ display: 'flex', gap: 20, overflowX: 'auto', paddingBottom: 18, borderBottom: `1px solid ${border}` }}>
               {modules.map((module) => (
                 <button
                   type="button"
                   key={module.id}
                   onClick={() => selectModule(module.id)}
-                  style={{ flexShrink: 0, border: `1px solid ${activeModule?.id === module.id ? green : border}`, borderRadius: 12, padding: '11px 14px', background: activeModule?.id === module.id ? pale : '#fff', color: activeModule?.id === module.id ? green : muted, fontSize: 13, fontWeight: 700, cursor: 'pointer' }}
+                  style={{ flexShrink: 0, border: 0, borderBottom: `2px solid ${activeModule?.id === module.id ? green : 'transparent'}`, borderRadius: 0, padding: '7px 0 8px', background: 'transparent', color: activeModule?.id === module.id ? ink : muted, fontSize: 13, fontWeight: 700, cursor: 'pointer' }}
                 >
                   {module.order}. {module.shortTitle}
                 </button>
@@ -361,17 +345,10 @@ export default function IronSidesView({ modules, questions, archiveCards, onBack
           {section === 'learn' && activeModule && (
             <section>
               <div style={{ padding: '20px 0 8px' }}>
-                <div style={{ color: green, fontSize: 13, fontWeight: 750, marginBottom: 8 }}>Topic {activeModule.order} of {modules.length}</div>
                 <h2 style={{ color: ink, fontSize: 'clamp(34px, 6vw, 52px)', lineHeight: 1.05, fontWeight: 540, letterSpacing: '-0.04em', margin: '0 0 16px' }}>{activeModule.title}</h2>
                 {activeModule.assessmentWeight && (
                   <div style={{ color: green, fontSize: 12, fontWeight: 800, letterSpacing: '0.07em', textTransform: 'uppercase', margin: '-6px 0 16px' }}>{activeModule.assessmentWeight}</div>
                 )}
-                <div style={{ maxWidth: 820, borderTop: `1px solid ${border}`, borderBottom: `1px solid ${border}`, padding: '16px 0' }}>
-                  <div style={{ color: green, fontSize: 11, fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 6 }}>Capability</div>
-                  <p style={{ color: ink, fontSize: 17, lineHeight: 1.65, margin: 0 }}>{activeModule.capability}</p>
-                </div>
-                <p style={{ color: muted, fontSize: 14, lineHeight: 1.65, maxWidth: 820, margin: '14px 0 0' }}>{activeModule.description}</p>
-                <div style={{ color: ink, fontSize: 13, fontWeight: 750, marginTop: 16 }}>{activeModule.concepts.length} expandable subtopics</div>
               </div>
               {activeModule.concepts.map((item, index) => <ConceptCard key={item.id} item={item} index={index} />)}
               <TopicNavigation previousTopic={previousTopic} nextTopic={nextTopic} onSelect={selectModule} />

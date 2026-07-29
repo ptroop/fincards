@@ -12,10 +12,14 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       workbox: {
-        maximumFileSizeToCacheInBytes: 10000000 // 10MB
+        maximumFileSizeToCacheInBytes: 10000000,
+        skipWaiting: true,
+        clientsClaim: true,
       },
+      injectRegister: 'auto',
       devOptions: {
-        enabled: true
+        enabled: true,
+        type: 'module'
       },
       includeAssets: ['favicon.ico', 'pwa-192x192.png', 'pwa-512x512.png', 'pwa-maskable-512x512.png'],
       manifest: {

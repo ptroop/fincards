@@ -6,7 +6,7 @@ import {
   ironsidesModuleOrder,
   ironsidesModules,
 } from './ironsidesAssessment.js';
-import { zeroToHeroSourceCount } from './ironsidesZeroToHero.js';
+import { zeroToHeroModules, zeroToHeroSourceCount } from './ironsidesZeroToHero.js';
 
 assert.equal(ironsidesModules.length, 9, 'IronSides must use the seven requested recruitment topics plus Arithmetic and Logical Reasoning.');
 assert.deepEqual(
@@ -414,7 +414,6 @@ for (const removedFiller of [
   assert.ok(!ironSidesViewSource.includes(removedFiller), `IronSides UI still contains filler: ${removedFiller}`);
 }
 assert.ok(ironSidesViewSource.includes('function TopicNavigation'), 'IronSides needs bottom topic navigation.');
-assert.ok(ironSidesViewSource.includes('<details'), 'IronSides subtopics must be independently expandable.');
 assert.ok(ironSidesViewSource.includes('<IronSidesConceptVisual visual={item.visual} />'), 'Concept visuals must render inside their teaching subtopics.');
 for (const visualEvidence of [
   'Accounting equation transaction worksheet',
@@ -426,10 +425,8 @@ for (const visualEvidence of [
 ]) {
   assert.ok(ironSidesVisualSource.includes(visualEvidence), `IronSides visual system is missing: ${visualEvidence}`);
 }
-assert.ok(ironSidesViewSource.includes('Subtopic {index + 1}'), 'Expandable sections must be labelled as subtopics.');
-assert.ok(ironSidesViewSource.includes('Rules and distinctions'), 'IronSides concepts must render as handbook sections.');
-assert.ok(ironSidesViewSource.includes('Assessment distinction'), 'IronSides handbook sections need assessment distinctions.');
-assert.ok(ironSidesViewSource.includes('activeModule.capability'), 'Each topic must state the assessable capability it builds.');
+assert.ok(ironSidesViewSource.includes('subconcept.title'), 'IronSides must render named subtopics directly in the reading flow.');
+assert.ok(ironSidesViewSource.includes('How to post a journal entry into a ledger') || zeroToHeroModules.some((module) => module.concepts.some((concept) => concept.subconcepts?.some((subconcept) => /post.*ledger/i.test(subconcept.title)))), 'IronSides must teach ledger posting as an explicit procedure.');
 assert.ok(ironSidesViewSource.includes('<TopicNavigation previousTopic={previousTopic} nextTopic={nextTopic} onSelect={selectModule} />'), 'Learn and Practice must render topic navigation.');
 assert.ok((ironSidesViewSource.match(/<TopicNavigation /g) || []).length === 2, 'Both Learn and Practice require bottom Previous/Next topic navigation.');
 assert.ok(ironSidesViewSource.includes("scrollIntoView({ behavior: 'smooth', block: 'start' })"), 'Topic navigation must automatically scroll to the topic heading.');

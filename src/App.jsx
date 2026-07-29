@@ -4,7 +4,6 @@ import CramCard from './components/CramCard';
 import ShortcutView from './components/ShortcutView';
 import SecuritizationView from './components/SecuritizationView';
 import LearningMapView from './components/LearningMapView';
-import PodcastLauncher from './components/podcast/PodcastLauncher.jsx';
 import InterviewReadyView from './components/InterviewReadyView.jsx';
 import IronSidesView from './components/IronSidesView.jsx';
 import TMinusOneDayView from './components/TMinusOneDayView.jsx';
@@ -558,7 +557,6 @@ export default function App() {
 
           {!activeCategory && (
             <div className="flex gap-2">
-              <PodcastLauncher />
               {globalMode !== 'graph' && globalMode !== 'lesson' && (
                 <button 
                   onClick={() => setGlobalMode(prev => prev === 'focus' ? 'list' : 'focus')}
@@ -573,7 +571,6 @@ export default function App() {
           {/* Securitization: Notes/Flashcards + Cram/Focus toggle */}
           {activeCategory && isSecuritizationCategory(activeCategory) && !showSecuritizationNotes && (
             <>
-              <PodcastLauncher />
               <button
                 onClick={() => setShowSecuritizationNotes(true)}
                 className="whitespace-nowrap px-3 py-1.5 text-[12px] font-medium rounded-full bg-[#e8e8ed] dark:bg-[#2c2c2e] text-[#1d1d1f] dark:text-[#f5f5f7] hover:bg-[#d2d2d7] dark:hover:bg-[#3a3a3c] transition-colors"

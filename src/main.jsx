@@ -4,8 +4,6 @@ import 'katex/dist/katex.min.css'
 import './index.css'
 import App from './App.jsx'
 import TopicExplorer from './components/TopicExplorer.jsx'
-import { PodcastPlayerProvider } from './components/podcast/PodcastPlayerContext.jsx'
-import PodcastChrome from './components/podcast/PodcastChrome.jsx'
 import PasswordGate from './components/PasswordGate.jsx'
 
 const isRuntimeValidation = window.location.pathname.includes('/scene-runtime-validation')
@@ -15,10 +13,7 @@ const DeepDiveReader = lazy(() => import('./components/DeepDiveReader.jsx'))
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <PasswordGate>
-      <PodcastPlayerProvider>
-        <Suspense fallback={<div className="min-h-screen bg-[#f5f5f7]" aria-label="Loading lesson reader" />}>{isRuntimeValidation ? <DeepDiveReader /> : isTopicExplorer ? <TopicExplorer /> : <App />}</Suspense>
-        <PodcastChrome />
-      </PodcastPlayerProvider>
+      <Suspense fallback={<div className="min-h-screen bg-[#f5f5f7]" aria-label="Loading lesson reader" />}>{isRuntimeValidation ? <DeepDiveReader /> : isTopicExplorer ? <TopicExplorer /> : <App />}</Suspense>
     </PasswordGate>
   </StrictMode>,
 )

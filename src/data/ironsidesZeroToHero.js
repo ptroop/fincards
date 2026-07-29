@@ -114,7 +114,7 @@ export const zeroToHeroModules = [
       }),
       lesson({
         id: 'zth_cycle_evidence',
-        title: 'Source documents, journal, ledger, trial balance, adjustments, and closing',
+        title: 'How the books move from evidence to financial statements',
         definition: 'The accounting cycle is the recurring sequence through which transaction evidence is analysed, journalised, posted to ledger accounts, tested through a trial balance, adjusted, reported in financial statements, and closed for the next period.',
         simpleMeaning: 'A document proves that something may have happened; the journal records it by date; the ledger groups it by account; the trial balance totals the accounts; adjustments correct timing; statements communicate the result.',
         eli5: 'A journal is the business diary. A ledger is the same diary rearranged into folders such as Cash, Sales and Rent. A trial balance checks whether the folder totals preserve debit-credit equality.',
@@ -135,14 +135,14 @@ export const zeroToHeroModules = [
       }),
       lesson({
         id: 'zth_ledgers_control_accounts',
-        title: 'Ledger posting, balancing, personal ledgers, and control accounts',
+        title: 'How to post, balance, and reconcile a ledger',
         definition: 'A ledger is the complete classified collection of accounts to which journal entries are posted; balancing determines the net debit or credit position of each account, while control accounts reconcile the aggregate of subsidiary personal ledgers with the general ledger.',
         simpleMeaning: 'The journal answers “what happened on this date?” The ledger answers “what is the complete movement and closing balance of Cash, Sales, Rent, each customer, and each supplier?”',
         eli5: 'The journal is a chronological inbox. Posting sorts every line of that inbox into named folders. The balance in each folder is what enters the trial balance.',
         explanation: 'Each journal debit is posted to the debit side of the relevant ledger account and each credit to the credit side, preserving date, amount and cross-reference. At period end, the smaller side receives the balancing figure so totals agree; the balance is then brought down on its natural side. Customer and supplier details are commonly maintained in receivables and payables subsidiary ledgers. Receivables and payables control accounts in the general ledger summarise those details. A control-account difference may arise from omitted postings, wrong amounts, contra settlements, returns, discounts, bad debts or an error in the list of individual balances. The trial balance uses general-ledger balances, not the raw total of journal columns.',
         subconcepts: [
-          { title: 'Posting', explanation: 'Transfer every debit and credit from the journal to the corresponding account with a cross-reference; posting does not create a new transaction.' },
-          { title: 'Balancing', explanation: 'Total both sides, insert the difference as balance carried down, and bring it into the next period on its normal side.' },
+          { title: 'How to post a journal entry into a ledger', explanation: 'Transfer every journal debit to the debit side of the matching account and every journal credit to the credit side. Preserve date, amount, narration and cross-reference. Posting does not create a new transaction; it classifies one already recorded.' },
+          { title: 'How to balance a ledger account', explanation: 'Total both sides, enter the difference on the smaller side as balance c/d, and bring that balance into the next period as balance b/d on its natural side. A debit balance means debit-side resources or expenses exceed credits; a credit balance means the reverse.' },
           { title: 'Subsidiary ledgers', explanation: 'Maintain individual customer and supplier balances so collections, disputes, credit limits and confirmations can be controlled.' },
           { title: 'Control accounts', explanation: 'General-ledger totals for receivables and payables should reconcile to the sum of individual subsidiary balances.' },
           { title: 'Cash book and petty cash', explanation: 'The cash book records cash and bank transactions and can function as both a book of original entry and the relevant ledger account. An imprest petty-cash system restores a fixed float by reimbursing documented expenditure.' },
@@ -170,7 +170,7 @@ export const zeroToHeroModules = [
     [
       lesson({
         id: 'zth_journal_method',
-        title: 'The economic-event method for every journal entry',
+        title: 'How to write a journal entry from a transaction',
         definition: 'A journal entry is a dated record that expresses the dual financial effect of a transaction or adjustment by debiting one or more accounts and crediting one or more accounts for equal totals.',
         simpleMeaning: 'Ask what the business gained, gave up, earned, consumed, owns or owes. Then translate those movements into account increases and decreases.',
         eli5: 'Do not start by guessing debit or credit. First describe the story: “We used electricity but have not paid.” The story itself tells you that expense rose and a payable arose.',
