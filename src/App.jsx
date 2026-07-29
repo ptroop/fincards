@@ -6,6 +6,7 @@ import SecuritizationView from './components/SecuritizationView';
 import LearningMapView from './components/LearningMapView';
 import PodcastLauncher from './components/podcast/PodcastLauncher.jsx';
 import InterviewReadyView from './components/InterviewReadyView.jsx';
+import IronSidesView from './components/IronSidesView.jsx';
 import TMinusOneDayView from './components/TMinusOneDayView.jsx';
 import ExcelMasteryView from './components/ExcelMasteryView.jsx';
 import FormulaeView from './components/FormulaeView.jsx';
@@ -15,6 +16,7 @@ import { accountingAptitudeCards } from './data/accountingAptitudeCards';
 import { accountingAdvancedCards } from './data/accountingAdvancedCards';
 import { accountingInterviewConceptCards, accountingInterviewAptitudeCards } from './data/accountingInterviewExpansionCards';
 import { interviewReadyCards } from './data/interviewReadyCards';
+import { ironsidesAssessmentQuestions, ironsidesModules } from './data/ironsidesAssessment';
 import { getTMinusOneDayDeck } from './data/tMinusOneDayCards';
 import { oxaneAptitudeCards, oxaneAptitudeSubcategories } from './data/oxaneAptitudeCards';
 import { excelFinanceModelingCards } from './data/excelFinanceModelingCards';
@@ -39,6 +41,9 @@ const baseCardsData = cardsData.filter((card) => (
   ...(verifiedMarketCurrentAffairsOverrides[card.id] || {}),
 }));
 const tMinusOneDayDeck = getTMinusOneDayDeck(interviewReadyCards);
+const isIronsidesArchiveCard = (card) => card.tag === 'archive' && /ironsides/i.test(card.firm || '');
+const ironsidesArchiveCards = interviewReadyCards.filter(isIronsidesArchiveCard);
+const interviewReadyDisplayCards = interviewReadyCards.filter((card) => !isIronsidesArchiveCard(card));
 const loadSavedCustomCards = () => {
   try {
     return JSON.parse(localStorage.getItem('deepti_custom_cards') || '[]');
@@ -708,6 +713,21 @@ export default function App() {
           
           <div className="flex flex-col gap-3 md:gap-4 mt-2">
             <button
+              onClick={() => openCategory("IronSides")}
+              className="w-full flex items-center justify-between px-5 py-3 md:py-4 rounded-[16px] md:rounded-[20px] bg-[#245c3f] text-white font-semibold text-[14px] md:text-[15px] apple-shadow apple-shadow-hover transition-all group"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center">
+                  <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3l8 4v5c0 4.8-3.4 8.7-8 9.8C7.4 20.7 4 16.8 4 12V7l8-4zM9 12l2 2 4-4" /></svg>
+                </div>
+                <div className="text-left">
+                  <div>IronSides</div>
+                  <div className="text-[11px] font-medium text-white/65">MBA assessment preparation</div>
+                </div>
+              </div>
+              <svg className="w-4 h-4 opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+            </button>
+            <button
               onClick={() => openCategory("Interview Ready")}
               className="w-full flex items-center justify-between px-5 py-3 md:py-4 rounded-[16px] md:rounded-[20px] bg-gradient-to-r from-gray-900 to-black dark:from-white dark:to-gray-200 text-white dark:text-black font-semibold text-[14px] md:text-[15px] apple-shadow apple-shadow-hover transition-all group"
             >
@@ -794,9 +814,16 @@ export default function App() {
       {activeCategory && (
         <>
           {/* Interview Ready View */}
-          {activeCategory === 'Interview Ready' ? (
+          {activeCategory === 'IronSides' ? (
+            <IronSidesView
+              modules={ironsidesModules}
+              questions={ironsidesAssessmentQuestions}
+              archiveCards={ironsidesArchiveCards}
+              onBack={goBack}
+            />
+          ) : activeCategory === 'Interview Ready' ? (
             <InterviewReadyView
-              cards={interviewReadyCards}
+              cards={interviewReadyDisplayCards}
               onBack={goBack}
               onOpenTMinusOneDay={() => setActiveCategory('T - 1 Day')}
               globalMode={globalMode}
