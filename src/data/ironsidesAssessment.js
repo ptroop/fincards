@@ -1158,6 +1158,10 @@ export const ironsidesAssessmentQuestions = sourceAssessmentQuestions
   .map((card) => ({
     ...card,
     moduleId: topicIdForQuestion(card),
+    evidenceType: card.evidenceType === 'public interview benchmark' || card.evidenceType === 'reported interview question'
+      ? 'reported interview question'
+      : 'assessment-standard',
+    sourceUrl: card.sourceUrl ?? card.sources?.[0],
     difficulty: card.difficulty === 'Hard' && !genuinelyAdvancedQuestionIds.has(card.id)
       ? 'Medium'
       : card.difficulty,

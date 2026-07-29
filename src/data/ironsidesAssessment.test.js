@@ -51,6 +51,8 @@ assert.deepEqual(
 const questionIds = ironsidesAssessmentQuestions.map((card) => card.id);
 assert.equal(new Set(questionIds).size, questionIds.length, 'IronSides question IDs must be unique.');
 assert.equal(ironsidesAssessmentQuestions.length, 259, 'IronSides assessment question count changed unexpectedly.');
+assert.ok(ironsidesAssessmentQuestions.every((card) => ['reported interview question', 'assessment-standard'].includes(card.evidenceType)), 'Every question must disclose whether it is reported or assessment-standard.');
+assert.ok(ironsidesAssessmentQuestions.filter((card) => card.evidenceType === 'reported interview question').every((card) => card.sourceUrl), 'Reported questions must retain public source provenance.');
 
 for (const module of ironsidesModules) {
   assert.ok(module.description.length >= 80, `${module.id} needs a complete topic scope.`);

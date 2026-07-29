@@ -133,6 +133,14 @@ function QuestionCard({ card, number }) {
         </span>
         <span style={{ color: '#a2aaa4' }}>·</span>
         <span style={{ color: muted, fontSize: 13 }}>{card.type === 'mcq' ? 'MCQ' : 'Solving question'}</span>
+        {card.evidenceType && (
+          <>
+            <span style={{ color: '#a2aaa4' }}>·</span>
+            <span style={{ color: muted, fontSize: 13 }}>
+              {card.evidenceType === 'reported interview question' ? `Reported${card.company ? ` · ${card.company}` : ''}` : 'Assessment standard'}
+            </span>
+          </>
+        )}
         <span style={{ color: '#a2aaa4' }}>·</span>
       </div>
 
@@ -190,6 +198,11 @@ function QuestionCard({ card, number }) {
           <div style={{ color: '#405048', fontSize: 17, lineHeight: 1.78, marginTop: 12, fontFamily: textFont }}>
             <LongText text={card.explanation} />
           </div>
+          {card.sourceUrl && (
+            <a href={card.sourceUrl} target="_blank" rel="noreferrer" style={{ display: 'inline-block', marginTop: 14, color: green, fontSize: 14, fontWeight: 700, textDecoration: 'underline', textUnderlineOffset: 3 }}>
+              Public interview source ↗
+            </a>
+          )}
           {card.formula && (
             <div style={{ marginTop: 15, color: ink, fontFamily: 'ui-monospace, SFMono-Regular, Consolas, monospace', fontSize: 14, lineHeight: 1.6, padding: '12px 14px', borderRadius: 12, background: 'rgba(255,255,255,0.72)', overflowX: 'auto' }}>
               {card.formula}
